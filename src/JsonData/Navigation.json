@@ -1,0 +1,38 @@
+[
+    {
+        "name": "SALE",
+        "navigate": "#"
+    },
+    {
+        "name": "Mới về",
+        "navigate": "#"
+    },
+    {
+        "name": "Bán chạy",
+        "navigate": "#"
+    },
+    {
+        "name": "Nam",
+        "navigate": "#"
+    },
+    {
+        "name": "Nữ",
+        "navigate": "#"
+    },
+    {
+        "name": "Trẻ em",
+        "navigate": "#"
+    },
+    {
+        "name": "Bộ sưu tập",
+        "navigate": "#"
+    },
+    {
+        "name": "Đồng phục",
+        "navigate": "#"
+    },
+    {
+        "name": "Tin hot",
+        "navigate": "#"
+    }
+]

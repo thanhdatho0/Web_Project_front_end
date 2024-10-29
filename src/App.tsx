@@ -1,28 +1,15 @@
-import './App.css'
-import ProductCardList from "./Components/ProductCardList/ProductCardList.tsx";
-import {useState} from "react";
-import {Product} from "./Product";
-import {ProductList} from "./api.tsx";
+import Body from "./Components/Body";
+import Footer from "./Components/Footer";
+import Navbar from "./Components/Navbar";
 
-function App() {
-    const [error, setError] = useState<string | null>(null);
-    const [data, setData] = useState<Product[]>([]);
-
-    const getAllProducts = async () => {
-        const result = await ProductList();
-        if(typeof result === "string"){
-            setError(result);
-            console.log("Error Message", error);
-        }else if(Array.isArray(result.data)){
-            setData(result.data);
-        }
-    }
-    getAllProducts();
+const App = () => {
   return (
     <>
-      <ProductCardList ListData={data}/>
+      <Navbar />
+      <Body />
+      <Footer />
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;

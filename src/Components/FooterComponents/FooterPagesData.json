@@ -1,0 +1,95 @@
+[
+  {
+    "title": "Dịch vụ khách hàng",
+    "navigateItems": [
+      {
+        "caption": "Chính sách khách hàng thân thiết",
+        "href": "/"
+      },
+      {
+        "caption": "Chính sách đổi trả",
+        "href": "/"
+      },
+      {
+        "caption": "Chính sách bảo mật",
+        "href": "/"
+      },
+      {
+        "caption": "Chính sách sử dụng Cookies",
+        "href": "/"
+      },
+      {
+        "caption": "Chính sách thanh toán, giao nhận",
+        "href": "/"
+      },
+      {
+        "caption": "Chính sách đơn đồng phục",
+        "href": "/"
+      },
+      {
+        "caption": "Hướng dẫn chọn size",
+        "href": "/"
+      },
+      {
+        "caption": "Đăng ký đối tác",
+        "href": "/"
+      }
+    ]
+  },
+  {
+    "title": "Về YODY",
+    "navigateItems": [
+      {
+        "caption": "Giới thiệu",
+        "href": "/"
+      },
+      {
+        "caption": "Liên hệ",
+        "href": "/"
+      },
+      {
+        "caption": "Tuyển dụng",
+        "href": "/"
+      },
+      {
+        "caption": "Tin tức",
+        "href": "/"
+      },
+      {
+        "caption": "Hệ thống cửa hàng",
+        "href": "/"
+      },
+      {
+        "caption": "Tin khuyến mãi",
+        "href": "/"
+      }
+    ]
+  },
+  {
+    "title": "Địa chỉ liên hệ",
+    "navigateItems": [
+      {
+        "caption": "Địa chỉ: Đường An Định - Phường Việt Hòa - Thành phố Hải Dương",
+        "href": ""
+      }
+    ]
+  },
+  {
+    "title": "YODY lắng nghe bạn",
+    "navigateItems": [
+      {
+        "caption": "Chúng tôi luôn trân trọng và mong đợi nhận được mọi ý kiến đóng góp từ khách hàng để có thể nâng cấp trải nghiệm dịch vụ và sản phẩm tốt hơn nữa.",
+        "href": ""
+      }
+    ]
+  },
+  {
+    "title": "@ CÔNG TY CỔ PHẦN THỜI TRANG YODY",
+    "navigateItems": [
+      {
+        "caption": "Mã số doanh nghiệp: 0801206940. Giấy chứng nhận đăng ký doanh nghiệp do Sở Kế hoạch và Đầu tư TP Hải Dương cấp lần đầu ngày 04/03/2017",
+        "href": ""
+      }
+    ]
+  }
+]

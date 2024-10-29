@@ -1,0 +1,20 @@
+[
+  {
+    "icon": "line-md:phone-call-loop",
+    "tilte": "Liên hệ đặt hàng",
+    "method": "024 999 86 999",
+    "href": "#"
+  },
+  {
+    "icon": "akar-icons:chat-question",
+    "tilte": "Góp ý khiếu nại",
+    "method": "1800 2086",
+    "href": "#"
+  },
+  {
+    "icon": "ic:baseline-email",
+    "tilte": "Email",
+    "method": "chamsockhachhang@yody.vn",
+    "href": "#"
+  }
+]
