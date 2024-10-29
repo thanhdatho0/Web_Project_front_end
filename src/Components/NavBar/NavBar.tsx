@@ -25,7 +25,7 @@ const NavBar = () => {
 
   useEffect(() => {
     getAllCategory();
-  },[])
+  })
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);

@@ -1,7 +1,7 @@
 
 interface Props {
     logo_src: string;
-};
+}
 
 const Logo = ({logo_src}: Props) => {
   return (
