@@ -1,7 +1,7 @@
-import ContactMethod from "./ContactMethod";
+import ContactMethod from "./ContactMethod.tsx";
 import MethodData from "./ContactMethodDatas.json";
 
-const ContactMethods = () => {
+const ContactMethodList = () => {
   return (
     <div>
       <ul>
@@ -20,4 +20,4 @@ const ContactMethods = () => {
   );
 };
 
-export default ContactMethods;
+export default ContactMethodList;

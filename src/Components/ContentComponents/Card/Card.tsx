@@ -1,10 +1,9 @@
-import React from "react";
+
 import ColorCard from "../ColorCard/ColorCard";
 import { Link } from "react-router-dom";
 
-interface Props {}
 
-const Card: React.FC<Props> = (props: Props): JSX.Element => {
+const Card = () => {
   return (
     <Link to="#">
       <div className="relative overflow-hidden">

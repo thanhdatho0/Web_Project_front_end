@@ -1,12 +1,12 @@
-import Body from "./Components/Body";
-import Footer from "./Components/Footer";
-import Navbar from "./Components/Navbar";
+import HomePage from "./Pages/HomePage/HomePage.tsx";
+import Footer from "./Components/Footer/Footer.tsx";
+import NavBar from "./Components/NavBar/NavBar.tsx";
 
 const App = () => {
   return (
     <>
-      <Navbar />
-      <Body />
+      <NavBar />
+      <HomePage />
       <Footer />
     </>
   );

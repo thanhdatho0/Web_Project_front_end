@@ -1,8 +1,6 @@
-import React from "react";
 
-type Props = {};
 
-const ColorCard = (props: Props) => {
+const ColorCard = () => {
   const color: string[] = [
     "bg-yellow-300",
     "bg-rose-700",

@@ -1,7 +1,7 @@
 import pages from "./FooterPagesData.json";
-import AdditionInfo from "./AdditionInfo";
-import ContactMethods from "./ContactMethods";
-import SocialMediaLists from "./SocialMediaLists";
+import AdditionInfo from "./AdditionInfo.tsx";
+import ContactMethodList from "../ContactMethod/ContactMethodList.tsx";
+import SocialMediaList from "../SocialMediaContact/SocialMediaList.tsx";
 
 const AdditionInfoLayout = () => {
   return (
@@ -27,8 +27,8 @@ const AdditionInfoLayout = () => {
           title={pages[3].title}
           navigateItems={pages[3].navigateItems}
         />
-        <ContactMethods />
-        <SocialMediaLists />
+        <ContactMethodList />
+        <SocialMediaList />
       </div>
     </div>
   );

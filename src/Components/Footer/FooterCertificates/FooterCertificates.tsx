@@ -1,5 +1,5 @@
-import info from "./FooterPagesData.json";
-import AdditionInfo from "./AdditionInfo";
+import info from "../PoliciesAndMore/FooterPagesData.json";
+import AdditionInfo from "../PoliciesAndMore/AdditionInfo.tsx";
 
 const FooterCertificates = () => {
   return (

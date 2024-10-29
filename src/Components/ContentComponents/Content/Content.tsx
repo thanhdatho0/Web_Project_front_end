@@ -1,11 +1,10 @@
 import CardList from "../CardList/CardList";
 import tabTitles from "./TabSectionData.json";
 
-type Props = {};
 
-const Content = (props: Props) => {
+const Content = () => {
   return (
-    <div className="relative m-auto w-10/12 overflow-hidden pb-6 pt-6">
+    <div className="relative m-auto w-full overflow-hidden pb-6 pt-6">
       <h2 className="my-4 flex h-12 justify-center text-4xl font-medium">
         Sản phẩm ưa chuộng
       </h2>

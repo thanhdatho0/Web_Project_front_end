@@ -5,7 +5,7 @@ interface Props {
   href: string;
 }
 
-const SocialMediaLink = (props: Props) => {
+const SocialMedia = (props: Props) => {
   return (
     <>
       <a href={props.href} className="h-full w-full block">
@@ -20,4 +20,4 @@ const SocialMediaLink = (props: Props) => {
   );
 };
 
-export default SocialMediaLink;
+export default SocialMedia;

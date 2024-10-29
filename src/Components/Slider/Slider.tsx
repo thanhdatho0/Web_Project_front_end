@@ -56,7 +56,7 @@ const Carousel: React.FC = () => {
   }, [currentIndex]);
 
   return (
-    <div className="relative m-auto w-10/12 overflow-hidden pb-6 pt-6">
+    <div className="relative m-auto w-full overflow-hidden pb-6 pt-6">
       <div
         className="carousel flex transition-transform duration-500 ease-in-out"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}

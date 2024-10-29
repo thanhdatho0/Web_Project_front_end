@@ -1,5 +1,5 @@
 import { ChangeEvent } from "react"
-import SearchIcon from "./SearchIcon"
+import SearchIcon from "./SearchIcon.tsx"
 
 interface Props{
   handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
