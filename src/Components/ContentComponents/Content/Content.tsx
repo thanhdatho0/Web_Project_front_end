@@ -1,6 +1,6 @@
 import CardList from "../CardList/CardList";
+import ItemSuggestions from "../ItemSuggestions/ItemSuggestions";
 import tabTitles from "./TabSectionData.json";
-
 
 const Content = () => {
   return (
@@ -22,9 +22,59 @@ const Content = () => {
         <CardList />
       </div>
       <div className="flex w-full justify-center pt-4">
-        <button className="w-2/5 rounded-xl border-2 border-slate-500 py-2.5 hover:bg-slate-100">
+        <button className="w-1/5 rounded-xl border-2 border-slate-500 py-2.5 bg-while-500 hover:bg-gray-300 font-bold">
           Xem thêm
         </button>
+      </div>
+      <div className="pt-7">
+        <img
+          src="https://m.yodycdn.com/fit-in/filters:format(webp)/products/media/collections/Collection%20List%20Banner_Website_1800x600.jpg"
+          alt="A couple wearing orange jackets standing in a field of tall grass"
+        />
+      </div>
+      <div className="flex w-full justify-center pt-4">
+        <h2 className="mr-3 flex h-12 justify-center text-3xl pt-1 bg-gradient-to-r from-yellow-900 to-transparent text-transparent bg-clip-text">
+          Gợi ý sản phẩm
+        </h2>
+        <ItemSuggestions />
+      </div>
+      <div>
+        <CardList />
+        <CardList />
+      </div>
+      <div className="flex w-full justify-center pt-4">
+        <button className="w-1/5 rounded-xl border-2 border-slate-500 py-2.5 bg-while-500 hover:bg-gray-300 font-bold">
+          Xem thêm
+        </button>
+      </div>
+      <div className="pt-7 flex">
+        <img
+          className="w-1/2 mr-2"
+          src="https://m.yodycdn.com/fit-in/filters:format(webp)//products/YODY%20x%20Wintel_893x598.jpg"
+          alt="A couple wearing orange jackets standing in a field of tall grass"
+        />
+        <img
+          className="w-1/2 ml-2"
+          src="https://m.yodycdn.com/fit-in/filters:format(webp)//products/YODY_XANH%20SM_893x598.jpg"
+          alt="A couple wearing orange jackets standing in a field of tall grass"
+        />
+      </div>
+      <div className="pt-4 flex">
+        <img
+          className="w-1/2 mr-2"
+          src="https://m.yodycdn.com/fit-in/filters:format(webp)//products/Frame%2032%201.jpg"
+          alt="A couple wearing orange jackets standing in a field of tall grass"
+        />
+        <img
+          className="w-1/2 ml-2"
+          src="https://m.yodycdn.com/fit-in/filters:format(webp)//products/Frame%2031%201.jpg"
+          alt="A couple wearing orange jackets standing in a field of tall grass"
+        />
+      </div>
+      <div className="pt-7">
+        <h1 className="bg-black text-5xl text-white w-full font-bold py-4 text-center">
+          #Yody tự hào thương hiệu việt
+        </h1>
       </div>
     </div>
   );
