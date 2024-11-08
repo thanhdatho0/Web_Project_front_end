@@ -3,10 +3,12 @@ import Slider from "../../Components/Slider/Slider.tsx";
 
 const HomePage = () => {
   return (
-    <div className="lg:w-[85%] mx-auto">
-      <Slider />
-      <Content />
-    </div>
+    <section>
+      <div className="lg:w-[85%] mx-auto">
+        <Slider />
+        <Content />
+      </div>
+    </section>
   );
 };
 

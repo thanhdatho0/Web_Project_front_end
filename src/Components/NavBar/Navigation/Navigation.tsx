@@ -1,13 +1,16 @@
-import {NavBarCategoryTitle} from "../../../Category";
-
 interface Props {
-    data: NavBarCategoryTitle;
+  name: string;
+  navigate: string;
 }
 
-const Navigation = ({data}: Props) => {
+const Navigation: React.FC<Props> = ({ name, navigate }: Props) => {
   return (
-    <li><a href={"#"}>{data.name}</a></li>
-  )
-}
+    <div className=" relative ">
+      <a className="px-4 py-2 flex" href={navigate}>
+        {name}
+      </a>
+    </div>
+  );
+};
 
-export default Navigation
+export default Navigation;

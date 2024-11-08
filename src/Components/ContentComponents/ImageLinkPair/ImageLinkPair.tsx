@@ -1,10 +1,15 @@
+import { Link } from "react-router-dom";
+
 const ImageLinkPair = () => {
   return (
     <div>
       <div className="flex w-full justify-center pt-4">
-        <button className="w-1/5 rounded-xl border-2 border-slate-500 py-2.5 bg-while-500 hover:bg-gray-300 font-bold">
+        <Link
+          to="/Cart"
+          className="w-1/5 rounded-xl border-2 border-slate-500 py-2.5 bg-while-500 hover:bg-gray-300 font-bold text-center"
+        >
           Xem thêm
-        </button>
+        </Link>
       </div>
       <div className="pt-7 flex">
         <a href="" className="w-1/2 mr-2">
