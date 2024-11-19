@@ -1,11 +1,19 @@
-
 import ColorCard from "../ColorCard/ColorCard";
 import { Link } from "react-router-dom";
 
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  navigate: string;
+}
+interface Props {
+  product: Product;
+}
 
-const Card = () => {
+const Card: React.FC<Props> = ({ product }: Props) => {
   return (
-    <Link to="#">
+    <Link to={`/product/${product.navigate}`}>
       <div className="relative overflow-hidden">
         <img
           alt=""
@@ -14,9 +22,9 @@ const Card = () => {
         />
       </div>
       <div className="pt-2 text-sm">
-        <div>Áo sơ mi trắng</div>
+        <div>{product.name}</div>
         <div className="pt-2 text-base font-semibold tracking-wider">
-          500.000 đ
+          {product.price.toLocaleString("vi-VN")} đ
         </div>
       </div>
       <ColorCard />

@@ -6,10 +6,19 @@ import {
 } from "@material-tailwind/react";
 import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { Link } from "react-router-dom";
+
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  navigate: string;
+}
 
 interface Item {
   navigate: string;
   description: string;
+  product?: Product[];
 }
 
 type ItemGroup = Item[];
@@ -24,10 +33,6 @@ const WideDropdownMenu = ({
   img: string;
 }) => {
   const [openMenu, setOpenMenu] = useState(false);
-
-  const handleSelect = () => {
-    setOpenMenu(false);
-  };
 
   const toggleMenu = () => {
     setOpenMenu((prev) => !prev);
@@ -50,6 +55,11 @@ const WideDropdownMenu = ({
       columns[columnWithFewestLines].push(itemGroup);
     }
   });
+
+  const handleSelect = () => {
+    // onSelectProduct(description);
+    setOpenMenu(false);
+  };
 
   return (
     <Menu open={openMenu} handler={setOpenMenu}>
@@ -89,14 +99,14 @@ const WideDropdownMenu = ({
                         idx === 0 ? "font-bold pb-2 mb-1 mt-2" : "text-sm pb-2"
                       }
                      pl-2 text-sm text-gray-700 text-left`}
-                      onClick={handleSelect}
+                      onClick={() => handleSelect()}
                     >
-                      <a
-                        href={item.navigate}
+                      <Link
+                        to={`/category/${item.navigate}`}
                         className="dark:hover:text-red-600 ml-4"
                       >
                         {item.description}
-                      </a>
+                      </Link>
                     </Typography>
                   ))}
                 </div>

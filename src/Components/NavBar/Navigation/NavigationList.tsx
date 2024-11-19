@@ -1,61 +1,10 @@
-import WideDropdownMenu from "../../ContentComponents/ItemSuggestions/WideDropdownMenu";
+import WideDropdownMenu from "../../ContentComponents/WideDropdownMenu/WideDropdownMenu";
 import Navigation from "./Navigation";
+import aoNamItems from "../../../JsonData/AoNamItems.json";
+import quanNamItems from "../../../JsonData/QuanNamItems.json";
 
-// const items = [
-//   {
-//     name: "SALE",
-//     navigate: "#",
-//   },
-//   {
-//     name: "Mới về",
-//     navigate: "#",
-//   },
-//   {
-//     name: "Bán chạy",
-//     navigate: "#",
-//   },
-//   {
-//     name: "Nam",
-//     navigate: "#",
-//   },
-//   {
-//     name: "Nữ",
-//     navigate: "#",
-//   },
-//   {
-//     name: "Trẻ em",
-//     navigate: "#",
-//   },
-//   {
-//     name: "Bộ sưu tập",
-//     navigate: "#",
-//   },
-//   {
-//     name: "Đồng phục",
-//     navigate: "#",
-//   },
-//   {
-//     name: "Tin hot",
-//     navigate: "#",
-//   },
-// ];
+// const aoNamItems =
 
-const aoNamItems = [
-  { navigate: "#", description: "Áo nam" },
-  { navigate: "#", description: "Áo polo" },
-  { navigate: "#", description: "Áo thun" },
-  { navigate: "#", description: "Áo sơ mi" },
-  { navigate: "#", description: "Áo khoác" },
-  { navigate: "#", description: "Áo hoodie - Áo nỉ" },
-];
-const quanNamItems = [
-  { navigate: "#", description: "Quần" },
-  { navigate: "#", description: "Quần jeans" },
-  { navigate: "#", description: "Quần âu" },
-  { navigate: "#", description: "Quần kaki" },
-  { navigate: "#", description: "Quần dài" },
-  { navigate: "#", description: "Quần short" },
-];
 const doBoNamItems = [
   { navigate: "#", description: "Đồ bộ" },
   { navigate: "#", description: "Đồ bộ ngắn tay" },
@@ -233,20 +182,21 @@ const items = [
 
 const NavigationList = () => {
   return (
-    <div className="relative flex flex-row font-semibold">
-      {items.map((item, index) =>
-        item.items ? (
-          <WideDropdownMenu
-            key={index}
-            name={item.name}
-            items={item.items}
-            img={item.img}
-          />
-        ) : (
-          <Navigation key={index} name={item.name} navigate={item.navigate} />
-        )
-      )}
-      {/* <MegaMenuDefault /> */}
+    <div>
+      <div className="relative flex flex-row font-semibold">
+        {items.map((item, index) =>
+          item.items ? (
+            <WideDropdownMenu
+              key={index}
+              name={item.name}
+              items={item.items}
+              img={item.img}
+            />
+          ) : (
+            <Navigation key={index} name={item.name} navigate={item.navigate} />
+          )
+        )}
+      </div>
     </div>
   );
 };

@@ -46,6 +46,7 @@ const Content = () => {
       <div>
         <CardList />
         <CardList />
+        đưa ra các products mới nhất
       </div>
       <div>
         <ImageLinkPair />
