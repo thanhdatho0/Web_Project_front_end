@@ -2,7 +2,7 @@ import ColorCard from "../ColorCard/ColorCard";
 import { Link } from "react-router-dom";
 
 interface Product {
-  id: number;
+  productId: number;
   name: string;
   price: number;
   navigate: string;
@@ -27,7 +27,7 @@ const Card: React.FC<Props> = ({ product }: Props) => {
           {product.price.toLocaleString("vi-VN")} đ
         </div>
       </div>
-      <ColorCard />
+      <ColorCard id={product.productId} />
     </Link>
   );
 };
