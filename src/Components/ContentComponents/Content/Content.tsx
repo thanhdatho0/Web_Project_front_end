@@ -44,8 +44,8 @@ const Content = () => {
         <ItemSuggestions />
       </div>
       <div>
-        <CardList />
-        <CardList />
+        {/* <CardList /> */}
+        {/* <CardList /> */}
         đưa ra các products mới nhất
       </div>
       <div>

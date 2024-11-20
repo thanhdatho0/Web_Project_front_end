@@ -1,35 +1,40 @@
 import { useEffect, useState } from "react";
 import Card from "../Card/Card";
-
-interface Product {
-  productId: number;
-  name: string;
-  price: number;
-  navigate: string;
-}
+import { ProductList } from "../../../api";
+import { Color, Product, Size } from "../../../Interface";
 
 const CardList: React.FC = (): JSX.Element => {
-  const URL = "http://localhost:5254/api/products";
-  const [products, setProducts] = useState<Product[]>([]); // Lưu trữ danh sách sản phẩm
+  const [products, setProducts] = useState<Product[] | string>([]); // Lưu trữ danh sách sản phẩm
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchProduct = async () => {
       try {
-        const result = await fetch(URL);
-        const data = await result.json();
-        setProducts(data); // Lưu danh sách sản phẩm từ API vào state
-      } catch (error) {
-        console.error("Error fetching data:", error);
+        const response = await ProductList();
+        if (typeof response === "string") {
+          // Xử lý lỗi trả về nếu response là chuỗi lỗi
+          setError(response);
+        } else {
+          // Gán dữ liệu sản phẩm vào state
+          setProducts(response);
+        }
+      } catch (e) {
+        console.error("Unexpected error while fetching products", error);
+        setError("An unexpected error occurred.");
       }
     };
-    fetchData();
-  }, [URL]);
+    fetchProduct();
+  }, []);
 
   return (
     <div className="my-5 grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      {products.map((product) => (
-        <Card key={product.productId} product={product} />
-      ))}
+      {Array.isArray(products) ? (
+        products.map((product) => (
+          <Card key={product.productId} product={product} />
+        ))
+      ) : (
+        <div>{error ? error : "No products found"}</div> // Hiển thị lỗi nếu có
+      )}
     </div>
   );
 };
