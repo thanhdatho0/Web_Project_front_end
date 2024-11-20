@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 
-const ColorCard = () => {
-  const URL = "http://localhost:5254/api/products/1";
-  const [colors, setColors] = useState([]); // Lưu trữ dữ liệu màu
-
+interface Props {
+  id: number;
+}
+interface Color {
+  hexaCode: string;
+}
+const ColorCard = ({ id }: Props) => {
+  const URL = `http://localhost:5254/api/products/${id}`;
+  const [colors, setColors] = useState<Color[]>([]); // Lưu trữ dữ liệu màu
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -15,7 +20,7 @@ const ColorCard = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [URL]);
 
   return (
     <div className="flex items-center gap-2 pt-2">
