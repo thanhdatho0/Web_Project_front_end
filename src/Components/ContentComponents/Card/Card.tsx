@@ -1,24 +1,22 @@
+import { Product } from "../../../Interface";
 import ColorCard from "../ColorCard/ColorCard";
 import { Link } from "react-router-dom";
 
-interface Product {
-  productId: number;
-  name: string;
-  price: number;
-  navigate: string;
-}
 interface Props {
   product: Product;
 }
 
 const Card: React.FC<Props> = ({ product }: Props) => {
+  const firstImageUrl = product.colors[0]?.images[0]?.url;
+  const firstImageAlt = product.colors[0]?.images[0]?.alt;
+
   return (
     <Link to={`/product/${product.navigate}`}>
       <div className="relative overflow-hidden">
         <img
-          alt=""
+          alt={firstImageAlt}
           className="w-full object-cover"
-          src="https://m.yodycdn.com/fit-in/filters:format(webp)/products/smm4073-den-5-c0028085-1e0a-4909-8a9a-254b104651d7.jpg"
+          src={firstImageUrl}
         />
       </div>
       <div className="pt-2 text-sm">
