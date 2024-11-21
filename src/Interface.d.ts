@@ -21,7 +21,6 @@ interface Product {
     providerId: number;
     sizes: Size[];
     colors: Color[];
-    image : string;
     navigate: string;
 
   }
