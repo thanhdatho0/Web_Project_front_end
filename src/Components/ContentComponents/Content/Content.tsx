@@ -26,13 +26,9 @@ const Content = () => {
           alt="A couple wearing orange jackets standing in a field of tall grass"
         />
       </div>
-      <div className="flex w-full justify-center pt-4">
-        <h2 className="mr-3 flex h-12 justify-center text-3xl pt-1 bg-gradient-to-r from-yellow-900 to-yellow-500 text-transparent bg-clip-text">
-          Gợi ý sản phẩm
-        </h2>
-        <ItemSuggestions />
-      </div>
-      <div>đưa ra các products mới nhất</div>
+
+      <ItemSuggestions />
+
       <div>
         <ImageLinkPair />
       </div>

@@ -35,7 +35,6 @@ const TrendingItemSuggestions: React.FC = (): JSX.Element => {
         setError(productData); // Handle error message
       } else {
         setProducts(productData); // Set products for the selected category
-        console.log(categoryId);
       }
     } catch (e) {
       setError("Failed to fetch products.");
