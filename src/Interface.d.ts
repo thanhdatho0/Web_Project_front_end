@@ -13,7 +13,9 @@ export interface NavBarCategoryTitle {
 }
 
 export interface Color {
+    colorId : number;
     hexaCode : string;
+    name : string
 }
 
 interface Product {

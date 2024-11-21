@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import CardList from "../CardList/CardList";
 import ImageLinkPair from "../ImageLinkPair/ImageLinkPair";
 import ItemSuggestions from "../ItemSuggestions/ItemSuggestions";
 import tabTitles from "./TabSectionData.json";
+import ProductCardList from "../../ProductCardList/ProductCardList";
 
 const Content = () => {
   return (
@@ -21,7 +21,7 @@ const Content = () => {
         ))}
       </div>
       <div>
-        <CardList />
+        <ProductCardList />
       </div>
       <div className="flex w-full justify-center pt-4">
         <Link
@@ -43,11 +43,7 @@ const Content = () => {
         </h2>
         <ItemSuggestions />
       </div>
-      <div>
-        {/* <CardList /> */}
-        {/* <CardList /> */}
-        đưa ra các products mới nhất
-      </div>
+      <div>đưa ra các products mới nhất</div>
       <div>
         <ImageLinkPair />
       </div>
