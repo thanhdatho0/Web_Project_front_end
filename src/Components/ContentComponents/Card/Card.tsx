@@ -1,4 +1,5 @@
-import { Product } from "../../../Interface";
+import { useState } from "react";
+import { Image, Product } from "../../../Interface";
 import ColorCard from "../ColorCard/ColorCard";
 import { Link } from "react-router-dom";
 
@@ -7,16 +8,22 @@ interface Props {
 }
 
 const Card: React.FC<Props> = ({ product }: Props) => {
-  const firstImageUrl = product.colors[0]?.images[0]?.url;
-  const firstImageAlt = product.colors[0]?.images[0]?.alt;
+  const [currentImage, setCurrentImage] = useState<Image>(
+    product.colors[0]?.images[0] || { url: "", alt: "" }
+  );
+  const handleHoverColor = (colorId: number) => {
+    const selectColor = product.colors.find((c) => c.colorId == colorId);
+    if (selectColor && selectColor.images.length > 0)
+      setCurrentImage(selectColor.images[0]);
+  };
 
   return (
     <Link to={`/product/${product.navigate}`}>
       <div className="relative overflow-hidden">
         <img
-          alt={firstImageAlt}
+          alt={currentImage.alt}
           className="w-full object-cover"
-          src={firstImageUrl}
+          src={currentImage.url}
         />
       </div>
       <div className="pt-2 text-sm">
@@ -25,7 +32,11 @@ const Card: React.FC<Props> = ({ product }: Props) => {
           {product.price.toLocaleString("vi-VN")} đ
         </div>
       </div>
-      <ColorCard id={product.productId} />
+      <ColorCard
+        id={product.productId}
+        colors={product.colors}
+        onHover={handleHoverColor}
+      />
     </Link>
   );
 };
