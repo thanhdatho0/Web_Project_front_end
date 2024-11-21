@@ -55,3 +55,10 @@ interface Product {
     productId: number;
     colorId: number;
   }
+
+  interface Category{
+    categoryId : number;
+    name : string;
+    description : string;
+    products : Product[]
+  }
