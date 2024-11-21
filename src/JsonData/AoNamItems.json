@@ -1,21 +1,58 @@
 [
-    { "navigate": "ao-nam", "description": "Áo nam" },
+    { "navigate": "ao-nam", "description": "Áo nam", "colors": "undefined" },
     {
       "navigate": "ao-polo-nam",
       "description": "Áo polo",
       "products": [
-        { "id": 1, "name": "Áo polo basic", "price": 25000, "navigate": "ao-polo-basic" },
+        {
+          "id": 1,
+          "name": "Áo polo basic",
+          "price": 25000,
+          "navigate": "ao-polo-basic",
+          "colors": [
+            { "label": "Trắng", "value": "white" },
+            { "label": "Đen", "value": "black" },
+            { "label": "Xanh", "value": "blue" }
+          ],
+          "sizes": [
+            { "label": "S", "value": "small" },
+            { "label": "M", "value": "medium" },
+            { "label": "L", "value": "large" },
+            { "label": "XL", "value": "extra-large" }
+          ]
+        },
         {
           "id": 2,
           "name": "Áo polo thể thao",
           "price": 300000,
-          "navigate": "ao-polo-the-thao"
+          "navigate": "ao-polo-the-thao",
+          "colors": [
+          { "label": "Xám", "value": "gray" },
+          { "label": "Xanh", "value": "blue" },
+          { "label": "Đỏ", "value": "red" }
+          ],
+          "sizes": [
+          { "label": "M", "value": "medium" },
+          { "label": "L", "value": "large" },
+          { "label": "XL", "value": "extra-large" }
+          ]
         },
         {
           "id": 3,
           "name": "Áo polo cổ trụ",
           "price": 280000,
-          "navigate": "ao-polo-co-tru"
+          "navigate": "ao-polo-co-tru",
+          "colors": [
+            { "label": "Trắng", "value": "white" },
+            { "label": "Be", "value": "beige" },
+            { "label": "Nâu", "value": "brown" }
+          ],
+          "sizes": [
+            { "label": "S", "value": "small" },
+            { "label": "M", "value": "medium" },
+            { "label": "L", "value": "large" },
+            { "label": "XL", "value": "extra-large" }
+          ]
         }
       ]
     },
@@ -23,18 +60,56 @@
       "navigate": "ao-thun-nam",
       "description": "Áo thun",
       "products": [
-        { "id": 4, "name": "Áo thun trơn", "price": 150000, "navigate": "ao-thun-tron" },
+        {
+          "id": 4,
+          "name": "Áo thun trơn",
+          "price": 150000,
+          "navigate": "ao-thun-tron",
+          "colors": [
+            { "label": "Trắng", "value": "white" },
+            { "label": "Đen", "value": "black" },
+            { "label": "Vàng", "value": "yellow" },
+            { "label": "Xanh", "value": "blue" }
+          ],
+          "sizes": [
+            { "label": "XS", "value": "extra-small" },
+            { "label": "S", "value": "small" },
+            { "label": "M", "value": "medium" },
+            { "label": "L", "value": "large" },
+            { "label": "XL", "value": "extra-large" }
+          ]
+        },
         {
           "id": 5,
           "name": "Áo thun graphic",
           "price": 200000,
-          "navigate": "ao-thun-graphic"
+          "navigate": "ao-thun-graphic",
+          "colors": [
+            { "label": "Đen", "value": "black" },
+            { "label": "Xanh lá", "value": "green" },
+            { "label": "Đỏ", "value": "red" }
+          ],
+          "sizes": [
+            { "label": "S", "value": "small" },
+            { "label": "M", "value": "medium" },
+            { "label": "L", "value": "large" }
+          ]
         },
         {
           "id": 6,
           "name": "Áo thun dài tay",
           "price": 220000,
-          "navigate": "ao-thun-dai-tay"
+          "navigate": "ao-thun-dai-tay",
+          "colors": [
+            { "label": "Trắng", "value": "white" },
+            { "label": "Xám", "value": "gray" },
+            { "label": "Xanh dương", "value": "blue" }
+          ],
+          "sizes": [
+            { "label": "M", "value": "medium" },
+            { "label": "L", "value": "large" },
+            { "label": "XL", "value": "extra-large" }
+          ]
         }
       ]
     },
@@ -46,19 +121,49 @@
           "id": 7,
           "name": "Áo sơ mi trắng",
           "price": 350000,
-          "navigate": "ao-so-mi-trang"
+          "navigate": "ao-so-mi-trang",
+          "colors": [
+            { "label": "Trắng", "value": "white" }
+          ],
+          "sizes": [
+            { "label": "S", "value": "small" },
+            { "label": "M", "value": "medium" },
+            { "label": "L", "value": "large" },
+            { "label": "XL", "value": "extra-large" },
+            { "label": "XXL", "value": "extra-extra-large" }
+          ]
         },
         {
           "id": 8,
           "name": "Áo sơ mi kẻ sọc",
           "price": 370000,
-          "navigate": "ao-so-mi-ke-soc"
+          "navigate": "ao-so-mi-ke-soc",
+          "colors": [
+            { "label": "Xanh dương", "value": "blue" },
+            { "label": "Đỏ", "value": "red" },
+            { "label": "Xám", "value": "gray" }
+          ],
+          "sizes": [
+            { "label": "M", "value": "medium" },
+            { "label": "L", "value": "large" },
+            { "label": "XL", "value": "extra-large" }
+          ]
         },
         {
           "id": 9,
           "name": "Áo sơ mi linen",
           "price": 400000,
-          "navigate": "ao-so-mi-linen"
+          "navigate": "ao-so-mi-linen",
+          "colors": [
+            { "label": "Be", "value": "beige" },
+            { "label": "Trắng", "value": "white" },
+            { "label": "Xanh lá", "value": "green" }
+          ],
+          "sizes": [
+            { "label": "S", "value": "small" },
+            { "label": "M", "value": "medium" },
+            { "label": "L", "value": "large" }
+          ]
         }
       ]
     },
@@ -66,13 +171,53 @@
       "navigate": "ao-khoac-nam",
       "description": "Áo khoác",
       "products": [
-        { "id": 10, "name": "Áo khoác da", "price": 1200000, "navigate": "ao-khoac-da" },
-        { "id": 11, "name": "Áo khoác gió", "price": 800000, "navigate": "ao-khoac-gio" },
+        {
+          "id": 10,
+          "name": "Áo khoác da",
+          "price": 1200000,
+          "navigate": "ao-khoac-da",
+          "colors": [
+            { "label": "Đen", "value": "black" },
+            { "label": "Nâu", "value": "brown" }
+          ],
+          "sizes": [
+            { "label": "M", "value": "medium" },
+            { "label": "L", "value": "large" },
+            { "label": "XL", "value": "extra-large" }
+          ]
+        },
+        {
+          "id": 11,
+          "name": "Áo khoác gió",
+          "price": 800000,
+          "navigate": "ao-khoac-gio",
+          "colors": [
+            { "label": "Xanh", "value": "blue" },
+            { "label": "Xám", "value": "gray" },
+            { "label": "Đen", "value": "black" }
+          ],
+          "sizes": [
+            { "label": "S", "value": "small" },
+            { "label": "M", "value": "medium" },
+            { "label": "L", "value": "large" },
+            { "label": "XL", "value": "extra-large" }
+          ]
+        },
         {
           "id": 12,
           "name": "Áo khoác dạ",
           "price": 1500000,
-          "navigate": "ao-khoac-da-nam"
+          "navigate": "ao-khoac-da-nam",
+          "colors": [
+            { "label": "Nâu", "value": "brown" },
+            { "label": "Be", "value": "beige" },
+            { "label": "Đen", "value": "black" }
+          ],
+          "sizes": [
+            { "label": "M", "value": "medium" },
+            { "label": "L", "value": "large" },
+            { "label": "XL", "value": "extra-large" }
+          ]
         }
       ]
     },
@@ -84,19 +229,50 @@
           "id": 13,
           "name": "Áo hoodie basic",
           "price": 450000,
-          "navigate": "ao-hoodie-basic"
+          "navigate": "ao-hoodie-basic",
+          "colors": [
+            { "label": "Đen", "value": "black" },
+            { "label": "Xám", "value": "gray" },
+            { "label": "Trắng", "value": "white" }
+          ],
+          "sizes": [
+            { "label": "S", "value": "small" },
+            { "label": "M", "value": "medium" },
+            { "label": "L", "value": "large" },
+            { "label": "XL", "value": "extra-large" }
+          ]
         },
         {
           "id": 14,
           "name": "Áo hoodie oversize",
           "price": 500000,
-          "navigate": "ao-hoodie-oversize"
+          "navigate": "ao-hoodie-oversize",
+          "colors": [
+            { "label": "Xanh dương", "value": "blue" },
+            { "label": "Xanh lá", "value": "green" },
+            { "label": "Đen", "value": "black" }
+          ],
+          "sizes": [
+            { "label": "M", "value": "medium" },
+            { "label": "L", "value": "large" },
+            { "label": "XL", "value": "extra-large" }
+          ]
         },
         {
           "id": 15,
           "name": "Áo nỉ cổ tròn",
           "price": 420000,
-          "navigate": "ao-ni-co-tron"
+          "navigate": "ao-ni-co-tron",
+          "colors": [
+            { "label": "Trắng", "value": "white" },
+            { "label": "Be", "value": "beige" },
+            { "label": "Xám", "value": "gray" }
+          ],
+          "sizes": [
+            { "label": "S", "value": "small" },
+            { "label": "M", "value": "medium" },
+            { "label": "L", "value": "large" }
+          ]
         }
       ]
     }

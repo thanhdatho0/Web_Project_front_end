@@ -1,10 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Breadcrumbs from "../../Components/ContentComponents/Breadcrumb/Breadcrumbs";
 import ColorCard from "../../Components/ContentComponents/ColorCard/ColorCard";
+import aoNamItems from "../../JsonData/AoNamItems.json";
+import Card from "@material-tailwind/react/components/Card";
 
 const ProductPage = () => {
   const [categoryName, setCategoryName] = useState("");
-  const [cateloryLocation, setCateloryLocation] = useState("");
+  const [categoryLocation, setCateloryLocation] = useState("");
+  const [count, setCount] = useState(1);
+  const [filteredProducts, setFilteredProducts] = useState<
+    { id: number; name: string; price: number; navigate: string }[]
+  >([]);
 
   const handleAddCategoryName = (categoryName: string) => {
     setCategoryName(categoryName);
@@ -39,7 +45,17 @@ const ProductPage = () => {
   const [active, setActive] = useState(
     "https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
   );
+  useEffect(() => {
+    const matchedCategory = aoNamItems.find(
+      (category) => category.navigate === categoryLocation
+    );
 
+    if (matchedCategory && Array.isArray(matchedCategory.products)) {
+      setFilteredProducts(matchedCategory.products);
+    } else {
+      setFilteredProducts([]);
+    }
+  }, [categoryLocation]);
   return (
     <div className="lg:w-[85%] mx-auto">
       <div className="pb-2 mt-16 "></div>
@@ -69,13 +85,83 @@ const ProductPage = () => {
           />
         </div>
         <div className="flex-1">
-          <span>{cateloryLocation}</span>
+          <span>{categoryLocation}</span>
           <br />
           <span>MãSP - Màu - Size</span>
           <br />
           <span>Giá bán</span>
-          <ColorCard />
+          <br />
+          <span>Màu sắc </span>
+          {filteredProducts.map((product) => (
+            <Card key={product.id} product={product} />
+          ))}
           <span>Kích thước</span>
+          <br />
+          <span>Số lượng:</span>
+          <br />
+          <div className="flex items-center  ">
+            <button
+              onClick={() => setCount((c) => c - 1)}
+              disabled={count === 1}
+              className={`w-10 h-10 justify-center rounded font-semibold transition  border border-black 
+              ${
+                count === 1
+                  ? " text-gray-400 cursor-not-allowed"
+                  : " text-gray-800 hover:bg-gray-200"
+              }`}
+            >
+              -
+            </button>
+            <input
+              type="text"
+              value={count}
+              readOnly
+              className="w-16 h-10 text-center bg-gray-100  rounded font-medium text-gray-800 mx-3"
+            />
+            <button
+              onClick={() => setCount((c) => c + 1)}
+              className="w-10 h-10 justify-center rounded border border-black text-gray-800 font-semibold hover:bg-gray-200 transition"
+            >
+              +
+            </button>
+
+            <button className="w-80 h-10 justify-center rounded border border-black text-gray-800 font-semibold hover:bg-gray-200 transition ml-16">
+              Thêm vào giỏ hàng
+            </button>
+          </div>
+          <button className="w-[552px] h-10 justify-center rounded bg-yellow-500 text-gray-800 font-semibold hover:bg-yellow-400 transition mt-6">
+            Mua ngay
+          </button>
+
+          <div className=" bg-gray-200 h-24 flex items-center justify-center mt-6">
+            <div className="flex space-x-4">
+              <img
+                src="https://yody.vn/icons/zalopay.png"
+                alt="ZaloPay"
+                className="h-8"
+              />
+              <img
+                src="https://yody.vn/icons/visa-card.png"
+                alt="VISA"
+                className="h-8"
+              />
+              <img
+                src="https://yody.vn/icons/master-card.png"
+                alt="MasterCard"
+                className="h-8"
+              />
+              <img
+                src="https://yody.vn/icons/vnpay-qr.png"
+                alt="VNPAYQR"
+                className="h-8"
+              />
+              <img
+                src="https://yody.vn/icons/momo.png"
+                alt="momo"
+                className="h-8"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
