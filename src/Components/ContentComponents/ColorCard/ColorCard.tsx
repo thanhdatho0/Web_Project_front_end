@@ -1,26 +1,30 @@
 import { useEffect, useState } from "react";
+import { Color } from "../../../Interface";
+import { ColorList } from "../../../api";
 
 interface Props {
   id: number;
 }
-interface Color {
-  hexaCode: string;
-}
+
 const ColorCard = ({ id }: Props) => {
-  const URL = `http://localhost:5254/api/products/${id}`;
   const [colors, setColors] = useState<Color[]>([]); // Lưu trữ dữ liệu màu
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchColor = async () => {
       try {
-        const result = await fetch(URL);
-        const data = await result.json();
-        setColors(data.colors); // Lưu mảng `colors` từ API vào state
-      } catch (error) {
+        const response = await ColorList(id);
+        if (typeof response === "string") {
+          setError(response);
+        } else {
+          setColors(response.colors);
+        }
+      } catch (e) {
         console.error("Error fetching data:", error);
       }
     };
-    fetchData();
-  }, [URL]);
+    fetchColor();
+  }, []);
 
   return (
     <div className="flex items-center gap-2 pt-2">

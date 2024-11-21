@@ -1,19 +1,11 @@
-// export interface Product {
-//     productId: number;
-//     title: string;
-//     price: number;
-//     category: string;
-//     description: string;
-//     image: string;
-//     navigate: string;
-// }
-
 export interface NavBarCategoryTitle {
     name: string;
 }
 
 export interface Color {
+    colorId : number;
     hexaCode : string;
+    name : string
 }
 
 interface Product {

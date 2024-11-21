@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import CardList from "../CardList/CardList";
 import ImageLinkPair from "../ImageLinkPair/ImageLinkPair";
 import ItemSuggestions from "../ItemSuggestions/ItemSuggestions";
 import tabTitles from "./TabSectionData.json";
+import ProductCardList from "../../ProductCardList/ProductCardList";
 import TrendingItemSuggestions from "../TrendingItemSuggestions/TrendingItemSuggestions";
 
 const Content = () => {
@@ -32,11 +32,7 @@ const Content = () => {
         </h2>
         <ItemSuggestions />
       </div>
-      <div>
-        {/* <CardList /> */}
-        {/* <CardList /> */}
-        đưa ra các products mới nhất
-      </div>
+      <div>đưa ra các products mới nhất</div>
       <div>
         <ImageLinkPair />
       </div>
