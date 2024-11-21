@@ -1,12 +1,7 @@
 // import { Product } from "./Product";
 import { NavBarCategoryTitle } from "./Category";
 import axios from "axios";
-import { Color } from "./Interface";
 import { Category, Product } from "./Interface";
-
-interface ProductListResponse {
-  data: Product[];
-}
 
 interface CategoryResponse {
   data: NavBarCategoryTitle[];
@@ -20,7 +15,6 @@ export const ProductList = async (categoryId: number) => {
     );
     // Giả sử response.data chứa mảng các sản phẩm
     return response.data; // Trả về mảng sản phẩm
-    console.log("haha" + categoryId);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.log("Error Message", error.message);
