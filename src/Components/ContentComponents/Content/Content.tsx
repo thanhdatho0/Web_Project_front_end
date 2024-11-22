@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import ImageLinkPair from "../ImageLinkPair/ImageLinkPair";
 import ItemSuggestions from "../ItemSuggestions/ItemSuggestions";
-import tabTitles from "./TabSectionData.json";
-import ProductCardList from "../../ProductCardList/ProductCardList";
+// import tabTitles from "./TabSectionData.json";
+// import ProductCardList from "../../ProductCardList/ProductCardList";
 import TrendingItemSuggestions from "../TrendingItemSuggestions/TrendingItemSuggestions";
 
 const Content = () => {
@@ -14,7 +14,7 @@ const Content = () => {
       <TrendingItemSuggestions />
       <div className="flex w-full justify-center pt-4">
         <Link
-          to="/Cart"
+          to="/collection"
           className="w-1/5 rounded-xl border-2 border-slate-500 py-2.5 bg-while-500 hover:bg-gray-300 font-bold text-center"
         >
           Xem thêm

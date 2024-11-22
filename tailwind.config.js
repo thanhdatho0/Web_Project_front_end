@@ -2,13 +2,12 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        beige: "#F5F5DC", // Màu Beige
+        brown: "#8B4513", // Màu Brown
+      },
+    },
   },
   plugins: [],
 };
-
-// module.exports = {
-//   corePlugins: {
-//     preflight: false,
-//   },
-// };

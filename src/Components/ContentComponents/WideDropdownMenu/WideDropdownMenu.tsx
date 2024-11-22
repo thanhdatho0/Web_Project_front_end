@@ -6,19 +6,11 @@ import {
 } from "@material-tailwind/react";
 import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  navigate: string;
-}
-
+import { useNavigate } from "react-router-dom";
 interface Item {
   navigate: string;
   description: string;
-  product?: Product[];
+  id?: number;
 }
 
 type ItemGroup = Item[];
@@ -33,6 +25,23 @@ const WideDropdownMenu = ({
   img: string;
 }) => {
   const [openMenu, setOpenMenu] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSelect = async (id: number) => {
+    if (!id) {
+      console.error("Invalid ID:", id);
+      return;
+    }
+
+    try {
+      navigate(`/category/${id}`, {
+        state: { categoryId: id },
+      });
+      setOpenMenu(false);
+    } catch (error) {
+      console.error("Error fetching category:", error);
+    }
+  };
 
   const toggleMenu = () => {
     setOpenMenu((prev) => !prev);
@@ -55,11 +64,6 @@ const WideDropdownMenu = ({
       columns[columnWithFewestLines].push(itemGroup);
     }
   });
-
-  const handleSelect = () => {
-    // onSelectProduct(description);
-    setOpenMenu(false);
-  };
 
   return (
     <Menu open={openMenu} handler={setOpenMenu}>
@@ -99,14 +103,16 @@ const WideDropdownMenu = ({
                         idx === 0 ? "font-bold pb-2 mb-1 mt-2" : "text-sm pb-2"
                       }
                      pl-2 text-sm text-gray-700 text-left`}
-                      onClick={() => handleSelect()}
+                      onClick={() => handleSelect(Number(item.id))}
                     >
-                      <Link
-                        to={`/category/${item.navigate}`}
+                      {/* <Link
+                        to={{
+                          pathname: `/category/${item.navigate}`,
+                          state: { categoryData: item },
+                        }}
                         className="dark:hover:text-red-600 ml-4"
-                      >
-                        {item.description}
-                      </Link>
+                      ></Link> */}
+                      {item.description}
                     </Typography>
                   ))}
                 </div>
