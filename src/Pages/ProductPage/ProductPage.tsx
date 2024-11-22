@@ -1,23 +1,28 @@
 import { useEffect, useState } from "react";
 import Breadcrumbs from "../../Components/ContentComponents/Breadcrumb/Breadcrumbs";
-import ColorCard from "../../Components/ContentComponents/ColorCard/ColorCard";
 import aoNamItems from "../../JsonData/AoNamItems.json";
-import Card from "@material-tailwind/react/components/Card";
+import { useCart } from "../../Components/NavBar/NavBarCart/CartContext";
+import { Link } from "react-router-dom";
 
 const ProductPage = () => {
   const [categoryName, setCategoryName] = useState("");
-  const [categoryLocation, setCateloryLocation] = useState("");
+  const [categoryLocation, setCategoryLocation] = useState("");
   const [count, setCount] = useState(1);
   const [filteredProducts, setFilteredProducts] = useState<
     { id: number; name: string; price: number; navigate: string }[]
   >([]);
+  const { addToCart } = useCart();
+
+  const handleAddToCart = () => {
+    addToCart(count);
+  };
 
   const handleAddCategoryName = (categoryName: string) => {
     setCategoryName(categoryName);
   };
 
   const handleAddCategoryLocation = (category: string) => {
-    setCateloryLocation(category);
+    setCategoryLocation(category);
   };
 
   const data = [
@@ -45,6 +50,7 @@ const ProductPage = () => {
   const [active, setActive] = useState(
     "https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
   );
+
   useEffect(() => {
     const matchedCategory = aoNamItems.find(
       (category) => category.navigate === categoryLocation
@@ -92,9 +98,7 @@ const ProductPage = () => {
           <span>Giá bán</span>
           <br />
           <span>Màu sắc </span>
-          {filteredProducts.map((product) => (
-            <Card key={product.id} product={product} />
-          ))}
+          {/*   */}
           <span>Kích thước</span>
           <br />
           <span>Số lượng:</span>
@@ -125,13 +129,18 @@ const ProductPage = () => {
               +
             </button>
 
-            <button className="w-80 h-10 justify-center rounded border border-black text-gray-800 font-semibold hover:bg-gray-200 transition ml-16">
+            <button
+              onClick={handleAddToCart}
+              className="w-80 h-10 justify-center rounded border border-black text-gray-800 font-semibold hover:bg-gray-200 transition ml-16"
+            >
               Thêm vào giỏ hàng
             </button>
           </div>
-          <button className="w-[552px] h-10 justify-center rounded bg-yellow-500 text-gray-800 font-semibold hover:bg-yellow-400 transition mt-6">
-            Mua ngay
-          </button>
+          <Link to="/Cart">
+            <button className="w-[552px] h-10 justify-center rounded bg-yellow-500 text-gray-800 font-semibold hover:bg-yellow-400 transition mt-6">
+              Mua ngay
+            </button>
+          </Link>
 
           <div className=" bg-gray-200 h-24 flex items-center justify-center mt-6">
             <div className="flex space-x-4">

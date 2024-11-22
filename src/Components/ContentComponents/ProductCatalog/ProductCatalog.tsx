@@ -1,5 +1,4 @@
 "use client";
-import Card from "../Card/Card";
 import {
   Disclosure,
   DisclosureButton,
@@ -14,10 +13,9 @@ import {
   MinusIcon,
   PlusIcon,
 } from "@heroicons/react/20/solid";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ItemFilter from "../ItemFilter/ItemFilter";
-import aoNamItems from "../../../JsonData/AoNamItems.json";
-// import quanNamItems from "../../../JsonData/QuanNamItems.json";
+import CardList from "../CardList/CardList";
 
 const sortOptions = [
   { name: "Nổi bật", href: "#", current: false },
@@ -76,16 +74,14 @@ function classNames(...classes: (string | false | null | undefined)[]): string {
 interface Props {
   categoryName: string;
   categoryLocation: string;
+  categoryId: number;
 }
 
 const ProductCatalog: React.FC<Props> = ({
   categoryName,
-  categoryLocation,
+  categoryId,
 }: Props) => {
   const [selectedFilters, setSelectedFilters] = useState<{ id: string }[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<
-    { id: number; name: string; price: number; navigate: string }[]
-  >([]);
   const handleAddItem = (value) => {
     setSelectedFilters((selectedFilters) => [
       ...selectedFilters,
@@ -105,17 +101,6 @@ const ProductCatalog: React.FC<Props> = ({
     handleAddItem(newItem);
   };
 
-  useEffect(() => {
-    const matchedCategory = aoNamItems.find(
-      (category) => category.navigate === categoryLocation
-    );
-
-    if (matchedCategory && Array.isArray(matchedCategory.products)) {
-      setFilteredProducts(matchedCategory.products);
-    } else {
-      setFilteredProducts([]);
-    }
-  }, [categoryLocation]);
   return (
     <div className="bg-white">
       <div>
@@ -235,11 +220,8 @@ const ProductCatalog: React.FC<Props> = ({
                   </Disclosure>
                 ))}
               </form>
-              <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* thông tin products */}
-                {filteredProducts.map((product) => (
-                  <Card key={product.id} product={product} />
-                ))}
+              <div className="lg:col-span-3 gap-6">
+                <CardList categoryId={categoryId} />
               </div>
             </div>
           </section>
