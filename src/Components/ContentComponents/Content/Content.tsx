@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import CardList from "../CardList/CardList";
 import ImageLinkPair from "../ImageLinkPair/ImageLinkPair";
 import ItemSuggestions from "../ItemSuggestions/ItemSuggestions";
 import tabTitles from "./TabSectionData.json";
+import ProductCardList from "../../ProductCardList/ProductCardList";
+import TrendingItemSuggestions from "../TrendingItemSuggestions/TrendingItemSuggestions";
 
 const Content = () => {
   return (
@@ -10,19 +11,7 @@ const Content = () => {
       <h2 className="my-4 flex h-12 justify-center text-4xl font-medium">
         Sản phẩm ưa chuộng
       </h2>
-      <div className="m-1 flex w-full items-center justify-start space-x-4 font-sans xl:justify-center">
-        {tabTitles.map((title) => (
-          <div
-            id={title.id}
-            className="cursor-pointer rounded-3xl bg-stone-100 px-7 py-2 text-xl text-slate-400"
-          >
-            {title.title}
-          </div>
-        ))}
-      </div>
-      <div>
-        <CardList />
-      </div>
+      <TrendingItemSuggestions />
       <div className="flex w-full justify-center pt-4">
         <Link
           to="/Cart"
@@ -37,17 +26,9 @@ const Content = () => {
           alt="A couple wearing orange jackets standing in a field of tall grass"
         />
       </div>
-      <div className="flex w-full justify-center pt-4">
-        <h2 className="mr-3 flex h-12 justify-center text-3xl pt-1 bg-gradient-to-r from-yellow-900 to-yellow-500 text-transparent bg-clip-text">
-          Gợi ý sản phẩm
-        </h2>
-        <ItemSuggestions />
-      </div>
-      <div>
-        {/* <CardList /> */}
-        {/* <CardList /> */}
-        đưa ra các products mới nhất
-      </div>
+
+      <ItemSuggestions />
+
       <div>
         <ImageLinkPair />
       </div>
