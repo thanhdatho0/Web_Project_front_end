@@ -6,16 +6,11 @@ import ProductCatalog from "../../Components/ContentComponents/ProductCatalog/Pr
 
 const CategoryPage = () => {
   const [categoryName, setCategoryName] = useState("");
-  const [cateloryLocation, setCateloryLocation] = useState("");
 
   const location = useLocation();
   const { categoryId } = location.state || {};
   const handleAddCategoryName = (categoryName: string) => {
     setCategoryName(categoryName);
-  };
-
-  const handleAddCategoryLocation = (category: string) => {
-    setCateloryLocation(category);
   };
 
   useEffect(() => {
@@ -29,7 +24,6 @@ const CategoryPage = () => {
         const response = await axios.get(
           `/api/products?CategoryId=${categoryId}&PageNumber=1&PageSize=10`
         );
-        console.log(categoryId);
         if (Array.isArray(response.data)) {
           console.log(response.data);
         }
@@ -46,13 +40,9 @@ const CategoryPage = () => {
       <div className="pb-2 mt-16"></div>
       <Breadcrumbs
         onAddCategoryName={handleAddCategoryName}
-        onAddCategoryLocation={handleAddCategoryLocation}
-      />
-      <ProductCatalog
-        categoryName={categoryName}
-        categoryLocation={cateloryLocation}
         categoryId={categoryId}
       />
+      <ProductCatalog categoryName={categoryName} categoryId={categoryId} />
     </div>
   );
 };

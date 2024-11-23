@@ -4,11 +4,11 @@ import { useCart } from "./CartContext";
 const Cart = () => {
   const { count } = useCart();
   return (
-    <div>
+    <div className="relative">
       <Link to="/Cart">
         <button
           type="button"
-          className="relative inline-flex items-center p-3 text-sm font-medium text-center text-black rounded-lg focus:outline-none  "
+          className="relative flex items-center p-2 text-sm font-medium bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 transition ease-in-out duration-200"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -16,7 +16,7 @@ const Cart = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-7 h-7"
+            className="w-7 h-7 text-gray-800"
           >
             <path
               strokeLinecap="round"
@@ -24,9 +24,11 @@ const Cart = () => {
               d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
             />
           </svg>
-          <div className="absolute inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-0.25 -right-0.5 ">
-            {count}
-          </div>
+          {count > 0 && (
+            <span className="absolute flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full -top-1 -right-1 ring-2 ring-white">
+              {count}
+            </span>
+          )}
         </button>
       </Link>
     </div>
