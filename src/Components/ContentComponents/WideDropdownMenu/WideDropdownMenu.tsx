@@ -7,10 +7,31 @@ import {
 import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
+
+const slugify = (text: string) => {
+  const from =
+    "áàảãạăắằẳẵặâấầẩẫậóòỏõọôốồổỗộơớờởỡợéèẻẽẹêếềểễệúùủũụưứừửữựíìỉĩịýỳỷỹỵđ";
+  const to =
+    "aaaaaaaaaaaaaaaaaaooooooooooooooooeeeeeeeeeeeuuuuuuuuuuuuiiiiiyyyyyd";
+
+  let slug = text
+    .split("")
+    .map((char) => {
+      const i = from.indexOf(char.toLowerCase());
+      return i !== -1 ? to[i] : char;
+    })
+    .join("");
+
+  slug = slug.toLowerCase();
+
+  slug = slug.replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-");
+
+  return slug.replace(/^-+|-+$/g, "");
+};
 interface Item {
   navigate: string;
   description: string;
-  id?: number;
+  id?: string;
 }
 
 type ItemGroup = Item[];
@@ -26,15 +47,15 @@ const WideDropdownMenu = ({
 }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const navigate = useNavigate();
-
-  const handleSelect = async (id: number) => {
+  const handleSelect = async (id: number, description: string) => {
     if (!id) {
       console.error("Invalid ID:", id);
       return;
     }
-
+    console.log(description);
     try {
-      navigate(`/category/${id}`, {
+      const formattedDescription = slugify(description);
+      navigate(`/category/${formattedDescription}`, {
         state: { categoryId: id },
       });
       setOpenMenu(false);
@@ -103,7 +124,9 @@ const WideDropdownMenu = ({
                         idx === 0 ? "font-bold pb-2 mb-1 mt-2" : "text-sm pb-2"
                       }
                      pl-2 text-sm text-gray-700 text-left`}
-                      onClick={() => handleSelect(Number(item.id))}
+                      onClick={() =>
+                        handleSelect(Number(item.id), item.description)
+                      }
                     >
                       {/* <Link
                         to={{

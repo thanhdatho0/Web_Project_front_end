@@ -13,9 +13,10 @@ import {
   MinusIcon,
   PlusIcon,
 } from "@heroicons/react/20/solid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ItemFilter from "../ItemFilter/ItemFilter";
 import CardList from "../CardList/CardList";
+import { ProductList } from "../../../api";
 
 const sortOptions = [
   { name: "Nổi bật", href: "#", current: false },
@@ -73,7 +74,6 @@ function classNames(...classes: (string | false | null | undefined)[]): string {
 }
 interface Props {
   categoryName: string;
-  categoryLocation: string;
   categoryId: number;
 }
 
@@ -82,6 +82,21 @@ const ProductCatalog: React.FC<Props> = ({
   categoryId,
 }: Props) => {
   const [selectedFilters, setSelectedFilters] = useState<{ id: string }[]>([]);
+  const [productCount, setProductCount] = useState<number>(0);
+  useEffect(() => {
+    const fetchProductCount = async () => {
+      try {
+        const response = await ProductList(categoryId);
+        const productCount = response.length;
+        setProductCount(productCount);
+        console.log(productCount);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+    fetchProductCount();
+  }, [categoryId]);
+
   const handleAddItem = (value) => {
     setSelectedFilters((selectedFilters) => [
       ...selectedFilters,
@@ -110,7 +125,7 @@ const ProductCatalog: React.FC<Props> = ({
           </h1>
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-3 pt-2">
             <span className="text-lg  tracking-tight text-gray-900">
-              ... sản phẩm
+              {productCount} sản phẩm
             </span>
             <ItemFilter
               selectedFilter={selectedFilters}
