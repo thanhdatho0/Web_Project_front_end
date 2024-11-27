@@ -1,99 +1,28 @@
 [
-    { "navigate": "quan-nam", "description": "Quần nam" },
+    { "navigate": "quan-nam", "description": "Quần" },
     {
       "navigate": "quan-jeans-nam",
-      "description": "Quần jeans",
-      "products": [
-        {
-          "id": 1,
-          "name": "Quần jeans slim fit",
-          "price": 450000,
-          "navigate": "quan-jeans-slim-fit"
-        },
-        {
-          "id": 2,
-          "name": "Quần jeans rách",
-          "price": 500000,
-          "navigate": "quan-jeans-rach"
-        },
-        {
-          "id": 3,
-          "name": "Quần jeans basic",
-          "price": 400000,
-          "navigate": "quan-jeans-basic"
-        }
-      ]
+      "description": "Quần jeans nam",
+      "id": "6"
     },
     {
       "navigate": "quan-au-nam",
-      "description": "Quần âu",
-      "products": [
-        {
-          "id": 4,
-          "name": "Quần âu công sở",
-          "price": 600000,
-          "navigate": "quan-au-cong-so"
-        },
-        {
-          "id": 5,
-          "name": "Quần âu lưng cao",
-          "price": 650000,
-          "navigate": "quan-au-lung-cao"
-        }
-      ]
+      "description": "Quần âu nam",
+      "id": "7"
     },
     {
       "navigate": "quan-kaki-nam",
-      "description": "Quần kaki",
-      "products": [
-        {
-          "id": 6,
-          "name": "Quần kaki slim fit",
-          "price": 550000,
-          "navigate": "quan-kaki-slim-fit"
-        },
-        {
-          "id": 7,
-          "name": "Quần kaki basic",
-          "price": 500000,
-          "navigate": "quan-kaki-basic"
-        }
-      ]
+      "description": "Quần kaki nam",
+      "id": "8"
     },
     {
       "navigate": "quan-dai-nam",
-      "description": "Quần dài",
-      "products": [
-        {
-          "id": 8,
-          "name": "Quần dài thể thao",
-          "price": 450000,
-          "navigate": "quan-dai-the-thao"
-        },
-        {
-          "id": 9,
-          "name": "Quần dài jogger",
-          "price": 400000,
-          "navigate": "quan-dai-jogger"
-        }
-      ]
+      "description": "Quần dài nam",
+      "id": "9"
     },
     {
       "navigate": "quan-short-nam",
-      "description": "Quần short",
-      "products": [
-        {
-          "id": 10,
-          "name": "Quần short kaki",
-          "price": 300000,
-          "navigate": "quan-short-kaki"
-        },
-        {
-          "id": 11,
-          "name": "Quần short thể thao",
-          "price": 350000,
-          "navigate": "quan-short-the-thao"
-        }
-      ]
+      "description": "Quần short nam",
+      "id": "10"
     }
   ]

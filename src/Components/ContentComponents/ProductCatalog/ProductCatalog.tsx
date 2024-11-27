@@ -1,5 +1,4 @@
 "use client";
-import Card from "../Card/Card";
 import {
   Disclosure,
   DisclosureButton,
@@ -16,8 +15,8 @@ import {
 } from "@heroicons/react/20/solid";
 import { useEffect, useState } from "react";
 import ItemFilter from "../ItemFilter/ItemFilter";
-import aoNamItems from "../../../JsonData/AoNamItems.json";
-// import quanNamItems from "../../../JsonData/QuanNamItems.json";
+import CardList from "../CardList/CardList";
+import { ProductList } from "../../../api";
 
 const sortOptions = [
   { name: "Nổi bật", href: "#", current: false },
@@ -75,17 +74,29 @@ function classNames(...classes: (string | false | null | undefined)[]): string {
 }
 interface Props {
   categoryName: string;
-  categoryLocation: string;
+  categoryId: number;
 }
 
 const ProductCatalog: React.FC<Props> = ({
   categoryName,
-  categoryLocation,
+  categoryId,
 }: Props) => {
   const [selectedFilters, setSelectedFilters] = useState<{ id: string }[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<
-    { id: number; name: string; price: number; navigate: string }[]
-  >([]);
+  const [productCount, setProductCount] = useState<number>(0);
+  useEffect(() => {
+    const fetchProductCount = async () => {
+      try {
+        const response = await ProductList(categoryId);
+        const productCount = response.length;
+        setProductCount(productCount);
+        console.log(productCount);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+    fetchProductCount();
+  }, [categoryId]);
+
   const handleAddItem = (value) => {
     setSelectedFilters((selectedFilters) => [
       ...selectedFilters,
@@ -105,17 +116,6 @@ const ProductCatalog: React.FC<Props> = ({
     handleAddItem(newItem);
   };
 
-  useEffect(() => {
-    const matchedCategory = aoNamItems.find(
-      (category) => category.navigate === categoryLocation
-    );
-
-    if (matchedCategory && Array.isArray(matchedCategory.products)) {
-      setFilteredProducts(matchedCategory.products);
-    } else {
-      setFilteredProducts([]);
-    }
-  }, [categoryLocation]);
   return (
     <div className="bg-white">
       <div>
@@ -125,7 +125,7 @@ const ProductCatalog: React.FC<Props> = ({
           </h1>
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-3 pt-2">
             <span className="text-lg  tracking-tight text-gray-900">
-              ... sản phẩm
+              {productCount} sản phẩm
             </span>
             <ItemFilter
               selectedFilter={selectedFilters}
@@ -235,11 +235,8 @@ const ProductCatalog: React.FC<Props> = ({
                   </Disclosure>
                 ))}
               </form>
-              <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* thông tin products */}
-                {filteredProducts.map((product) => (
-                  <Card key={product.id} product={product} />
-                ))}
+              <div className="lg:col-span-3 gap-6">
+                <CardList categoryId={categoryId} />
               </div>
             </div>
           </section>

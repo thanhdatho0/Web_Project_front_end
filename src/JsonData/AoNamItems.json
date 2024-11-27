@@ -1,103 +1,28 @@
 [
-    { "navigate": "ao-nam", "description": "Áo nam" },
+    { "navigate": "ao-nam", "description": "Áo", "colors": "undefined" },
     {
       "navigate": "ao-polo-nam",
-      "description": "Áo polo",
-      "products": [
-        { "id": 1, "name": "Áo polo basic", "price": 25000, "navigate": "ao-polo-basic" },
-        {
-          "id": 2,
-          "name": "Áo polo thể thao",
-          "price": 300000,
-          "navigate": "ao-polo-the-thao"
-        },
-        {
-          "id": 3,
-          "name": "Áo polo cổ trụ",
-          "price": 280000,
-          "navigate": "ao-polo-co-tru"
-        }
-      ]
+      "description": "Áo polo nam",
+      "id": "1"
     },
     {
       "navigate": "ao-thun-nam",
-      "description": "Áo thun",
-      "products": [
-        { "id": 4, "name": "Áo thun trơn", "price": 150000, "navigate": "ao-thun-tron" },
-        {
-          "id": 5,
-          "name": "Áo thun graphic",
-          "price": 200000,
-          "navigate": "ao-thun-graphic"
-        },
-        {
-          "id": 6,
-          "name": "Áo thun dài tay",
-          "price": 220000,
-          "navigate": "ao-thun-dai-tay"
-        }
-      ]
+      "description": "Áo thun nam",
+      "id": "2"
     },
     {
       "navigate": "ao-so-mi-nam",
-      "description": "Áo sơ mi",
-      "products": [
-        {
-          "id": 7,
-          "name": "Áo sơ mi trắng",
-          "price": 350000,
-          "navigate": "ao-so-mi-trang"
-        },
-        {
-          "id": 8,
-          "name": "Áo sơ mi kẻ sọc",
-          "price": 370000,
-          "navigate": "ao-so-mi-ke-soc"
-        },
-        {
-          "id": 9,
-          "name": "Áo sơ mi linen",
-          "price": 400000,
-          "navigate": "ao-so-mi-linen"
-        }
-      ]
+      "description": "Áo sơ mi nam",
+      "id": "3"
     },
     {
       "navigate": "ao-khoac-nam",
-      "description": "Áo khoác",
-      "products": [
-        { "id": 10, "name": "Áo khoác da", "price": 1200000, "navigate": "ao-khoac-da" },
-        { "id": 11, "name": "Áo khoác gió", "price": 800000, "navigate": "ao-khoac-gio" },
-        {
-          "id": 12,
-          "name": "Áo khoác dạ",
-          "price": 1500000,
-          "navigate": "ao-khoac-da-nam"
-        }
-      ]
+      "description": "Áo khoác nam",
+      "id": "4"
     },
     {
       "navigate": "ao-hoodie-ni-nam",
-      "description": "Áo hoodie - Áo nỉ",
-      "products": [
-        {
-          "id": 13,
-          "name": "Áo hoodie basic",
-          "price": 450000,
-          "navigate": "ao-hoodie-basic"
-        },
-        {
-          "id": 14,
-          "name": "Áo hoodie oversize",
-          "price": 500000,
-          "navigate": "ao-hoodie-oversize"
-        },
-        {
-          "id": 15,
-          "name": "Áo nỉ cổ tròn",
-          "price": 420000,
-          "navigate": "ao-ni-co-tron"
-        }
-      ]
+      "description": "Áo hoodie - Áo nỉ nam",
+      "id": "5"
     }
   ]

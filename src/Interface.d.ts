@@ -22,7 +22,6 @@ export interface Product {
     sizes: Size[];
     colors: Color[];
     navigate: string;
-
   }
   
 export interface Size {

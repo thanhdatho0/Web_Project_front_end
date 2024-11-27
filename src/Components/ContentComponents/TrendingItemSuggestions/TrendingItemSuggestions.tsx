@@ -26,9 +26,9 @@ const TrendingItemSuggestions: React.FC = (): JSX.Element => {
     };
     fetchProduct();
   }, []);
+  
   const handleSubcategoryClick = async (subcategoryId: number) => {
-    setSelectedSubcategoryId(subcategoryId); // Update selected category
-  };
+    setSelectedSubcategoryId(subcategoryId); // Update selected subcategory
   return (
     <>
       <div className="m-1 flex w-full items-center justify-start space-x-4 font-sans xl:justify-center">

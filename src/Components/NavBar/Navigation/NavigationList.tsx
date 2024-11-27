@@ -6,132 +6,145 @@ import quanNamItems from "../../../JsonData/QuanNamItems.json";
 // const aoNamItems =
 
 const doBoNamItems = [
-  { navigate: "#", description: "Đồ bộ" },
-  { navigate: "#", description: "Đồ bộ ngắn tay" },
-  { navigate: "#", description: "Đồ bộ dài tay" },
+  { navigate: "do-bo-nam", description: "Đồ bộ" },
+  { navigate: "db-ngan-tay", description: "Đồ bộ ngắn tay nam", id: "11" },
+  { navigate: "db-dai-tay", description: "Đồ bộ dài tay nam", id: "12" },
 ];
 
 const doMacTrongNamItems = [
-  { navigate: "#", description: "Đò mặc trong" },
-  { navigate: "#", description: "Áo ba lỗ" },
-  { navigate: "#", description: "Quần lót" },
-  { navigate: "#", description: "Áo giữ nhiệt" },
+  { navigate: "do-mac-trong-nam", description: "Đồ mặc trong" },
+  { navigate: "ao-ba-lo", description: "Áo ba lỗ nam", id: "13" },
+  { navigate: "quan-lot", description: "Quần lót nam", id: "14" },
+  { navigate: "ao-giu-nhiet", description: "Áo giữ nhiệt nam", id: "15" },
 ];
 
 const doTheThaoNamItems = [
-  { navigate: "#", description: "Đồ thể thao nam" },
-  { navigate: "#", description: "Áo thun thể thao" },
-  { navigate: "#", description: "Áo polo" },
-  { navigate: "#", description: "Quần thể thao" },
-  { navigate: "#", description: "Bộ thể thao" },
+  { navigate: "do-the-thao-nam", description: "Đồ thể thao" },
+  {
+    navigate: "ao-thun-the-thao",
+    description: "Áo thun thể thao nam",
+    id: "16",
+  },
+  { navigate: "ao-polo", description: "Áo polo nam", id: "17" },
+  { navigate: "quan-the-thao", description: "Quần thể thao nam", id: "18" },
+  { navigate: "bo-the-thao", description: "Bộ thể thao nam", id: "19" },
 ];
 
 const phuKienNamItems = [
-  { navigate: "#", description: "Phụ kiện nam" },
-  { navigate: "#", description: "Giày" },
-  { navigate: "#", description: "Thắt lưng" },
-  { navigate: "#", description: "Mũ" },
-  { navigate: "#", description: "Khác" },
+  { navigate: "phu-kien-nam", description: "Phụ kiện" },
+  { navigate: "giay", description: "Giày nam", id: "20" },
+  { navigate: "that-lung", description: "Thắt lưng nam", id: "21" },
+  { navigate: "mu", description: "Mũ nam", id: "22" },
 ];
 
 // Các danh mục sản phẩm nữ
 const aoNuItems = [
-  { navigate: "#", description: "Áo nữ" },
-  { navigate: "#", description: "Áo polo" },
-  { navigate: "#", description: "Áo thun" },
-  { navigate: "#", description: "Áo sơ mi" },
-  { navigate: "#", description: "Áo chống nắng" },
-  { navigate: "#", description: "Áo khoác" },
-  { navigate: "#", description: "Áo hoodie - Áo nỉ" },
-  { navigate: "#", description: "Áo len" },
+  { navigate: "ao-nu", description: "Áo" },
+  { navigate: "ao-polo", description: "Áo polo nữ", id: "23" },
+  { navigate: "ao-thun", description: "Áo thun nữ", id: "24" },
+  { navigate: "ao-so-mi", description: "Áo sơ mi nữ", id: "25" },
+  { navigate: "ao-chong-nang", description: "Áo chống nắng nữ", id: "26" },
+  { navigate: "ao-khoac", description: "Áo khoác nữ", id: "27" },
+  { navigate: "ao-hoodie-ni", description: "Áo hoodie - Áo nỉ nữ", id: "28" },
+  { navigate: "#ao-len", description: "Áo len nữ", id: "29" },
 ];
 
 const quanNuItems = [
-  { navigate: "#", description: "Quần nữ" },
-  { navigate: "#", description: "Quần jeans" },
-  { navigate: "#", description: "Quần âu" },
-  { navigate: "#", description: "Quần kaki" },
-  { navigate: "#", description: "Quần dài" },
-  { navigate: "#", description: "Quần short" },
-  { navigate: "#", description: "Quần nỉ nữ" },
+  { navigate: "quan-nu", description: "Quần" },
+  { navigate: "quan-jeans", description: "Quần jeans nữ", id: "30" },
+  { navigate: "quan-au", description: "Quần âu nữ", id: "31" },
+  { navigate: "quan-kaki", description: "Quần kaki nữ", id: "32" },
+  { navigate: "quan-dai", description: "Quần dài nữ", id: "33" },
+  { navigate: "quan-short", description: "Quần short nữ", id: "34" },
+  { navigate: "quan-ni", description: "Quần nỉ nữ", id: "35" },
 ];
 
 const doBoNuItems = [
-  { navigate: "#", description: "Đồ bộ" },
-  { navigate: "#", description: "Đồ bộ ngắn tay" },
-  { navigate: "#", description: "Đồ bộ dài tay" },
+  { navigate: "do-bo-nu", description: "Đồ bộ" },
+  { navigate: "do-bo-ngan-tay", description: "Đồ bộ ngắn tay nữ", id: "36" },
+  { navigate: "do-bo-dai-tay", description: "Đồ bộ dài tay nữ", id: "37" },
 ];
 
 const doMacTrongNuItems = [
-  { navigate: "#", description: "Đồ mặc trong" },
-  { navigate: "#", description: "Áo ba lỗ - 2 day" },
-  { navigate: "#", description: "Quần lót" },
-  { navigate: "#", description: "Áo bra" },
-  { navigate: "#", description: "Áo giữ nhiệt" },
+  { navigate: "do-mac-trong-nu", description: "Đồ mặc trong" },
+  { navigate: "ao-ba-lo-2-day", description: "Áo ba lỗ - 2 day nữ", id: "38" },
+  { navigate: "quan-lot", description: "Quần lót nữ", id: "39" },
+  { navigate: "ao-bra", description: "Áo bra nữ", id: "40" },
+  { navigate: "ao-giu-nhiet", description: "Áo giữ nhiệt nữ", id: "41" },
 ];
 
 const doTheThaoNuItems = [
-  { navigate: "#", description: "Đồ thể thao" },
-  { navigate: "#", description: "Áo polo thể thao" },
-  { navigate: "#", description: "Bộ thể thao" },
+  { navigate: "do-the-thao-nu", description: "Đồ thể thao" },
+  {
+    navigate: "ao-polo-the-thao",
+    description: "Áo polo thể thao nữ",
+    id: "42",
+  },
+  { navigate: "bo-the-thao", description: "Bộ thể thao nữ", id: "43" },
 ];
 
 const vayNuItems = [
-  { navigate: "#", description: "Váy nữ" },
-  { navigate: "#", description: "Đầm" },
-  { navigate: "#", description: "Chân váy" },
+  { navigate: "vay-nu", description: "Váy" },
+  { navigate: "dam-nu", description: "Đầm nữ", id: "44" },
+  { navigate: "chan-vay-nu", description: "Chân váy nữ", id: "45" },
 ];
 
 const phuKienNuItems = [
-  { navigate: "#", description: "Phụ kiện nữ" },
-  { navigate: "#", description: "Giày" },
-  { navigate: "#", description: "Túi xách" },
-  { navigate: "#", description: "Tất nữ" },
-  { navigate: "#", description: "Khác" },
+  { navigate: "phu-kien-nu", description: "Phụ kiện" },
+  { navigate: "giay", description: "Giày nữ", id: "46" },
+  { navigate: "tui-xach", description: "Túi xách nữ", id: "47" },
+  { navigate: "tat", description: "Tất nữ", id: "48" },
 ];
 
 // Các danh mục sản phẩm trẻ con
 const aoTreEmItems = [
-  { navigate: "#", description: "Áo trẻ em" },
-  { navigate: "#", description: "Áo polo" },
-  { navigate: "#", description: "Áo thun" },
-  { navigate: "#", description: "Áo sơ mi" },
-  { navigate: "#", description: "Áo khoác" },
-  { navigate: "#", description: "Áo hoodie - Áo nỉ" },
-  { navigate: "#", description: "Áo len" },
+  { navigate: "ao-tre-em", description: "Áo" },
+  { navigate: "ao-polo", description: "Áo polo trẻ ẻm", id: "49" },
+  { navigate: "ao-thun", description: "Áo thun trẻ em", id: "50" },
+  { navigate: "ao-so-mi", description: "Áo sơ mi trẻ em", id: "51" },
+  { navigate: "ao-khoac", description: "Áo khoác trẻ em", id: "52" },
+  {
+    navigate: "ao-hoodie-ni",
+    description: "Áo hoodie - Áo nỉ trẻ em",
+    id: "53",
+  },
+  { navigate: "ao-len", description: "Áo len trẻ em", id: "54" },
 ];
 
 const quanTreEmItems = [
-  { navigate: "#", description: "Quần trẻ em" },
-  { navigate: "#", description: "Quần jeans" },
-  { navigate: "#", description: "Quần kaki" },
-  { navigate: "#", description: "Quần dài" },
-  { navigate: "#", description: "Quần short" },
-  { navigate: "#", description: "Quần nỉ" },
+  { navigate: "quan", description: "Quần " },
+  { navigate: "quan-jean", description: "Quần jeans trẻ em", id: "55" },
+  { navigate: "quan-kaki", description: "Quần kaki trẻ em", id: "56" },
+  { navigate: "quan-dai", description: "Quần dài trẻ em", id: "57" },
+  { navigate: "quan-short", description: "Quần short trẻ em", id: "58" },
+  { navigate: "quan-ni", description: "Quần nỉ trẻ em", id: "59" },
 ];
 
 const doBoTreEmItems = [
-  { navigate: "#", description: "Đồ bộ trẻ em" },
-  { navigate: "#", description: "Đồ bộ ngắn tay" },
-  { navigate: "#", description: "Đồ bộ dài tay" },
+  { navigate: "do-bo-tre-em", description: "Đồ bộ" },
+  {
+    navigate: "do-bo-ngan-tay",
+    description: "Đồ bộ ngắn tay trẻ em",
+    id: "60",
+  },
+  { navigate: "do-bo-dai-tay", description: "Đồ bộ dài tay trẻ em", id: "61" },
 ];
 
 const doMacTrongItems = [
-  { navigate: "#", description: "Đồ mặc trong" },
-  { navigate: "#", description: "Áo giữ nhiệt" },
+  { navigate: "do-mac-trong-tre-em", description: "Đồ mặc trong" },
+  { navigate: "ao-giu-nhiet", description: "Áo giữ nhiệt trẻ em", id: "62" },
 ];
 
 const vayTreEmItems = [
-  { navigate: "#", description: "Đầm - Chân váy" },
-  { navigate: "#", description: "Đầm" },
-  { navigate: "#", description: "Chân váy" },
+  { navigate: "dam-chan-vay-tre-em", description: "Đầm - Chân váy" },
+  { navigate: "dam", description: "Đầm trẻ em", id: "63" },
+  { navigate: "chan-vay", description: "Chân váy trẻ em", id: "64" },
 ];
 
 const phuKienTreEmItems = [
-  { navigate: "#", description: "Phụ kiện trẻ em" },
-  { navigate: "#", description: "Mũ" },
-  { navigate: "#", description: "Tất" },
-  { navigate: "#", description: "Khác" },
+  { navigate: "phu-kien-tre-em", description: "Phụ kiện" },
+  { navigate: "mu", description: "Mũ trẻ em", id: "65" },
+  { navigate: "tat", description: "Tất trẻ em", id: "66" },
 ];
 
 const items = [
