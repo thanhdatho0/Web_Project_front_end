@@ -4,10 +4,10 @@ import { ProductList } from "../../../api";
 import { Product } from "../../../Interface";
 
 interface Props {
-  categoryId: number;
+  subcategoryId: number;
 }
 
-const CardList: React.FC<Props> = ({ categoryId }: Props): JSX.Element => {
+const CardList: React.FC<Props> = ({ subcategoryId }: Props): JSX.Element => {
   const [products, setProducts] = useState<Product[] | string>([]); // Store products or error message
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false); // Loading state
@@ -16,7 +16,7 @@ const CardList: React.FC<Props> = ({ categoryId }: Props): JSX.Element => {
     const fetchProduct = async () => {
       setLoading(true); // Set loading to true before fetching data
       try {
-        const response = await ProductList(categoryId);
+        const response = await ProductList(subcategoryId);
         if (typeof response === "string") {
           // Handle error if response is a string
           setError(response);
@@ -33,7 +33,7 @@ const CardList: React.FC<Props> = ({ categoryId }: Props): JSX.Element => {
     };
 
     fetchProduct();
-  }, [categoryId]); // Re-fetch when categoryId changes
+  }, [subcategoryId]); // Re-fetch when subcategoryId changes
 
   if (loading) {
     return <div>Loading...</div>; // Show loading state while fetching

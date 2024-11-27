@@ -8,7 +8,7 @@ export interface Color {
     name : string
 }
 
-interface Product {
+export interface Product {
     productId: number;
     name: string;
     categoryName: string;
@@ -25,7 +25,7 @@ interface Product {
 
   }
   
-  interface Size {
+export interface Size {
     sizeId: number;
     sizeValue: string;
   }
@@ -37,7 +37,7 @@ interface Product {
     images: Image[];
   }
   
-  interface Image {
+export interface Image {
     imageId: number;
     url: string;
     alt: string;
@@ -45,9 +45,27 @@ interface Product {
     colorId: number;
   }
 
-  interface Category{
+export interface Category{
     categoryId : number;
     name : string;
-    description : string;
-    products : Product[]
+    targetCustomerId : number;
+    subcategories : Subcategory[];
+    navigate: string;
   }
+
+export interface Subcategory {
+    subcategoryId: number;
+    subcategoryName : string;
+    description : string;
+    products: Product[];
+    categoryId: number;
+    navigate: string;
+}
+
+export interface TargerCustomer {
+  targetCustomerId : number;
+  targetCustomerName : string;
+  url : string;
+  alt : string;
+  categories : Category[];
+}
