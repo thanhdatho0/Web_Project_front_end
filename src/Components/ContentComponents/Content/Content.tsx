@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import ImageLinkPair from "../ImageLinkPair/ImageLinkPair";
 import ItemSuggestions from "../ItemSuggestions/ItemSuggestions";
-// import tabTitles from "./TabSectionData.json";
-// import ProductCardList from "../../ProductCardList/ProductCardList";
 import TrendingItemSuggestions from "../TrendingItemSuggestions/TrendingItemSuggestions";
 
 const Content = () => {
