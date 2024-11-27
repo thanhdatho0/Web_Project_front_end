@@ -73,20 +73,20 @@ function classNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(" ");
 }
 interface Props {
-  categoryName: string;
-  categoryId: number;
+  subcategoryName: string;
+  subcategoryId: number;
 }
 
 const ProductCatalog: React.FC<Props> = ({
-  categoryName,
-  categoryId,
+  subcategoryName,
+  subcategoryId,
 }: Props) => {
   const [selectedFilters, setSelectedFilters] = useState<{ id: string }[]>([]);
   const [productCount, setProductCount] = useState<number>(0);
   useEffect(() => {
     const fetchProductCount = async () => {
       try {
-        const response = await ProductList(categoryId);
+        const response = await ProductList(subcategoryId);
         const productCount = response.length;
         setProductCount(productCount);
         console.log(productCount);
@@ -95,7 +95,7 @@ const ProductCatalog: React.FC<Props> = ({
       }
     };
     fetchProductCount();
-  }, [categoryId]);
+  }, [subcategoryId]);
 
   const handleAddItem = (value) => {
     setSelectedFilters((selectedFilters) => [
@@ -121,7 +121,7 @@ const ProductCatalog: React.FC<Props> = ({
       <div>
         <main className="">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900 mb-5">
-            {categoryName}
+            {subcategoryName}
           </h1>
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-3 pt-2">
             <span className="text-lg  tracking-tight text-gray-900">
@@ -236,7 +236,7 @@ const ProductCatalog: React.FC<Props> = ({
                 ))}
               </form>
               <div className="lg:col-span-3 gap-6">
-                <CardList categoryId={categoryId} />
+                <CardList subcategoryId={subcategoryId} />
               </div>
             </div>
           </section>

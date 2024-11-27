@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Product, Subcategory } from "./Interface";
+import { Product, Subcategory, TargerCustomer } from "./Interface";
 
 const BASE_URL = "http://localhost:5254/api";
 
@@ -39,22 +39,23 @@ export const SubcategoryList = async () => {
   }
 };
 
-// export const CategoryTitleList = async (): Promise => {
-//   try {
-//     const response = await axios.get<CategoryResponse>(
-//       `${BASE_URL}/categories`
-//     );
-//   } catch (error) {
-//     if (axios.isAxiosError(error)) {
-//       console.log("Error Message", error.message);
-//       return error.message;
-//     } else {
-//       console.log("Unexpected Error", error);
-//       return "Unexpected Error";
-//     }
-//   }
-// };
-
+export const targerCustomer = async (): Promise<TargerCustomer[] | string> => {
+  // trả về một mảng Category hoặc một chuỗi lỗi
+  try {
+    const response = await axios.get<TargerCustomer[]>(
+      `${BASE_URL}/targetcustomers`
+    );
+    return response.data; // chỉ trả về dữ liệu trong response
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log("Error Message", error.message);
+      return error.message; // trả về thông báo lỗi khi có lỗi từ axios
+    } else {
+      console.log("Unexpected Error", error);
+      return "Unexpected Error"; // trả về lỗi không xác định
+    }
+  }
+};
 // export const ColorList = async (id: number) => {
 //   try {
 //     const response = await axios.get<Product>(
