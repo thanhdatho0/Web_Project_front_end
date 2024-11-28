@@ -7,6 +7,7 @@ import {
 import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
+import { Category } from "../../../Interface";
 
 const slugify = (text: string) => {
   const from =
@@ -28,13 +29,6 @@ const slugify = (text: string) => {
 
   return slug.replace(/^-+|-+$/g, "");
 };
-interface Item {
-  navigate: string;
-  description: string;
-  id?: string;
-}
-
-type ItemGroup = Item[];
 
 const WideDropdownMenu = ({
   name,
@@ -42,8 +36,8 @@ const WideDropdownMenu = ({
   img,
 }: {
   name: string;
-  items: ItemGroup[];
-  img: string;
+  items: Category[];
+  img: { url: string; alt: string };
 }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const navigate = useNavigate();
@@ -55,12 +49,12 @@ const WideDropdownMenu = ({
     console.log(description);
     try {
       const formattedDescription = slugify(description);
-      navigate(`/category/${formattedDescription}`, {
-        state: { categoryId: id },
+      navigate(`subcategory/${formattedDescription}`, {
+        state: { subcategoryId: id },
       });
       setOpenMenu(false);
     } catch (error) {
-      console.error("Error fetching category:", error);
+      console.error("Error fetching subcategory:", error);
     }
   };
 
@@ -68,21 +62,24 @@ const WideDropdownMenu = ({
     setOpenMenu((prev) => !prev);
   };
 
-  const columns: ItemGroup[][] = Array.from({ length: 5 }, () => []);
+  const columnCategories: Category[][] = Array.from({ length: 5 }, () => []);
 
-  items.forEach((itemGroup, index) => {
+  items.forEach((category, index) => {
     if (index < 5) {
-      columns[index].push(itemGroup);
+      columnCategories[index].push(category);
     } else {
-      const columnWithFewestLines = columns.reduce(
+      const columnWithFewestLines = columnCategories.reduce(
         (minColIdx, col, colIdx, cols) =>
-          col.reduce((sum, group) => sum + group.length, 0) <
-          cols[minColIdx].reduce((sum, group) => sum + group.length, 0)
+          col.reduce((sum, group) => sum + group.subcategories.length, 0) <
+          cols[minColIdx].reduce(
+            (sum, group) => sum + group.subcategories.length,
+            0
+          )
             ? colIdx
             : minColIdx,
         0
       );
-      columns[columnWithFewestLines].push(itemGroup);
+      columnCategories[columnWithFewestLines].push(category);
     }
   });
 
@@ -108,24 +105,33 @@ const WideDropdownMenu = ({
           className="grid grid-cols-6 "
           style={{ border: "none !important" }}
         >
-          {columns.map((columnItems, index) => (
+          {columnCategories.map((categories, index) => (
             <div
               key={index}
               className={`col-span-1 ${
                 index < 4 ? "border-r border-gray-300" : ""
               }`}
             >
-              {columnItems.map((itemGroup, groupIdx) => (
+              {categories.map((category, groupIdx) => (
                 <div key={groupIdx}>
-                  {itemGroup.map((item, idx) => (
+                  {/* Tên danh mục chính */}
+                  <div
+                    key={category.categoryId}
+                    className="font-bold pb-2 mb-1 mt-2  pl-2 text-sm text-gray-700 text-left"
+                  >
+                    {category.name}
+                  </div>
+
+                  {/* Danh sách danh mục con */}
+                  {category.subcategories.map((subcategory, idx) => (
                     <Typography
                       key={idx}
-                      className={`${
-                        idx === 0 ? "font-bold pb-2 mb-1 mt-2" : "text-sm pb-2"
-                      }
-                     pl-2 text-sm text-gray-700 text-left`}
+                      className="text-sm pb-2 pl-2 text-gray-700 text-left"
                       onClick={() =>
-                        handleSelect(Number(item.id), item.description)
+                        handleSelect(
+                          Number(subcategory.subcategoryId),
+                          subcategory.subcategoryName
+                        )
                       }
                     >
                       {/* <Link
@@ -135,7 +141,7 @@ const WideDropdownMenu = ({
                         }}
                         className="dark:hover:text-red-600 ml-4"
                       ></Link> */}
-                      {item.description}
+                      {subcategory.subcategoryName}
                     </Typography>
                   ))}
                 </div>
@@ -143,7 +149,7 @@ const WideDropdownMenu = ({
             </div>
           ))}
           <div className="col-span-1">
-            <img src={img} className="w-full h-auto" />
+            <img src={img.url} alt={img.alt} className="w-full h-auto" />
           </div>
         </div>
       </MenuList>
