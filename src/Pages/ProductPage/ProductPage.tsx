@@ -1,88 +1,172 @@
 import { useEffect, useState } from "react";
+import { Image } from "../../Interface";
 import Breadcrumbs from "../../Components/ContentComponents/Breadcrumb/Breadcrumbs";
-import aoNamItems from "../../JsonData/AoNamItems.json";
-import { useCart } from "../../Components/NavBar/NavBarCart/CartContext";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import ColorCard from "../../Components/ContentComponents/ColorCard/ColorCard";
+import ShippingInfo from "../../Components/ContentComponents/ShippingInfo/ShippingInfo";
+import PaymentMethods from "../../Components/ContentComponents/PaymentMethods/PaymentMethods";
 
 const ProductPage = () => {
   const [categoryName, setCategoryName] = useState("");
-  const [categoryLocation, setCategoryLocation] = useState("");
   const [count, setCount] = useState(1);
-  const [filteredProducts, setFilteredProducts] = useState<
-    { id: number; name: string; price: number; navigate: string }[]
-  >([]);
-  const { addToCart } = useCart();
+  const [copySuccess, setCopySuccess] = useState("");
+  const location = useLocation();
+  const product = location.state?.product;
+  const [cartItems, setCartItems] = useState<string[]>([]);
+  const [cartCount, setCartCount] = useState(0);
 
-  const handleAddToCart = () => {
-    addToCart(count);
+  useEffect(() => {
+    const storedCartItems = localStorage.getItem("cartItems");
+    if (storedCartItems) {
+      setCartItems(JSON.parse(storedCartItems));
+    }
+
+    const storedCartCount = localStorage.getItem("cartCount");
+    if (storedCartCount) {
+      setCartCount(parseInt(storedCartCount, 10));
+    }
+  }, []);
+
+  if (!product) {
+    return (
+      <div className="lg:w-[85%] mx-auto">
+        <div className="text-center mt-16">
+          <p className="text-red-500">Sản phẩm không tồn tại hoặc có lỗi!</p>
+          <Link to="/" className="text-blue-500 hover:underline">
+            Quay lại trang chủ
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const defaultImages: Image[] = [];
+  const defaultColorId = "";
+  const defaultSizeValue = "";
+  const defaultActiveUrl = "";
+
+  const [images, setImages] = useState<Image[]>(
+    product.colors?.[0]?.images || defaultImages
+  );
+  const [selectedSize, setSelectedSize] = useState(
+    product.sizes?.[0]?.sizeId || defaultSizeValue
+  );
+  const [selectedSizeName, setSelectedSizeName] = useState(
+    product.sizes?.[0]?.sizeValue || defaultSizeValue
+  );
+  const [colorId, setColorId] = useState(
+    product.colors?.[0]?.colorId || defaultColorId
+  );
+  const [colorName, setColorName] = useState(
+    product.colors?.[0]?.name || defaultColorId
+  );
+  const [active, setActive] = useState(
+    product.colors?.[0]?.images?.[0]?.url || defaultActiveUrl
+  );
+
+  const handleCopy = () => {
+    const orderCode = `${product.productId}-${colorId}-${selectedSize}`;
+    navigator.clipboard
+      .writeText(orderCode)
+      .then(() => {
+        setCopySuccess("Sao chép thành công!");
+        setTimeout(() => setCopySuccess(""), 2000);
+      })
+      .catch(() => {
+        setCopySuccess("Không thể sao chép!");
+      });
+  };
+
+  const handleSelectSize = (size: string) => {
+    setSelectedSize(size);
+  };
+  const handleSelectSizeName = (size: string) => {
+    setSelectedSizeName(size);
   };
 
   const handleAddCategoryName = (categoryName: string) => {
     setCategoryName(categoryName);
   };
 
-  const handleAddCategoryLocation = (category: string) => {
-    setCategoryLocation(category);
+  console.log(categoryName);
+
+  const handleHoverColor = (colorId: number) => {
+    setColorId(colorId);
+    const selectedColor = product.colors.find((c) => c.colorId === colorId);
+    setColorName(selectedColor.name);
+    if (selectedColor) {
+      setImages(selectedColor.images);
+      setActive(selectedColor.images[0]?.url || "");
+    }
   };
 
-  const data = [
-    {
-      imgelink:
-        "https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-    },
-    {
-      imgelink:
-        "https://images.unsplash.com/photo-1432462770865-65b70566d673?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
-    },
-    {
-      imgelink:
-        "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80",
-    },
-    {
-      imgelink:
-        "https://images.unsplash.com/photo-1518623489648-a173ef7824f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2762&q=80",
-    },
-    {
-      imgelink:
-        "https://images.unsplash.com/photo-1682407186023-12c70a4a35e0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2832&q=80",
-    },
-  ];
-  const [active, setActive] = useState(
-    "https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-  );
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const matchedCategory = aoNamItems.find(
-      (category) => category.navigate === categoryLocation
-    );
+  const handleAddToCart = () => {
+    const cartItem = `${product.productId}-${colorId}-${selectedSize}`;
+    const updatedCartItems = [...cartItems, cartItem];
 
-    if (matchedCategory && Array.isArray(matchedCategory.products)) {
-      setFilteredProducts(matchedCategory.products);
-    } else {
-      setFilteredProducts([]);
-    }
-  }, [categoryLocation]);
+    setCartItems(updatedCartItems);
+    setCartCount((prevCount) => {
+      const newCount = prevCount + count;
+      localStorage.setItem("cartCount", newCount.toString());
+      return newCount;
+    });
+    console.log(cartCount);
+
+    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+  };
+
+  const handleProductClick = () => {
+    setCartCount((prevCount) => {
+      const newCount = prevCount + 1;
+      localStorage.setItem("cartCount", newCount.toString());
+      console.log("New count after setCartCount:", newCount);
+      return newCount;
+    });
+    const cartItem = `${product.productId}-${colorId}-${selectedSize}`;
+    const updatedCartItems = [...cartItems, cartItem];
+
+    setCartItems(updatedCartItems);
+
+    console.log("Updated cartItems:", updatedCartItems);
+
+    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+    navigate("/cart");
+  };
+
+  const handleClearCart = () => {
+    localStorage.removeItem("cartItems"); // Xóa giỏ hàng
+    setCartItems([]); // Cập nhật lại trạng thái giỏ hàng trong component
+    setCartCount(0);
+
+    setCartCount(() => {
+      const newCount = 0; // Đặt lại giá trị cart count thành 0
+      console.log("prevCount = 0");
+      localStorage.setItem("cartCount", newCount.toString());
+      return newCount;
+    });
+  };
+
   return (
     <div className="lg:w-[85%] mx-auto">
       <div className="pb-2 mt-16 "></div>
-      <Breadcrumbs
-        onAddCategoryName={handleAddCategoryName}
-        onAddCategoryLocation={handleAddCategoryLocation}
-      />
+      <Breadcrumbs onAddCategoryName={handleAddCategoryName} categoryId={1} />
 
-      <div className="flex gap-4 mb-60 px-[54px]">
+      <div className="flex gap-4 px-[54px]">
         <div className="flex-none w-20 space-y-4">
-          {data.map(({ imgelink }, index) => (
+          {images.map(({ url }, index) => (
             <div key={index}>
               <img
-                onClick={() => setActive(imgelink)}
-                src={imgelink}
+                onClick={() => setActive(url)}
+                src={url}
                 className=" cursor-pointer rounded-lg object-cover object-center"
                 alt="gallery-image"
               />
             </div>
           ))}
         </div>
+
         <div className="flex-1">
           <img
             className=" w-[428px] h-[580px] rounded-lg object-cover object-center "
@@ -90,23 +174,71 @@ const ProductPage = () => {
             alt=""
           />
         </div>
+
         <div className="flex-1">
-          <span>{categoryLocation}</span>
+          <span>{product.name}</span>
           <br />
-          <span>MãSP - Màu - Size</span>
+          <button onClick={handleCopy} className="flex items-center">
+            <span className="pr-2">
+              {product.productId}-{colorId}-{selectedSize}
+            </span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M16.5 8.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v8.25A2.25 2.25 0 0 0 6 16.5h2.25m8.25-8.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-7.5A2.25 2.25 0 0 1 8.25 18v-1.5m8.25-8.25h-6a2.25 2.25 0 0 0-2.25 2.25v6"
+              />
+            </svg>
+          </button>
+          {copySuccess && (
+            <div className="mt-2 text-green-600">{copySuccess}</div>
+          )}
+          <span>
+            Giá bán:{" "}
+            {product.price.toLocaleString("vi-VN", {
+              style: "currency",
+              currency: "VND",
+            })}
+          </span>
           <br />
-          <span>Giá bán</span>
-          <br />
-          <span>Màu sắc </span>
-          {/*   */}
-          <span>Kích thước</span>
-          <br />
+          <span>Màu sắc: {colorName} </span>
+          <ColorCard
+            id={product.productId}
+            colors={product.colors}
+            onHover={handleHoverColor}
+          />
+          <span>Kích thước: {selectedSizeName}</span>
+          <div className="flex gap-4 mt-2 mb-2">
+            {product.sizes.map((size) => (
+              <button
+                key={size.sizeId}
+                className={`px-4 py-2 border border-gray-400 rounded ${
+                  selectedSize === size.sizeId
+                    ? "bg-gray-900 text-white"
+                    : "hover:bg-gray-200"
+                }`}
+                onClick={() => {
+                  handleSelectSize(size.sizeId);
+                  handleSelectSizeName(size.sizeValue);
+                }}
+              >
+                {size.sizeValue}
+              </button>
+            ))}
+          </div>
           <span>Số lượng:</span>
           <br />
-          <div className="flex items-center  ">
+          <div className="flex items-center mt-2 ">
             <button
               onClick={() => setCount((c) => c - 1)}
-              disabled={count === 1}
+              disabled={count <= 1}
               className={`w-10 h-10 justify-center rounded font-semibold transition  border border-black 
               ${
                 count === 1
@@ -136,41 +268,17 @@ const ProductPage = () => {
               Thêm vào giỏ hàng
             </button>
           </div>
-          <Link to="/Cart">
-            <button className="w-[552px] h-10 justify-center rounded bg-yellow-500 text-gray-800 font-semibold hover:bg-yellow-400 transition mt-6">
-              Mua ngay
-            </button>
-          </Link>
-
-          <div className=" bg-gray-200 h-24 flex items-center justify-center mt-6">
-            <div className="flex space-x-4">
-              <img
-                src="https://yody.vn/icons/zalopay.png"
-                alt="ZaloPay"
-                className="h-8"
-              />
-              <img
-                src="https://yody.vn/icons/visa-card.png"
-                alt="VISA"
-                className="h-8"
-              />
-              <img
-                src="https://yody.vn/icons/master-card.png"
-                alt="MasterCard"
-                className="h-8"
-              />
-              <img
-                src="https://yody.vn/icons/vnpay-qr.png"
-                alt="VNPAYQR"
-                className="h-8"
-              />
-              <img
-                src="https://yody.vn/icons/momo.png"
-                alt="momo"
-                className="h-8"
-              />
-            </div>
-          </div>
+          <button
+            className="w-[552px] h-10 justify-center rounded bg-yellow-500 text-gray-800 font-semibold hover:bg-yellow-400 transition mt-6"
+            onClick={() => {
+              handleProductClick();
+            }}
+          >
+            Mua ngay
+          </button>
+          <button onClick={handleClearCart}>Clear Cart</button>
+          <PaymentMethods />
+          <ShippingInfo />
         </div>
       </div>
     </div>

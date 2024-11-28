@@ -22,7 +22,6 @@ const Breadcrumbs: React.FC<Props> = ({
         const response = await axios.get(
           `http://localhost:5254/api/categories/${categoryId}`
         );
-        console.log("API Response:", response.data);
 
         const categoryData = response.data;
         if (categoryData.name) {
@@ -44,7 +43,7 @@ const Breadcrumbs: React.FC<Props> = ({
       <ul className="flex mb-6 mt-6 ">
         <li>
           <Link to="/" className="hover:text-blue-500 hover:underline mt-2">
-            Home
+            Trang chủ
           </Link>
         </li>
         {pathnames.map((value, index) => {

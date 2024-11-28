@@ -23,6 +23,16 @@ export interface Product {
     colors: Color[];
     navigate: string;
   }
+  export interface ProductCart {
+    productId: number;
+    name: string;
+    price: number;
+    color: string;   
+    imgUrl: string;
+    imgAlt: string;
+    size: string;    
+    quantity: number;
+  }
   
 export interface Size {
     sizeId: number;
