@@ -93,7 +93,7 @@ const ProductCatalog: React.FC<Props> = ({
     const fetchProducts = async () => {
       try {
         const queryParams = new URLSearchParams();
-        queryParams.append("CategoryId", categoryId.toString());
+        queryParams.append("SubcategoryId", subcategoryId.toString());
 
         if (colorId.length > 0) {
           queryParams.append("ColorId", colorId.join(","));
@@ -122,7 +122,7 @@ const ProductCatalog: React.FC<Props> = ({
     };
 
     fetchProducts();
-  }, [colorId, size, price, categoryId]);
+  }, [colorId, size, price, subcategoryId]);
 
   const handleSortSelect = (value: string) => {
     setSortBy(value);

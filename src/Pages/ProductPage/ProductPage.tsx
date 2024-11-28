@@ -151,7 +151,10 @@ const ProductPage = () => {
   return (
     <div className="lg:w-[85%] mx-auto">
       <div className="pb-2 mt-16 "></div>
-      <Breadcrumbs onAddCategoryName={handleAddCategoryName} categoryId={1} />
+      <Breadcrumbs
+        onAddSubcategoryName={handleAddCategoryName}
+        subcategoryId={1}
+      />
 
       <div className="flex gap-4 px-[54px]">
         <div className="flex-none w-20 space-y-4">

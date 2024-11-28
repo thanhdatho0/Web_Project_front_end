@@ -10,8 +10,8 @@ export const ProductList = async (
 ) => {
   try {
     const queryParams = new URLSearchParams();
-    if (categoryId !== undefined)
-      queryParams.append("CategoryId", categoryId.toString());
+    if (subcategoryId !== undefined)
+      queryParams.append("SubcategoryId", subcategoryId.toString());
     if (colorId !== undefined)
       queryParams.append("ColorId", colorId.toString());
     if (sizeId !== undefined) queryParams.append("SizeId", sizeId.toString());

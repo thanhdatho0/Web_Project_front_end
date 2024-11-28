@@ -4,39 +4,40 @@ import { convertSlugToTitle } from "../../Service/slugService";
 import axios from "axios";
 
 interface Props {
-  onAddCategoryName: (categoryName: string) => void;
-  categoryId: number;
+  onAddSubcategoryName: (subcategoryName: string) => void;
+  subcategoryId: number;
 }
 
 const Breadcrumbs: React.FC<Props> = ({
-  onAddCategoryName,
-  categoryId,
+  onAddSubcategoryName,
+  subcategoryId,
 }: Props) => {
   const location = useLocation();
-  const [categoryName, setCategoryName] = useState<string>("");
+  const [subcategoryName, setSubcategoryName] = useState<string>("");
   const pathnames = location.pathname.split("/").filter((x) => x);
 
   useEffect(() => {
-    const fetchCategoryName = async () => {
+    const fetchSubcategoryName = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5254/api/categories/${categoryId}`
+          `http://localhost:5254/api/subcategories/${subcategoryId}`
         );
 
-        const categoryData = response.data;
-        if (categoryData.name) {
-          setCategoryName(categoryData.name);
-          onAddCategoryName(categoryData.name);
+        const subcategoryData = response.data;
+        if (subcategoryData.name) {
+          setSubcategoryName(subcategoryData.name);
+          onAddSubcategoryName(subcategoryData.name);
+          console.log(subcategoryData.name);
         } else {
-          console.error("Name not found in category data:", categoryData);
+          console.error("Name not found in subcategory data:", subcategoryData);
         }
       } catch (error) {
-        console.error("Error fetching category data:", error);
+        console.error("Error fetching subcategory data:", error);
       }
     };
 
-    fetchCategoryName();
-  }, [categoryId]);
+    fetchSubcategoryName();
+  }, [subcategoryId]);
 
   return (
     <nav className="text-blue-500 text text-base">
@@ -51,13 +52,13 @@ const Breadcrumbs: React.FC<Props> = ({
           const to = `/${pathnames.slice(0, index + 1).join("/")}`;
           const title = convertSlugToTitle(value);
 
-          if (value === "category") return null;
+          if (value === "subcategory") return null;
 
           return (
             <li key={to}>
               <span className="mx-2 mt-6">/</span>
               {last ? (
-                <span>{categoryName || title || "Loading..."}</span>
+                <span>{subcategoryName || title || "Loading..."}</span>
               ) : (
                 <Link to={to} className="hover:underline hover:text-blue-500">
                   {title}

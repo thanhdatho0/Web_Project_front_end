@@ -8,12 +8,11 @@ import {
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import CardList from "../CardList/CardList";
-import { Product, Subcategory } from "../../../Interface";
+import { Subcategory } from "../../../Interface";
 import { SubcategoryList } from "../../../api";
 
 const ItemSuggestions = () => {
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]); // Store categories
-  const [products, setProducts] = useState<Product[]>([]); // Store products
   const [error, setError] = useState<string | null>(null);
 
   const [openMenu, setOpenMenu] = useState(false);
