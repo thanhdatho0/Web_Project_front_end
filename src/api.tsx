@@ -3,8 +3,18 @@ import { Product, Subcategory, TargerCustomer } from "./Interface";
 
 const BASE_URL = "http://localhost:5254/api";
 
-export const ProductList = async (subcategoryId: number) => {
+export const ProductList = async (
+  subcategoryId: number,
+  colorId?: number,
+  sizeId?: number
+) => {
   try {
+    const queryParams = new URLSearchParams();
+    if (categoryId !== undefined)
+      queryParams.append("CategoryId", categoryId.toString());
+    if (colorId !== undefined)
+      queryParams.append("ColorId", colorId.toString());
+    if (sizeId !== undefined) queryParams.append("SizeId", sizeId.toString());
     const response = await axios.get<Product[]>(
       `${BASE_URL}/products?SubcategoryId=${subcategoryId}`
     );
