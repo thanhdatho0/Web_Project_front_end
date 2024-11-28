@@ -19,7 +19,7 @@ const NavBar = () => {
       id="head-navbar"
       className=" w-full shadow-sm fixed top-0 z-50 bg-white"
     >
-      <div className="flex flex-row items-center justify-between lg:w-[85%] xl:w-[85%] m-auto">
+      <div className="flex flex-row items-center justify-between lg:w-[95%] xl:w-[95%] m-auto">
         <div className="left-side flex items-center gap-8 p-3">
           <Logo logo_src={logo_img} />
           <NavigationList />

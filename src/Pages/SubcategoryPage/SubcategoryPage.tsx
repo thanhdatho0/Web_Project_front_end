@@ -4,25 +4,25 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import ProductCatalog from "../../Components/ContentComponents/ProductCatalog/ProductCatalog";
 
-const CategoryPage = () => {
-  const [categoryName, setCategoryName] = useState("");
+const SubCategoryPage = () => {
+  const [subcategoryName, setSubcategoryName] = useState("");
 
   const location = useLocation();
-  const { categoryId } = location.state || {};
-  const handleAddCategoryName = (categoryName: string) => {
-    setCategoryName(categoryName);
+  const { subcategoryId } = location.state || {};
+  const handleAddSubcategoryName = (subcategoryName: string) => {
+    setSubcategoryName(subcategoryName);
   };
 
   useEffect(() => {
-    if (!categoryId) {
-      console.error("Category ID is missing");
+    if (!subcategoryId) {
+      console.error("Subcategory ID is missing");
       return;
     }
 
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          `/api/products?CategoryId=${categoryId}&PageNumber=1&PageSize=10`
+          `/api/products?SubategoryId=${subcategoryId}&PageNumber=1&PageSize=10`
         );
         if (Array.isArray(response.data)) {
           console.log(response.data);
@@ -33,17 +33,20 @@ const CategoryPage = () => {
     };
 
     fetchProducts();
-  }, [categoryId]);
+  }, [subcategoryId]);
 
   return (
     <div className="lg:w-[85%] mx-auto">
       <div className="pb-2 mt-16"></div>
       <Breadcrumbs
-        onAddCategoryName={handleAddCategoryName}
-        categoryId={categoryId}
+        onAddCategoryName={handleAddSubcategoryName}
+        categoryId={subcategoryId}
       />
-      <ProductCatalog categoryName={categoryName} categoryId={categoryId} />
+      <ProductCatalog
+        subcategoryName={subcategoryName}
+        subcategoryId={subcategoryId}
+      />
     </div>
   );
 };
-export default CategoryPage;
+export default SubCategoryPage;
