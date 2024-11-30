@@ -17,6 +17,8 @@ const Breadcrumbs: React.FC<Props> = ({
   const pathnames = location.pathname.split("/").filter((x) => x);
 
   useEffect(() => {
+    if (!subcategoryId) return;
+
     const fetchSubcategoryName = async () => {
       try {
         const response = await axios.get(
@@ -24,10 +26,9 @@ const Breadcrumbs: React.FC<Props> = ({
         );
 
         const subcategoryData = response.data;
-        if (subcategoryData.name) {
-          setSubcategoryName(subcategoryData.name);
-          onAddSubcategoryName(subcategoryData.name);
-          console.log(subcategoryData.name);
+        if (subcategoryData.subcategoryName) {
+          setSubcategoryName(subcategoryData.subcategoryName);
+          onAddSubcategoryName(subcategoryData.subcategoryName);
         } else {
           console.error("Name not found in subcategory data:", subcategoryData);
         }
@@ -37,7 +38,7 @@ const Breadcrumbs: React.FC<Props> = ({
     };
 
     fetchSubcategoryName();
-  }, [subcategoryId]);
+  }, [subcategoryId, onAddSubcategoryName]);
 
   return (
     <nav className="text-blue-500 text text-base">

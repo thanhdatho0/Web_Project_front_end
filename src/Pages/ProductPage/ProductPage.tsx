@@ -112,7 +112,6 @@ const ProductPage = () => {
       localStorage.setItem("cartCount", newCount.toString());
       return newCount;
     });
-    console.log(cartCount);
 
     localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
   };
@@ -121,16 +120,12 @@ const ProductPage = () => {
     setCartCount((prevCount) => {
       const newCount = prevCount + 1;
       localStorage.setItem("cartCount", newCount.toString());
-      console.log("New count after setCartCount:", newCount);
       return newCount;
     });
     const cartItem = `${product.productId}-${colorId}-${selectedSize}`;
     const updatedCartItems = [...cartItems, cartItem];
 
     setCartItems(updatedCartItems);
-
-    console.log("Updated cartItems:", updatedCartItems);
-
     localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
     navigate("/cart");
   };
@@ -142,7 +137,6 @@ const ProductPage = () => {
 
     setCartCount(() => {
       const newCount = 0; // Đặt lại giá trị cart count thành 0
-      console.log("prevCount = 0");
       localStorage.setItem("cartCount", newCount.toString());
       return newCount;
     });
@@ -153,7 +147,7 @@ const ProductPage = () => {
       <div className="pb-2 mt-16 "></div>
       <Breadcrumbs
         onAddSubcategoryName={handleAddCategoryName}
-        subcategoryId={1}
+        subcategoryId={product.categoryId}
       />
 
       <div className="flex gap-4 px-[54px]">
