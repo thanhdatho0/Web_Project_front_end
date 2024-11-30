@@ -6,7 +6,7 @@ import {
 } from "@material-tailwind/react";
 import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Category } from "../../../Interface";
 
 const slugify = (text: string) => {
@@ -58,10 +58,6 @@ const WideDropdownMenu = ({
     }
   };
 
-  const toggleMenu = () => {
-    setOpenMenu((prev) => !prev);
-  };
-
   const columnCategories: Category[][] = Array.from({ length: 5 }, () => []);
 
   items.forEach((category, index) => {
@@ -84,12 +80,13 @@ const WideDropdownMenu = ({
   });
 
   return (
-    <Menu open={openMenu} handler={setOpenMenu}>
+    <Menu open={openMenu}>
       <MenuHandler>
-        <a
-          href="#"
+        <Link
+          to="/"
+          onMouseEnter={() => setOpenMenu(true)}
+          onMouseLeave={() => setOpenMenu(false)}
           className="text-black focus:outline-none px-2 py-2 inline-flex items-center"
-          onClick={toggleMenu}
         >
           {name}
           <ChevronDownIcon
@@ -98,61 +95,66 @@ const WideDropdownMenu = ({
               openMenu ? "rotate-180" : ""
             }`}
           />
-        </a>
+        </Link>
       </MenuHandler>
-      <MenuList className="w-full z-10">
-        <div
-          className="grid grid-cols-6 "
-          style={{ border: "none !important" }}
-        >
-          {columnCategories.map((categories, index) => (
-            <div
-              key={index}
-              className={`col-span-1 ${
-                index < 4 ? "border-r border-gray-300" : ""
-              }`}
-            >
-              {categories.map((category, groupIdx) => (
-                <div key={groupIdx}>
-                  {/* Tên danh mục chính */}
-                  <div
-                    key={category.categoryId}
-                    className="font-bold pb-2 mb-1 mt-2  pl-2 text-sm text-gray-700 text-left"
-                  >
-                    {category.name}
-                  </div>
-
-                  {/* Danh sách danh mục con */}
-                  {category.subcategories.map((subcategory, idx) => (
-                    <Typography
-                      key={idx}
-                      className="text-sm pb-2 pl-2 text-gray-700 text-left"
-                      onClick={() =>
-                        handleSelect(
-                          Number(subcategory.subcategoryId),
-                          subcategory.subcategoryName
-                        )
-                      }
+      <div
+        onMouseEnter={() => setOpenMenu(true)}
+        onMouseLeave={() => setOpenMenu(false)}
+      >
+        <MenuList className="w-full z-10">
+          <div
+            className="grid grid-cols-6 "
+            style={{ border: "none !important" }}
+          >
+            {columnCategories.map((categories, index) => (
+              <div
+                key={index}
+                className={`col-span-1 ${
+                  index < 4 ? "border-r border-gray-300" : ""
+                }`}
+              >
+                {categories.map((category, groupIdx) => (
+                  <div key={groupIdx}>
+                    {/* Tên danh mục chính */}
+                    <div
+                      key={category.categoryId}
+                      className="font-bold pb-2 mb-1 mt-2  pl-2 text-sm text-gray-700 text-left"
                     >
-                      {/* <Link
+                      <Link to="/">{category.name}</Link>
+                    </div>
+
+                    {/* Danh sách danh mục con */}
+                    {category.subcategories.map((subcategory, idx) => (
+                      <Typography
+                        key={idx}
+                        className="text-sm pb-2 pl-2 text-gray-700 text-left"
+                        onClick={() =>
+                          handleSelect(
+                            Number(subcategory.subcategoryId),
+                            subcategory.subcategoryName
+                          )
+                        }
+                      >
+                        {/* <Link
                         to={{
                           pathname: `/category/${item.navigate}`,
                           state: { categoryData: item },
                         }}
                         className="dark:hover:text-red-600 ml-4"
                       ></Link> */}
-                      {subcategory.subcategoryName}
-                    </Typography>
-                  ))}
-                </div>
-              ))}
+                        {subcategory.subcategoryName}
+                      </Typography>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            ))}
+            <div className="col-span-1">
+              <img src={img.url} alt={img.alt} className="w-full h-auto" />
             </div>
-          ))}
-          <div className="col-span-1">
-            <img src={img.url} alt={img.alt} className="w-full h-auto" />
           </div>
-        </div>
-      </MenuList>
+        </MenuList>
+      </div>
     </Menu>
   );
 };
