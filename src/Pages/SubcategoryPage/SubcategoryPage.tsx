@@ -22,7 +22,7 @@ const SubCategoryPage = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          `/api/products?SubategoryId=${subcategoryId}&PageNumber=1&PageSize=10`
+          `/api/products?SubcategoryId=${subcategoryId}&PageNumber=1&PageSize=10`
         );
         if (Array.isArray(response.data)) {
           console.log(response.data);

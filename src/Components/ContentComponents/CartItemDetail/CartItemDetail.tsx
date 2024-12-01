@@ -67,12 +67,6 @@ const CartItemDetail: React.FC<Props> = ({
                 </a>
 
                 <div className="flex items-center gap-4 text-sm font-medium text-gray-500  dark:text-gray-400 ">
-                  {/* <button
-                      type="button"
-                      className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white"
-                    >
-                      để màu và size ở đây
-                    </button> */}
                   <p>Color: {item.color}</p>
                   <p>Size: {item.size}</p>
                   <button

@@ -11,61 +11,52 @@ const CartPage = () => {
   useEffect(() => {
     const fetchCartItems = async () => {
       const storedCartItems = localStorage.getItem("cartItems");
-      console.log("Stored cart items:", storedCartItems); // In ra dữ liệu để kiểm tra
       if (storedCartItems) {
         const parsedCartItems = JSON.parse(storedCartItems);
-        console.log("Parsed cart items:", parsedCartItems); // Kiểm tra mảng sau khi parse
 
         if (parsedCartItems.length > 0) {
           try {
             const fetchedItems = await Promise.all(
-              parsedCartItems.map(async (item) => {
+              parsedCartItems.map(async (item: string) => {
                 const [productId, colorId, sizeId] = item.split("-");
-
-                const response = await axios.get<Product[]>(
-                  `http://localhost:5254/api/products?ProductId=${productId}`
+                const response = await axios.get<Product>(
+                  `http://localhost:5254/api/products/${productId}`
                 );
 
                 const products = response.data;
 
-                const validProductCartItems = products.map((product) => {
-                  const selectedColor = product.colors.find(
-                    (color) => color.colorId === parseInt(colorId)
-                  );
+                const selectedColor = products.colors.find(
+                  (color) => color.colorId === parseInt(colorId)
+                );
 
-                  const selectedImgUrl = selectedColor
-                    ? selectedColor.images[0].url
-                    : "";
+                const selectedImgUrl = selectedColor
+                  ? selectedColor.images[0].url
+                  : "";
 
-                  const selectedImgAlt = selectedColor
-                    ? selectedColor.images[0].alt
-                    : "";
+                const selectedImgAlt = selectedColor
+                  ? selectedColor.images[0].alt
+                  : "";
 
-                  const selectedSize = product.sizes.find(
-                    (size) => size.sizeId === parseInt(sizeId)
-                  );
+                const selectedSize = products.sizes.find(
+                  (size) => size.sizeId === parseInt(sizeId)
+                );
 
-                  if (!selectedColor || !selectedSize) {
-                    return null;
-                  }
+                if (!selectedColor || !selectedSize) {
+                  return null;
+                }
 
-                  const productCart: ProductCart = {
-                    productId: product.productId,
-                    name: product.name,
-                    price: product.price,
-                    color: selectedColor.name,
-                    imgUrl: selectedImgUrl,
-                    imgAlt: selectedImgAlt,
-                    size: selectedSize.sizeValue,
-                    quantity: 1,
-                  };
+                const productCart: ProductCart = {
+                  productId: products.productId,
+                  name: products.name,
+                  price: products.price,
+                  color: selectedColor.name,
+                  imgUrl: selectedImgUrl,
+                  imgAlt: selectedImgAlt,
+                  size: selectedSize.sizeValue,
+                  quantity: 1,
+                };
 
-                  return productCart;
-                });
-
-                return validProductCartItems.filter(
-                  (item) => item !== null
-                ) as ProductCart[];
+                return productCart;
               })
             );
 
@@ -84,17 +75,16 @@ const CartPage = () => {
   }, []);
 
   const handleRemoveItem = (productId: number) => {
-    setCartItems((prevItems) =>
-      prevItems.filter((item) => item.productId !== productId)
+    const updateCartItem = cartItems.filter(
+      (item) => item.productId === productId
     );
+    setCartItems(updateCartItem);
+    localStorage.setItem("cartItems", JSON.stringify(updateCartItem));
+    window.location.reload();
   };
 
   if (loading) {
     return <div>Loading...</div>;
-  }
-
-  if (cartItems.length === 0) {
-    return <div>Không có sản phẩm trong giỏ hàng.</div>;
   }
 
   return (
