@@ -7,77 +7,139 @@ import axios from "axios";
 const CartPage = () => {
   const [cartItems, setCartItems] = useState<ProductCart[]>([]);
   const [loading, setLoading] = useState(true);
+  const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
     const fetchCartItems = async () => {
       const storedCartItems = localStorage.getItem("cartItems");
       if (storedCartItems) {
-        const parsedCartItems = JSON.parse(storedCartItems);
+        try {
+          const parsedCartItems: ProductCart[] = JSON.parse(storedCartItems);
 
-        if (parsedCartItems.length > 0) {
-          try {
-            const fetchedItems = await Promise.all(
-              parsedCartItems.map(async (item: string) => {
-                const [productId, colorId, sizeId] = item.split("-");
-                const response = await axios.get<Product>(
-                  `http://localhost:5254/api/products/${productId}`
-                );
+          const fetchedItems = await Promise.all(
+            parsedCartItems.map(async (item) => {
+              const response = await axios.get<Product>(
+                `http://localhost:5254/api/products/${item.productId}`
+              );
 
-                const products = response.data;
+              const products = response.data;
 
-                const selectedColor = products.colors.find(
-                  (color) => color.colorId === parseInt(colorId)
-                );
+              const updatedColor = products.colors.find(
+                (color) => color.name === item.color
+              );
 
-                const selectedImgUrl = selectedColor
-                  ? selectedColor.images[0].url
-                  : "";
+              const updatedSize = products.sizes.find(
+                (size) => size.sizeValue === item.size
+              );
 
-                const selectedImgAlt = selectedColor
-                  ? selectedColor.images[0].alt
-                  : "";
+              return {
+                ...item,
+                price: products.price,
+                imgUrl: updatedColor?.images[0]?.url || item.imgUrl,
+                imgAlt: updatedColor?.images[0]?.alt || item.imgAlt,
+                color: updatedColor?.name || item.color,
+                size: updatedSize?.sizeValue || item.size,
+                // quantity: 1,
+              };
+            })
+          );
 
-                const selectedSize = products.sizes.find(
-                  (size) => size.sizeId === parseInt(sizeId)
-                );
+          const mergedCartItems = fetchedItems.reduce(
+            (acc: ProductCart[], item) => {
+              if (!item) return acc;
 
-                if (!selectedColor || !selectedSize) {
-                  return null;
-                }
+              const existingItem = acc.find(
+                (cartItem) =>
+                  cartItem.productId === item.productId &&
+                  cartItem.color === item.color &&
+                  cartItem.size === item.size
+              );
 
-                const productCart: ProductCart = {
-                  productId: products.productId,
-                  name: products.name,
-                  price: products.price,
-                  color: selectedColor.name,
-                  imgUrl: selectedImgUrl,
-                  imgAlt: selectedImgAlt,
-                  size: selectedSize.sizeValue,
-                  quantity: 1,
-                };
+              if (existingItem) {
+                existingItem.quantity += 1;
+              } else {
+                acc.push(item);
+              }
 
-                return productCart;
-              })
-            );
-
-            const allCartItems = fetchedItems.flat();
-            setCartItems(allCartItems);
-          } catch (error) {
-            console.error("Failed to fetch cart items:", error);
-          } finally {
-            setLoading(false);
-          }
+              return acc;
+            },
+            []
+          );
+          setCartItems(mergedCartItems);
+        } catch (error) {
+          console.error("Failed to fetch cart items:", error);
+        } finally {
+          setLoading(false);
         }
       }
     };
 
     fetchCartItems();
   }, []);
-
-  const handleRemoveItem = (productId: number) => {
-    const updateCartItem = cartItems.filter(
-      (item) => item.productId === productId
+  const handleUpdateQuantity = (
+    productId: number,
+    color: string,
+    size: string,
+    newQuantity: number
+  ) => {
+    const updateCartItems = cartItems.map((item) =>
+      item.productId === productId && item.color === color && item.size === size
+        ? { ...item, quantity: newQuantity }
+        : item
     );
+    setCartItems(updateCartItems);
+    localStorage.setItem("cartItems", JSON.stringify(updateCartItems));
+  };
+
+  const handleUpdateColor_Size = (
+    productId: number,
+    oldColor: string,
+    oldSize: string,
+    newColor: string,
+    newSize: string,
+    newImgUrl: string,
+    newImgAlt: string
+  ) => {
+    const updateCartItems = cartItems.map((item) =>
+      item.productId === productId &&
+      item.color === oldColor &&
+      item.size === oldSize
+        ? {
+            ...item,
+            color: newColor,
+            size: newSize,
+            imgUrl: newImgUrl,
+            imgAlt: newImgAlt,
+          }
+        : item
+    );
+    setCartItems(updateCartItems);
+    localStorage.setItem("cartItems", JSON.stringify(updateCartItems));
+  };
+
+  const handleRemoveItem = (
+    productId: number,
+    color: string,
+    size: string,
+    count: number
+  ) => {
+    const currentCartCount = parseInt(
+      localStorage.getItem("cartCount") || "0",
+      10
+    );
+    const newCount = currentCartCount - count;
+    localStorage.setItem("cartCount", newCount.toString());
+    setCartCount(newCount);
+
+    const updateCartItem = cartItems.filter(
+      (item) =>
+        !(
+          item.productId === productId &&
+          item.color === color &&
+          item.size === size
+        )
+    );
+
     setCartItems(updateCartItem);
     localStorage.setItem("cartItems", JSON.stringify(updateCartItem));
     window.location.reload();
@@ -93,14 +155,16 @@ const CartPage = () => {
         <section className="bg-white py-8 antialiased dark:bg-gray-800 ">
           <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
-              Shopping Cart
+              Giỏ hàng
             </h2>
             <div className="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
               <CartItemDetail
                 cartItems={cartItems}
                 onRemoveItem={handleRemoveItem}
+                onUpdateQuantity={handleUpdateQuantity}
+                onUpdateColor_Size={handleUpdateColor_Size}
               />
-              <CheckoutSummary />
+              <CheckoutSummary cartItems={cartItems} />
             </div>
           </div>
         </section>

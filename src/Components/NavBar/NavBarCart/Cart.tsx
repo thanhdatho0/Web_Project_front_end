@@ -13,7 +13,7 @@ const Cart = () => {
 
   return (
     <div className="relative">
-      <Link to="/Cart">
+      <Link to="/cart">
         <button
           type="button"
           className="relative flex items-center p-2 text-sm font-medium bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 transition ease-in-out duration-200"

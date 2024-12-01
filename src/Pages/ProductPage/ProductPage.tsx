@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Image } from "../../Interface";
+import { Image, ProductCart } from "../../Interface";
 import Breadcrumbs from "../../Components/ContentComponents/Breadcrumb/Breadcrumbs";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import ColorCard from "../../Components/ContentComponents/ColorCard/ColorCard";
@@ -12,8 +12,12 @@ const ProductPage = () => {
   const [copySuccess, setCopySuccess] = useState("");
   const location = useLocation();
   const product = location.state?.product;
-  const [cartItems, setCartItems] = useState<string[]>([]);
+  const [cartItems, setCartItems] = useState<ProductCart[]>([]);
   const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    console.log("cartCount = " + cartCount);
+  }, [cartCount]);
 
   useEffect(() => {
     const storedCartItems = localStorage.getItem("cartItems");
@@ -103,8 +107,21 @@ const ProductPage = () => {
   const navigate = useNavigate();
 
   const handleAddToCart = () => {
-    const cartItem = `${product.productId}-${colorId}-${selectedSize}`;
-    const updatedCartItems = [...cartItems, cartItem];
+    const selectedColor = product.colors.find((c) => c.colorId === colorId);
+    const selectedSizeObj = product.sizes.find(
+      (c) => c.sizeId === selectedSize
+    );
+    const newItem: ProductCart = {
+      productId: product.productId,
+      name: product.name,
+      price: product.price,
+      color: selectedColor?.name || "",
+      imgUrl: selectedColor?.images[0]?.url || "",
+      imgAlt: selectedColor?.images[0]?.alt || "",
+      size: selectedSizeObj?.sizeValue || "",
+      quantity: count,
+    };
+    const updatedCartItems = [...cartItems, newItem];
 
     setCartItems(updatedCartItems);
     setCartCount((prevCount) => {
@@ -114,22 +131,44 @@ const ProductPage = () => {
     });
 
     localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+    window.location.reload();
   };
 
   const handleProductClick = () => {
-    setCartCount((prevCount) => {
-      const newCount = prevCount + 1;
-      localStorage.setItem("cartCount", newCount.toString());
-      return newCount;
-    });
-    const cartItem = `${product.productId}-${colorId}-${selectedSize}`;
-    const updatedCartItems = [...cartItems, cartItem];
+    const currentCartCount = parseInt(
+      localStorage.getItem("cartCount") || "0",
+      10
+    );
+    const newCount = currentCartCount + 1;
+
+    localStorage.setItem("cartCount", newCount.toString());
+    setCartCount(newCount);
+
+    const selectedColor = product.colors.find((c) => c.colorId === colorId);
+    const selectedSizeObj = product.sizes.find(
+      (s) => s.sizeId === selectedSize
+    );
+
+    const newItem: ProductCart = {
+      productId: product.productId,
+      name: product.name,
+      price: product.price,
+      color: selectedColor?.name || "",
+      imgUrl: selectedColor?.images[0]?.url || "",
+      imgAlt: selectedColor?.images[0]?.alt || "",
+      size: selectedSizeObj?.sizeValue || "",
+      quantity: count,
+    };
+
+    const updatedCartItems = [...cartItems, newItem];
 
     setCartItems(updatedCartItems);
     localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
     navigate("/cart");
+    window.location.reload();
   };
 
+  // cái này để test
   const handleClearCart = () => {
     localStorage.removeItem("cartItems"); // Xóa giỏ hàng
     setCartItems([]); // Cập nhật lại trạng thái giỏ hàng trong component
@@ -140,6 +179,7 @@ const ProductPage = () => {
       localStorage.setItem("cartCount", newCount.toString());
       return newCount;
     });
+    window.location.reload();
   };
 
   return (
@@ -273,7 +313,10 @@ const ProductPage = () => {
           >
             Mua ngay
           </button>
-          <button onClick={handleClearCart}>Clear Cart</button>
+
+          <button onClick={handleClearCart}>
+            Clear Cart(cái này dùng để test)
+          </button>
           <PaymentMethods />
           <ShippingInfo />
         </div>
