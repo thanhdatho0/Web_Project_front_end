@@ -4,6 +4,7 @@ import Search from "../Search/Search.tsx";
 import Cart from "./NavBarCart/Cart.tsx";
 import { ChangeEvent, useState } from "react";
 import NavigationList from "./Navigation/NavigationList.tsx";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
   const [search, setSearch] = useState<string>("");
@@ -21,7 +22,9 @@ const NavBar = () => {
     >
       <div className="flex flex-row items-center justify-between lg:w-[95%] xl:w-[95%] m-auto">
         <div className="left-side flex items-center gap-8 p-3">
-          <Logo logo_src={logo_img} />
+          <Link to="/">
+            <Logo logo_src={logo_img} />
+          </Link>
           <NavigationList />
         </div>
         <div className="right-side flex flex-row items-center gap-8 p-3 text-center">

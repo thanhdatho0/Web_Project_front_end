@@ -44,9 +44,9 @@ const filters = [
     id: "price",
     name: "Theo giá",
     options: [
-      { value: "duoi-350", label: "Dưới 350", checked: false },
+      { value: "duoi-350", label: "Dưới 350.000đ", checked: false },
       {
-        value: "350.000-750.000",
+        value: "350-750",
         label: "Từ 350.000đ - 750.000đ",
         checked: false,
       },
