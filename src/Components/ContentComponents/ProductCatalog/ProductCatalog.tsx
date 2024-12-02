@@ -19,13 +19,8 @@ import { Product } from "../../../Interface";
 import Card from "../Card/Card";
 // import { ProductList } from "../../../api";
 import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const sortOptions = [
-  { name: "Nổi bật", href: "#", current: false },
-  { name: "Mới nhất", href: "#", current: false },
-  { name: "Giá từ thấp đến cao", href: "#", current: false },
-  { name: "Giá từ cao đến thấp", href: "#", current: false },
-];
 const filters = [
   {
     id: "color",
@@ -77,17 +72,33 @@ interface Props {
   subcategoryId: number;
 }
 
+interface Option {
+  value: string;
+  name: string;
+  current: boolean;
+}
+const Options = [
+  { value: "trend", name: "Nổi bật", current: false },
+  { value: "date", name: "Mới nhất", current: false },
+  { value: "low", name: "Giá từ thấp đến cao", current: false },
+  { value: "hight", name: "Giá từ cao đến thấp", current: false },
+];
+
 const ProductCatalog: React.FC<Props> = ({
   subcategoryName,
   subcategoryId,
 }: Props) => {
+  const location = useLocation();
+  // const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [price, setPrice] = useState<string[]>([]);
   const [size, setSize] = useState<string[]>([]);
   const [colorId, setColorId] = useState<string[]>([]);
   const [selectedFilters, setSelectedFilters] = useState<{ id: string }[]>([]);
   const [productCount, setProductCount] = useState<number>(0);
+  const [sortOptions, setSortOptions] = useState(Options);
   const [sortBy, setSortBy] = useState("Sắp xếp theo");
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -106,6 +117,10 @@ const ProductCatalog: React.FC<Props> = ({
           queryParams.append("Price", price.join(","));
         }
 
+        if (sortBy !== "Sắp xếp theo" && selectedOption) {
+          queryParams.append("SortBy", selectedOption);
+        }
+
         const response = await axios.get<Product[]>(
           `http://localhost:5254/api/products?${queryParams.toString()}`
         );
@@ -122,10 +137,27 @@ const ProductCatalog: React.FC<Props> = ({
     };
 
     fetchProducts();
-  }, [colorId, size, price, subcategoryId]);
+  }, [colorId, size, price, subcategoryId, selectedOption]);
 
-  const handleSortSelect = (value: string) => {
-    setSortBy(value);
+  const handleSortSelect = (option: Option) => {
+    setSortOptions((prevOptions) =>
+      prevOptions.map((o) => {
+        if (o.name === option.name) {
+          // Nếu mục được chọn đã được chọn, đặt current = false và thay đổi tên
+          if (selectedOption === option.value) {
+            setSortBy("Sắp xếp theo");
+            setSelectedOption(null); // Deselect nếu mục đã được chọn
+            return { ...o, current: false };
+          }
+          setSortBy(o.name);
+          setSelectedOption(o.value); // Cập nhật selectedOption
+          // Nếu mục được chọn chưa được chọn, đặt current = true và thay đổi tên
+          return { ...o, current: true };
+        }
+        // Cập nhật các mục khác với current = false
+        return { ...o, current: false };
+      })
+    );
   };
 
   const handleAddColorId = (newColorId) => {
@@ -248,21 +280,18 @@ const ProductCatalog: React.FC<Props> = ({
                 >
                   <div className="py-1">
                     {sortOptions.map((option) => (
-                      <MenuItem
-                        key={option.name}
-                        onClick={() => handleSortSelect(option.name)}
-                      >
-                        <a
-                          href={option.href}
+                      <MenuItem key={option.name}>
+                        <div
+                          onClick={() => handleSortSelect(option)}
                           className={classNames(
                             option.current
                               ? "font-medium text-gray-900"
                               : "text-gray-900",
-                            "block px-4 py-2 text-sm data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                            "block px-4 py-2 text-sm data-[focus]:bg-gray-100 data-[focus]:outline-none cursor-pointer"
                           )}
                         >
                           {option.name}
-                        </a>
+                        </div>
                       </MenuItem>
                     ))}
                   </div>
