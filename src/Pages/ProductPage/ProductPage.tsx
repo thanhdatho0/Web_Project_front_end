@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import ColorCard from "../../Components/ContentComponents/ColorCard/ColorCard";
 import ShippingInfo from "../../Components/ContentComponents/ShippingInfo/ShippingInfo";
 import PaymentMethods from "../../Components/ContentComponents/PaymentMethods/PaymentMethods";
+import SizeCard from "../../Components/ContentComponents/SizeCard/SizeCard";
 
 const ProductPage = () => {
   const [categoryName, setCategoryName] = useState("");
@@ -81,11 +82,9 @@ const ProductPage = () => {
       });
   };
 
-  const handleSelectSize = (size: string) => {
-    setSelectedSize(size);
-  };
-  const handleSelectSizeName = (size: string) => {
-    setSelectedSizeName(size);
+  const handleSelectSize = (sizeId: number, sizeValue: string) => {
+    setSelectedSize(sizeId);
+    setSelectedSizeName(sizeValue);
   };
 
   const handleAddCategoryName = (categoryName: string) => {
@@ -183,7 +182,7 @@ const ProductPage = () => {
   };
 
   return (
-    <div className="lg:w-[85%] mx-auto">
+    <div className="lg:w-[95%] mx-auto">
       <div className="pb-2 mt-16 "></div>
       <Breadcrumbs
         onAddSubcategoryName={handleAddCategoryName}
@@ -213,12 +212,13 @@ const ProductPage = () => {
         </div>
 
         <div className="flex-1">
-          <span>{product.name}</span>
-          <br />
+          <p className="text-xl font-semibold text-gray-900 mb-2">
+            {product.name}
+          </p>
           <button onClick={handleCopy} className="flex items-center">
-            <span className="pr-2">
+            <p className="pr-2 mb-2">
               {product.productId}-{colorId}-{selectedSize}
-            </span>
+            </p>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -237,41 +237,22 @@ const ProductPage = () => {
           {copySuccess && (
             <div className="mt-2 text-green-600">{copySuccess}</div>
           )}
-          <span>
+          <p className="mb-2 text-red-600 font-bold text-2xl">
             Giá bán:{" "}
             {product.price.toLocaleString("vi-VN", {
               style: "currency",
               currency: "VND",
             })}
-          </span>
-          <br />
-          <span>Màu sắc: {colorName} </span>
+          </p>
+          <p className="text-lg">Màu sắc: {colorName} </p>
           <ColorCard
             id={product.productId}
             colors={product.colors}
             onHover={handleHoverColor}
           />
-          <span>Kích thước: {selectedSizeName}</span>
-          <div className="flex gap-4 mt-2 mb-2">
-            {product.sizes.map((size) => (
-              <button
-                key={size.sizeId}
-                className={`px-4 py-2 border border-gray-400 rounded ${
-                  selectedSize === size.sizeId
-                    ? "bg-gray-900 text-white"
-                    : "hover:bg-gray-200"
-                }`}
-                onClick={() => {
-                  handleSelectSize(size.sizeId);
-                  handleSelectSizeName(size.sizeValue);
-                }}
-              >
-                {size.sizeValue}
-              </button>
-            ))}
-          </div>
-          <span>Số lượng:</span>
-          <br />
+          <p className="mt-4 mb-2">Kích thước: {selectedSizeName}</p>
+          <SizeCard onSizeSelect={handleSelectSize} />
+          <p className="mt-6">Số lượng:</p>
           <div className="flex items-center mt-2 ">
             <button
               onClick={() => setCount((c) => c - 1)}
