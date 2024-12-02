@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { convertSlugToTitle } from "../../Service/slugService";
-import axios from "axios";
+import { getSubcategoryId } from "../../../api";
 
 interface Props {
   onAddSubcategoryName: (subcategoryName: string) => void;
@@ -21,11 +21,12 @@ const Breadcrumbs: React.FC<Props> = ({
 
     const fetchSubcategoryName = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:5254/api/subcategories/${subcategoryId}`
-        );
+        const subcategoryData = await getSubcategoryId(subcategoryId);
 
-        const subcategoryData = response.data;
+        if (typeof subcategoryData === "string") {
+          console.error("Error fetching subcategory:", subcategoryData);
+          return null;
+        }
         if (subcategoryData.subcategoryName) {
           setSubcategoryName(subcategoryData.subcategoryName);
           onAddSubcategoryName(subcategoryData.subcategoryName);

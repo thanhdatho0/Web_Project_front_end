@@ -18,8 +18,8 @@ import ItemFilter from "../ItemFilter/ItemFilter";
 import { Product } from "../../../Interface";
 import Card from "../Card/Card";
 // import { ProductList } from "../../../api";
-import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+// import { useLocation, useNavigate } from "react-router-dom";
+import { getListProduct } from "../../../api";
 
 const filters = [
   {
@@ -88,7 +88,7 @@ const ProductCatalog: React.FC<Props> = ({
   subcategoryName,
   subcategoryId,
 }: Props) => {
-  const location = useLocation();
+  // const location = useLocation();
   // const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [price, setPrice] = useState<string[]>([]);
@@ -121,15 +121,13 @@ const ProductCatalog: React.FC<Props> = ({
           queryParams.append("SortBy", selectedOption);
         }
 
-        const response = await axios.get<Product[]>(
-          `http://localhost:5254/api/products?${queryParams.toString()}`
-        );
+        const response = await getListProduct(queryParams.toString());
 
-        if (Array.isArray(response.data)) {
-          setProducts(response.data);
-          setProductCount(response.data.length);
+        if (Array.isArray(response)) {
+          setProducts(response);
+          setProductCount(response.length);
         } else {
-          console.error("Invalid product data:", response.data);
+          console.error("Invalid product data:", response);
         }
       } catch (error) {
         console.error("Error fetching products:", error);

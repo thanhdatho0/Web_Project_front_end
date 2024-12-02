@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Color, Product, ProductCart, Size } from "../../../Interface";
 import axios from "axios";
+import { getProductById } from "../../../api";
 
 interface Props {
   cartItems: ProductCart[];
@@ -42,17 +43,6 @@ const CartItemDetail: React.FC<Props> = ({
 
   const [cartCount, setCartCount] = useState(0);
 
-  const fetchProductDetails = async (productId: number) => {
-    try {
-      const response = await axios.get<Product>(
-        `http://localhost:5254/api/products/${productId}`
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching product details:", error);
-    }
-  };
-
   useEffect(() => {
     const loadProductDetails = async () => {
       const updatedProductOptions: {
@@ -60,7 +50,13 @@ const CartItemDetail: React.FC<Props> = ({
       } = {};
 
       for (const item of cartItems) {
-        const productDetails = await fetchProductDetails(item.productId);
+        const productDetails = await getProductById(item.productId);
+
+        if (typeof productDetails === "string") {
+          console.error("Error fetching Product:", productDetails);
+          return null;
+        }
+
         if (productDetails) {
           updatedProductOptions[item.productId] = {
             colors: productDetails.colors,

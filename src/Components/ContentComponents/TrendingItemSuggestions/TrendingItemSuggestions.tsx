@@ -20,7 +20,7 @@ const TrendingItemSuggestions: React.FC = (): JSX.Element => {
           setSubcategories(response);
         }
       } catch (e) {
-        console.error("Unexpected error while fetching products", error);
+        console.error("Unexpected error while fetching Subcategory", error);
         setError("An unexpected error occurred.");
       }
     };
