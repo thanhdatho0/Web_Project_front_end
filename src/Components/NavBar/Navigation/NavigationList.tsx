@@ -7,9 +7,11 @@ import { TargerCustomer } from "../../../Interface";
 const NavigationList = () => {
   const [targetcustomers, setTargetcustomers] = useState<TargerCustomer[]>([]); // Store categories
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCategory = async () => {
+      setLoading(true);
       const response = await targerCustomer();
       if (typeof response === "string") {
         // Handle API returning a string error
@@ -18,8 +20,8 @@ const NavigationList = () => {
       } else {
         // response là mảng Category[], lưu vào state
         setTargetcustomers(response);
-        // console.log(response + "");
       }
+      setLoading(false);
     };
 
     fetchCategory();
@@ -48,6 +50,10 @@ const NavigationList = () => {
     { name: "Đồng phục", navigate: "#" },
     { name: "Tin hot", navigate: "#" },
   ];
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>

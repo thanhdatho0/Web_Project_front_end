@@ -2,7 +2,7 @@ import CartItemDetail from "../../Components/ContentComponents/CartItemDetail/Ca
 import CheckoutSummary from "../../Components/ContentComponents/CheckoutSummary/CheckoutSummary";
 import { useEffect, useState } from "react";
 import { Product, ProductCart } from "../../Interface";
-import axios from "axios";
+import { getProductById } from "../../api";
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState<ProductCart[]>([]);
@@ -18,23 +18,25 @@ const CartPage = () => {
 
           const fetchedItems = await Promise.all(
             parsedCartItems.map(async (item) => {
-              const response = await axios.get<Product>(
-                `http://localhost:5254/api/products/${item.productId}`
-              );
+              const product = await getProductById(item.productId);
 
-              const products = response.data;
+              if (typeof product === "string") {
+                console.error("Error fetching product:", product);
+                setLoading(false);
+                return null;
+              }
 
-              const updatedColor = products.colors.find(
+              const updatedColor = product.colors.find(
                 (color) => color.name === item.color
               );
 
-              const updatedSize = products.sizes.find(
+              const updatedSize = product.sizes.find(
                 (size) => size.sizeValue === item.size
               );
 
               return {
                 ...item,
-                price: products.price,
+                price: product.price,
                 imgUrl: updatedColor?.images[0]?.url || item.imgUrl,
                 imgAlt: updatedColor?.images[0]?.alt || item.imgAlt,
                 color: updatedColor?.name || item.color,
