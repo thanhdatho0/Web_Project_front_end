@@ -5,6 +5,8 @@ import CartPage from "../Pages/CartPage/CartPage";
 import CollectionPage from "../Pages/CollectionPage/CollectionPage";
 import SubcategoryPage from "../Pages/SubcategoryPage/SubcategoryPage";
 import ProductPage from "../Pages/ProductPage/ProductPage";
+import RegisterPage from "../Pages/RegisterPage/RegisterPage";
+import LoginPage from "../Pages/LoginPage/LoginPage";
 
 export const router = createBrowserRouter([
   {
@@ -16,6 +18,8 @@ export const router = createBrowserRouter([
       { path: "collection", element: <CollectionPage /> },
       { path: "subcategory/:ticker", element: <SubcategoryPage /> },
       { path: "product/:ticker", element: <ProductPage /> },
+      { path: "register", element: <RegisterPage /> },
+      { path: "login", element: <LoginPage /> },
     ],
   },
 ]);
