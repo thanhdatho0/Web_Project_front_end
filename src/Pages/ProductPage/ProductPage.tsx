@@ -186,11 +186,17 @@ const ProductPage = () => {
   return (
     <div className="lg:w-[95%] mx-auto">
       <div className="pb-2 mt-16 "></div>
-      <Breadcrumbs
+      {/* <Breadcrumbs
         onAddSubcategoryName={handleAddCategoryName}
         subcategoryId={product.categoryId}
+      /> */}
+      <Breadcrumbs
+        targetId={2}
+        categoryId={1}
+        subcategoryId={product.subcategoryId}
+        name={product.name}
+        productId={product.productId}
       />
-
       <div className="flex gap-4 px-[54px]">
         <div className="flex-none w-20 space-y-4">
           {images.map(({ url }, index) => (
