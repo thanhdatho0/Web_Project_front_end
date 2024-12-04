@@ -78,3 +78,15 @@ export interface TargerCustomer {
   alt : string;
   categories : Category[];
 }
+
+export interface RegisterData {
+  userName: string;  // Username (email or username)
+  passWord: string;  // Password
+  firstName: string; // First Name
+  lastName: string;  // Last Name
+  gender: string;    // Gender ("Nam", "Nữ", "Khác")
+  phoneNumber: string; // Phone number
+  address: string;    // Address
+  dob: string;        // Date of birth (format: 'YYYY-MM-DD')
+  email: string; 
+}

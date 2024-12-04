@@ -104,7 +104,9 @@ const ProductCatalog: React.FC<Props> = ({
   const [sortOptions, setSortOptions] = useState(Options);
   const [sortBy, setSortBy] = useState("Sắp xếp theo");
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to the top of the page
+  }, []);
   useEffect(() => {
     const fetchProducts = async () => {
       try {

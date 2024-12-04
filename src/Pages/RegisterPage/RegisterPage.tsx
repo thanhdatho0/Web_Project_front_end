@@ -1,72 +1,186 @@
-import { Link } from "react-router-dom"; // Đảm bảo cài React Router nếu sử dụng
-
+import { useState } from "react";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom"; // Use useNavigate instead of useHistory
+import { RegisterData } from "../../Interface"; // Adjust this import based on your typ
 const RegisterPage = () => {
+  window.scrollTo(0, 0); // Scroll to the top of the page
+  const [formData, setFormData] = useState<RegisterData>({
+    userName: "",
+    passWord: "",
+    firstName: "",
+    lastName: "",
+    gender: "",
+    phoneNumber: "",
+    address: "",
+    dob: "",
+    email: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate(); // Use React Router's useNavigate
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    const registerPayload = {
+      customerInfo: {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        male: formData.gender === "Nam",
+        phoneNumber: formData.phoneNumber,
+        address: formData.address,
+        dateOfBirth: new Date(formData.dob).toISOString().split("T")[0],
+        email: formData.email,
+      },
+      username: formData.userName,
+      password: formData.passWord,
+    };
+
+    console.log("Payload sent:", registerPayload); // Log payload for debugging
+
+    try {
+      const response = await fetch(
+        "http://localhost:5254/api/account/customer-register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(registerPayload),
+        }
+      );
+
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        console.error("Server Error:", errorMessage); // Log server response
+        setError(errorMessage || "An error occurred while registering.");
+        return;
+      }
+
+      const result = await response.json();
+      console.log("Result:", result); // Log result
+      navigate("/login");
+    } catch (err) {
+      console.error("Error during registration:", err);
+      setError("An unexpected error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="lg:w-[85%] mx-auto">
-      <div className="pb-6 mt-28">
-        <div className="font-sans bg-white min-h-screen">
-          <div className="grid md:grid-cols-2 items-center gap-8 min-h-screen">
-            <div className="order-last md:order-first p-4">
-              <img
-                src="https://readymadeui.com/signin-image.webp"
-                className="lg:max-w-[85%] w-full h-auto object-contain block mx-auto"
-                alt="Illustration for sign-up"
-              />
-            </div>
-
-            <div className="flex items-center md:p-8 p-6 bg-[#0C172C] h-full lg:w-11/12 lg:ml-auto">
-              <form className="max-w-lg w-full mx-auto">
-                <div className="mb-12">
-                  <h3 className="text-3xl font-bold text-yellow-400">
-                    Tạo tài khoản
-                  </h3>
-                </div>
-
-                {renderInputField(
-                  "Tài khoản",
-                  "userName",
-                  "Nhập tên tài khoản",
-                  "text"
-                )}
-                {renderInputField(
-                  "Mật khẩu",
-                  "passWord",
-                  "Nhập mật khẩu",
-                  "password"
-                )}
-                {renderInputField("Họ", "lastName", "Nhập họ", "text")}
-                {renderInputField("Tên", "firstName", "Nhập tên", "text")}
-                {renderGenderField()}
-                {renderInputField(
-                  "Số điện thoại",
-                  "phoneNumber",
-                  "Nhập số điện thoại",
-                  "tel"
-                )}
-                {renderInputField("Địa chỉ", "address", "Nhập địa chỉ", "text")}
-                {renderInputField("Ngày sinh", "dob", "dd/mm/yyyy", "date")}
-
-                <div className="mt-12">
-                  <button
-                    type="submit"
-                    className="w-full shadow-xl py-3 px-6 text-sm text-gray-800 font-semibold rounded-md bg-yellow-400 hover:bg-yellow-500 focus:outline-none"
-                  >
-                    Đăng ký
-                  </button>
-                  <p className="text-sm text-white mt-8 text-center">
-                    Đã có tài khoản?{" "}
-                    <Link
-                      to="/login"
-                      className="text-yellow-400 font-semibold hover:underline"
-                    >
-                      Đăng nhập tại đây
-                    </Link>
-                  </p>
-                </div>
-              </form>
-            </div>
+    <div
+      className="min-h-screen flex items-center justify-center bg-gray-100"
+      style={{ zoom: "80%", marginTop: "50px" }}
+    >
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
+        <h3 className="text-3xl font-bold text-center text-gray-800 mb-6">
+          Tạo tài khoản
+        </h3>
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4">
+            {error}
           </div>
-        </div>
+        )}
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 md:grid-cols-2 gap-8"
+        >
+          {/* Left Column - Username & Password */}
+          <div className="space-y-4">
+            {renderInputField(
+              "Tài khoản",
+              "userName",
+              "Nhập tên tài khoản",
+              "text",
+              formData,
+              setFormData
+            )}
+            {renderInputField(
+              "Mật khẩu",
+              "passWord",
+              "Nhập mật khẩu",
+              "password",
+              formData,
+              setFormData
+            )}
+          </div>
+
+          {/* Right Column - Other Information */}
+          <div className="space-y-4">
+            {renderInputField(
+              "Họ",
+              "lastName",
+              "Nhập họ",
+              "text",
+              formData,
+              setFormData
+            )}
+            {renderInputField(
+              "Tên",
+              "firstName",
+              "Nhập tên",
+              "text",
+              formData,
+              setFormData
+            )}
+            {renderGenderField(formData, setFormData)}
+            {renderInputField(
+              "Email",
+              "email",
+              "Nhập email",
+              "email",
+              formData,
+              setFormData
+            )}
+            {renderInputField(
+              "Số điện thoại",
+              "phoneNumber",
+              "Nhập số điện thoại",
+              "tel",
+              formData,
+              setFormData
+            )}
+            {renderInputField(
+              "Địa chỉ",
+              "address",
+              "Nhập địa chỉ",
+              "text",
+              formData,
+              setFormData
+            )}
+            {renderInputField(
+              "Ngày sinh",
+              "dob",
+              "dd/mm/yyyy",
+              "date",
+              formData,
+              setFormData
+            )}
+          </div>
+
+          <div className="md:col-span-2">
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition duration-300"
+            >
+              {loading ? "Đang đăng ký..." : "Đăng ký"}
+            </button>
+          </div>
+        </form>
+
+        <p className="text-sm text-center text-gray-600 mt-4">
+          Đã có tài khoản?{" "}
+          <Link
+            to="/login"
+            className="text-yellow-500 font-semibold hover:underline"
+          >
+            Đăng nhập tại đây
+          </Link>
+        </p>
       </div>
     </div>
   );
@@ -76,47 +190,48 @@ const renderInputField = (
   label: string,
   name: string,
   placeholder: string,
-  type: string
+  type: string,
+  formData: any,
+  setFormData: React.Dispatch<React.SetStateAction<any>>
 ) => (
-  <div className="mt-8">
-    <label htmlFor={name} className="text-white text-xs block mb-2">
+  <div>
+    <label htmlFor={name} className="text-gray-700 text-sm block mb-2">
       {label}
     </label>
-    <div className="relative flex items-center">
-      <input
-        id={name}
-        name={name}
-        type={type}
-        required
-        className="w-full bg-transparent text-sm text-white border-b border-gray-300 focus:border-yellow-400 px-2 py-3 outline-none"
-        placeholder={placeholder}
-        aria-label={label}
-      />
-    </div>
+    <input
+      id={name}
+      name={name}
+      type={type}
+      value={formData[name] || ""}
+      onChange={(e) => setFormData({ ...formData, [name]: e.target.value })}
+      required
+      className="w-full px-4 py-2 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+      placeholder={placeholder}
+    />
   </div>
 );
 
-const renderGenderField = () => (
-  <div className="mt-8">
-    <label className="text-white text-xs block mb-2">Giới tính</label>
-    <div className="flex items-center space-x-4">
+const renderGenderField = (
+  formData: any,
+  setFormData: React.Dispatch<React.SetStateAction<any>>
+) => (
+  <div>
+    <label className="text-gray-700 text-sm block mb-2">Giới tính</label>
+    <div className="flex justify-between">
       {["Nam", "Nữ", "Khác"].map((gender, index) => (
-        <div key={index} className="flex items-center">
+        <label key={index} className="inline-flex items-center">
           <input
-            id={`gender-${index}`}
-            name="gender"
             type="radio"
+            name="gender"
             value={gender}
-            className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-2 focus:ring-yellow-400"
-            required
+            checked={formData.gender === gender}
+            onChange={(e) =>
+              setFormData({ ...formData, gender: e.target.value })
+            }
+            className="form-radio h-5 w-5 text-yellow-400"
           />
-          <label
-            htmlFor={`gender-${index}`}
-            className="ms-2 text-sm font-medium text-gray-300"
-          >
-            {gender}
-          </label>
-        </div>
+          <span className="ml-2 text-gray-700">{gender}</span>
+        </label>
       ))}
     </div>
   </div>

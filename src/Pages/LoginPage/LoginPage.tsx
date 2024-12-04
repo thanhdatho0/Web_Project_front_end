@@ -1,6 +1,9 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
-
 const LoginPage = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to the top of the page
+  }, []);
   return (
     <div>
       <section className="bg-gray-50 dark:bg-gray-900">
