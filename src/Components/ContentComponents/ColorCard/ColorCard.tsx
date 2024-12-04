@@ -1,4 +1,3 @@
-import gradient from "@material-tailwind/react/theme/components/timeline/timelineIconColors/gradient";
 import { Color } from "../../../Interface";
 import { Link } from "react-router-dom";
 

@@ -134,3 +134,22 @@ export const getSizeList = async (): Promise<Size[] | string> => {
     }
   }
 };
+
+export const getAllProducts = async (
+  queryParams: URLSearchParams
+): Promise<Product[]> => {
+  try {
+    const response = await axios.get<Product[]>(`${BASE_URL}/products`, {
+      params: queryParams, // Truyền đối tượng URLSearchParams
+    });
+    console.log(response.config.url);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Axios error:", error.message);
+    } else {
+      console.error("Unexpected error:", error);
+    }
+    return []; // Trả về mảng rỗng nếu gặp lỗi
+  }
+};
