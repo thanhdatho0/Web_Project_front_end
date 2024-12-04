@@ -11,7 +11,9 @@ const CardList: React.FC<Props> = ({ subcategoryId }: Props): JSX.Element => {
   const [products, setProducts] = useState<Product[] | string>([]); // Store products or error message
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false); // Loading state
-
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to the top of the page
+  }, []);
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true); // Set loading to true before fetching data

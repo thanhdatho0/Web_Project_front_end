@@ -62,12 +62,12 @@ const CheckoutSummary: React.FC<Props> = ({ cartItems }) => {
           </dl>
         </div>
 
-        <a
-          href="#"
+        <Link
+          to="/login"
           className="flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
         >
           Thanh toán
-        </a>
+        </Link>
 
         <div className="flex items-center justify-center gap-2">
           <span className="text-sm font-normal text-gray-500 dark:text-gray-400">

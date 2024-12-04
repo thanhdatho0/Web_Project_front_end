@@ -41,7 +41,9 @@ const CartItemDetail: React.FC<Props> = ({
   }>({});
 
   const [cartCount, setCartCount] = useState(0);
-
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to the top of the page
+  }, []);
   useEffect(() => {
     const loadProductDetails = async () => {
       const updatedProductOptions: {

@@ -6,6 +6,8 @@ import CollectionPage from "../Pages/CollectionPage/CollectionPage";
 import SubcategoryPage from "../Pages/SubcategoryPage/SubcategoryPage";
 import ProductPage from "../Pages/ProductPage/ProductPage";
 import MainPage from "../Pages/MainPage/MainPage";
+import RegisterPage from "../Pages/RegisterPage/RegisterPage";
+import LoginPage from "../Pages/LoginPage/LoginPage";
 
 export const router = createBrowserRouter([
   {
@@ -19,6 +21,8 @@ export const router = createBrowserRouter([
       { path: "subcategory/:ticker", element: <MainPage /> },
       // { path: "subcategory/:ticker", element: <SubcategoryPage /> },
       { path: "product/:ticker", element: <ProductPage /> },
+      { path: "register", element: <RegisterPage /> },
+      { path: "login", element: <LoginPage /> },
     ],
   },
 ]);
