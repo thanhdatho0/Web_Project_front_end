@@ -53,15 +53,34 @@ const RegisterPage = () => {
       );
 
       if (!response.ok) {
-        const errorMessage = await response.text();
-        console.error("Server Error:", errorMessage); // Log server response
+        const errorMessage = await response.text(); // Read the error message as text
+        console.error("Server Error:", errorMessage);
         setError(errorMessage || "An error occurred while registering.");
         return;
       }
 
-      const result = await response.json();
-      console.log("Result:", result); // Log result
-      navigate("/login");
+      // Now check the content type to decide whether to parse as JSON or text
+      const contentType = response.headers.get("Content-Type");
+
+      let result;
+      if (contentType && contentType.includes("application/json")) {
+        // If it's JSON, parse it as JSON
+        result = await response.json();
+        console.log("Registration Successful:", result);
+      } else {
+        // If it's plain text (e.g., "Customer Created"), handle it as text
+        const textResponse = await response.text();
+        if (textResponse.includes("Customer Created")) {
+          console.log("Registration successful, customer created.");
+          result = { message: "Customer Created" }; // Handle success
+        } else {
+          console.error("Unexpected response:", textResponse);
+          setError("Unexpected response from server.");
+          return;
+        }
+      }
+
+      navigate("/login"); // Navigate to login page if successful
     } catch (err) {
       console.error("Error during registration:", err);
       setError("An unexpected error occurred. Please try again.");
