@@ -1,7 +1,7 @@
 import CartItemDetail from "../../Components/ContentComponents/CartItemDetail/CartItemDetail";
 import CheckoutSummary from "../../Components/ContentComponents/CheckoutSummary/CheckoutSummary";
 import { useEffect, useState } from "react";
-import { Product, ProductCart } from "../../Interface";
+import { ProductCart } from "../../Interface";
 import { getProductById } from "../../api";
 
 const CartPage = () => {
@@ -9,6 +9,7 @@ const CartPage = () => {
   const [loading, setLoading] = useState(true);
   const [cartCount, setCartCount] = useState(0);
 
+  // Fetch cart items from localStorage when the component mounts
   useEffect(() => {
     const fetchCartItems = async () => {
       const storedCartItems = localStorage.getItem("cartItems");
@@ -41,7 +42,6 @@ const CartPage = () => {
                 imgAlt: updatedColor?.images[0]?.alt || item.imgAlt,
                 color: updatedColor?.name || item.color,
                 size: updatedSize?.sizeValue || item.size,
-                // quantity: 1,
               };
             })
           );
@@ -73,26 +73,33 @@ const CartPage = () => {
         } finally {
           setLoading(false);
         }
+      } else {
+        // If there are no items in localStorage, set cartItems as empty
+        setCartItems([]);
+        setLoading(false);
       }
     };
 
     fetchCartItems();
-  }, []);
+  }, []); // Only run once on mount
+
+  // Handle updating the quantity of an item
   const handleUpdateQuantity = (
     productId: number,
     color: string,
     size: string,
     newQuantity: number
   ) => {
-    const updateCartItems = cartItems.map((item) =>
+    const updatedCartItems = cartItems.map((item) =>
       item.productId === productId && item.color === color && item.size === size
         ? { ...item, quantity: newQuantity }
         : item
     );
-    setCartItems(updateCartItems);
-    localStorage.setItem("cartItems", JSON.stringify(updateCartItems));
+    setCartItems(updatedCartItems);
+    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
   };
 
+  // Handle updating color and size of an item
   const handleUpdateColor_Size = (
     productId: number,
     oldColor: string,
@@ -102,7 +109,7 @@ const CartPage = () => {
     newImgUrl: string,
     newImgAlt: string
   ) => {
-    const updateCartItems = cartItems.map((item) =>
+    const updatedCartItems = cartItems.map((item) =>
       item.productId === productId &&
       item.color === oldColor &&
       item.size === oldSize
@@ -115,25 +122,13 @@ const CartPage = () => {
           }
         : item
     );
-    setCartItems(updateCartItems);
-    localStorage.setItem("cartItems", JSON.stringify(updateCartItems));
+    setCartItems(updatedCartItems);
+    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
   };
 
-  const handleRemoveItem = (
-    productId: number,
-    color: string,
-    size: string,
-    count: number
-  ) => {
-    const currentCartCount = parseInt(
-      localStorage.getItem("cartCount") || "0",
-      10
-    );
-    const newCount = currentCartCount - count;
-    localStorage.setItem("cartCount", newCount.toString());
-    setCartCount(newCount);
-
-    const updateCartItem = cartItems.filter(
+  // Handle removing an item from the cart
+  const handleRemoveItem = (productId: number, color: string, size: string) => {
+    const updatedCartItems = cartItems.filter(
       (item) =>
         !(
           item.productId === productId &&
@@ -141,10 +136,16 @@ const CartPage = () => {
           item.size === size
         )
     );
+    setCartItems(updatedCartItems);
+    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
 
-    setCartItems(updateCartItem);
-    localStorage.setItem("cartItems", JSON.stringify(updateCartItem));
-    window.location.reload();
+    // Update cart count
+    const updatedCount = updatedCartItems.reduce(
+      (total, item) => total + item.quantity,
+      0
+    );
+    setCartCount(updatedCount);
+    localStorage.setItem("cartCount", updatedCount.toString());
   };
 
   if (loading) {
@@ -154,19 +155,29 @@ const CartPage = () => {
   return (
     <div className="lg:w-[85%] mx-auto">
       <div className="pb-6 mt-28">
-        <section className="bg-white py-8 antialiased dark:bg-gray-800 ">
+        <section className="bg-white py-8 antialiased dark:bg-gray-800">
           <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
               Giỏ hàng
             </h2>
             <div className="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
-              <CartItemDetail
-                cartItems={cartItems}
-                onRemoveItem={handleRemoveItem}
-                onUpdateQuantity={handleUpdateQuantity}
-                onUpdateColor_Size={handleUpdateColor_Size}
-              />
-              <CheckoutSummary cartItems={cartItems} />
+              {cartItems.length === 0 ? (
+                <div className="text-center py-10">
+                  <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
+                    No Product in Cart
+                  </h2>
+                </div>
+              ) : (
+                <>
+                  <CartItemDetail
+                    cartItems={cartItems}
+                    onRemoveItem={handleRemoveItem}
+                    onUpdateQuantity={handleUpdateQuantity}
+                    onUpdateColor_Size={handleUpdateColor_Size}
+                  />
+                  <CheckoutSummary cartItems={cartItems} />
+                </>
+              )}
             </div>
           </div>
         </section>
