@@ -21,6 +21,7 @@ import { Product } from "../../Interface";
 import Card from "../../Components/ContentComponents/Card/Card";
 import { useLocation } from "react-router";
 import ItemFilter from "../../Components/ContentComponents/ItemFilter/ItemFilter";
+import Breadcrumbs from "../../Components/ContentComponents/Breadcrumb/Breadcrumbs";
 
 const filters = [
   {
@@ -40,6 +41,11 @@ const filters = [
     id: "price",
     name: "Theo giá",
     options: [
+      {
+        value: "tat-ca",
+        label: "Tất cả",
+        checked: true,
+      },
       { value: "duoi-350", label: "Dưới 350.000đ", checked: false },
       {
         value: "350-750",
@@ -94,6 +100,11 @@ const MainPage = () => {
   const [sortOptions, setSortOptions] = useState(Options);
   const [sortBy, setSortBy] = useState("Sắp xếp theo");
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectTitle, setSelectTitle] = useState<string>("");
+
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to the top of the page
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -165,6 +176,10 @@ const MainPage = () => {
     selectedOption,
   ]);
 
+  const handleSelectTitle = (name: string) => {
+    setSelectTitle(name);
+  };
+
   const handleSortSelect = (option: Option) => {
     setSortOptions((prevOptions) =>
       prevOptions.map((o) => {
@@ -186,33 +201,36 @@ const MainPage = () => {
     );
   };
 
-  const handleAddColorId = (newColorId) => {
+  const handleAddColorId = (newColorId: string) => {
     setColorId((prev) => {
       const updatedColorIds = [...prev, newColorId];
       return [...new Set(updatedColorIds)];
     });
   };
 
-  const handleDeleteColorId = (newColorId) => {
+  const handleDeleteColorId = (newColorId: string) => {
     setColorId((prev: string[]) => prev.filter((id) => id !== newColorId));
   };
 
-  const handleAddPrice = (newPrice) => {
-    setPrice((prev) => [...prev, newPrice]);
+  const handleAddPrice = (newPrice: string) => {
+    setPrice([newPrice]); // Only one price can be selected at a time
   };
 
-  const handleDeletePrice = (newPrice) => {
-    setPrice((prev) => prev.filter((id) => id !== newPrice));
+  const handleDeletePrice = () => {
+    setSelectedFilters((prev) => [
+      ...prev.filter((item) => item.id !== "Theo giá"), // Remove any existing price filter
+      { id: "Theo giá" }, // Add the new price filter
+    ]);
   };
 
-  const handleAddSize = (newSize) => {
+  const handleAddSize = (newSize: string) => {
     setSize((prev) => {
       const updateSize = [...prev, newSize];
       return [...new Set(updateSize)];
     });
   };
 
-  const handleDeleteSize = (newSize) => {
+  const handleDeleteSize = (newSize: string) => {
     setSize((prev: string[]) => prev.filter((id) => id !== newSize));
   };
 
@@ -249,16 +267,23 @@ const MainPage = () => {
     setSelectedFilters([]);
     setColorId([]);
     setSize([]);
+    setPrice([]);
   };
 
   return (
     <div className="lg:w-[85%] mx-auto">
       <div className="pb-2 mt-16"></div>
+      <Breadcrumbs
+        targetId={targetCustomerId}
+        categoryId={categoryId}
+        subcategoryId={subcategoryId}
+        onTitleChange={handleSelectTitle}
+      />
       <div className="bg-white">
         <div>
           <main className="">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 mb-5">
-              {"title"}
+              {selectTitle}
             </h1>
             <div className="flex items-center justify-between border-b border-gray-200 pb-3 pt-2">
               <div className="flex items-center">
@@ -370,30 +395,32 @@ const MainPage = () => {
                             >
                               <input
                                 id={`filter-${section.id}-${optionIdx}`}
-                                name={`${section.id}[]`}
-                                type="checkbox"
-                                checked={selectedFilters.some(
-                                  (item) => item.id === option.label
-                                )}
+                                name={section.id} // Same name for radio buttons to group them
+                                type={
+                                  section.id === "price" ? "radio" : "checkbox"
+                                } // Use radio for price
+                                checked={
+                                  section.id === "price"
+                                    ? price.includes(option.value)
+                                    : selectedFilters.some(
+                                        (item) => item.id === option.label
+                                      )
+                                }
                                 onChange={(e) => {
-                                  if (e.target.checked) {
+                                  if (section.id === "price") {
+                                    handleAddPrice(option.value); // Only one price selected
+                                  } else if (e.target.checked) {
                                     handleAddItem(option.label);
-                                    if (section.id === "color") {
+                                    if (section.id === "color")
                                       handleAddColorId(option.value);
-                                    } else if (section.id === "size") {
+                                    else if (section.id === "size")
                                       handleAddSize(option.value);
-                                    } else if (section.id === "price") {
-                                      handleAddPrice(option.value);
-                                    }
                                   } else {
                                     handleDeleteItem(option.label);
-                                    if (section.id === "color") {
+                                    if (section.id === "color")
                                       handleDeleteColorId(option.value);
-                                    } else if (section.id === "size") {
+                                    else if (section.id === "size")
                                       handleDeleteSize(option.value);
-                                    } else if (section.id === "price") {
-                                      handleDeletePrice(option.value);
-                                    }
                                   }
                                 }}
                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"

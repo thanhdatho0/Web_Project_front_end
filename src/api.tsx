@@ -1,5 +1,11 @@
 import axios from "axios";
-import { Product, Size, Subcategory, TargerCustomer } from "./Interface";
+import {
+  Category,
+  Product,
+  Size,
+  Subcategory,
+  TargerCustomer,
+} from "./Interface";
 
 const BASE_URL = "http://localhost:5254/api";
 
@@ -88,6 +94,44 @@ export const getSubcategoryId = async (
   try {
     const response = await axios.get<Subcategory>(
       `${BASE_URL}/subcategories/${subcategoryId}`
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log("Error Message", error.message);
+      return error.message; // Trả về chuỗi lỗi
+    } else {
+      console.log("Unexpected Error", error);
+      return "Unexpected Error"; // Trả về chuỗi lỗi nếu không phải lỗi Axios
+    }
+  }
+};
+
+export const getCategoryId = async (
+  categoryId: number
+): Promise<Category | string> => {
+  try {
+    const response = await axios.get<Category>(
+      `${BASE_URL}/categories/${categoryId}`
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log("Error Message", error.message);
+      return error.message; // Trả về chuỗi lỗi
+    } else {
+      console.log("Unexpected Error", error);
+      return "Unexpected Error"; // Trả về chuỗi lỗi nếu không phải lỗi Axios
+    }
+  }
+};
+
+export const getTargetId = async (
+  categoryId: number
+): Promise<TargerCustomer | string> => {
+  try {
+    const response = await axios.get<TargerCustomer>(
+      `${BASE_URL}/targetCustomers/${categoryId}`
     );
     return response.data;
   } catch (error) {

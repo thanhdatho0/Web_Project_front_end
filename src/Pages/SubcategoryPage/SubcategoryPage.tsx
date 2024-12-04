@@ -38,10 +38,10 @@ const SubCategoryPage = () => {
   return (
     <div className="lg:w-[85%] mx-auto">
       <div className="pb-2 mt-16"></div>
-      <Breadcrumbs
+      {/* <Breadcrumbs
         onAddSubcategoryName={handleAddSubcategoryName}
         subcategoryId={subcategoryId}
-      />
+      /> */}
       <ProductCatalog
         subcategoryName={subcategoryName}
         subcategoryId={subcategoryId}
