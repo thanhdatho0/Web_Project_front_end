@@ -6,7 +6,7 @@ import {
 } from "@material-tailwind/react";
 import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Category } from "../../../Interface";
 
 const slugify = (text: string) => {
@@ -30,31 +30,40 @@ const slugify = (text: string) => {
   return slug.replace(/^-+|-+$/g, "");
 };
 
-const WideDropdownMenu = ({
-  name,
-  items,
-  img,
-}: {
+interface Props {
+  targetId: number;
   name: string;
   items: Category[];
   img: { url: string; alt: string };
-}) => {
+}
+
+const WideDropdownMenu = ({ targetId, name, items, img }: Props) => {
   const [openMenu, setOpenMenu] = useState(false);
   const navigate = useNavigate();
-  const handleSelect = async (id: number, description: string) => {
-    if (!id) {
-      console.error("Invalid ID:", id);
-      return;
-    }
-    console.log(description);
+
+  const handleNavigation = async (
+    targetCustomerId: number,
+    categoryId: number,
+    name: string,
+    subcategoryId?: number
+  ) => {
     try {
-      const formattedDescription = slugify(description);
-      navigate(`subcategory/${formattedDescription}`, {
-        state: { subcategoryId: id },
+      const formattedName = slugify(name);
+      const path = subcategoryId
+        ? `subcategory/${formattedName}`
+        : `category/${formattedName}`;
+
+      navigate(path, {
+        state: {
+          targetCustomerId,
+          categoryId,
+          ...(subcategoryId && { subcategoryId }),
+        },
       });
+
       setOpenMenu(false);
     } catch (error) {
-      console.error("Error fetching subcategory:", error);
+      console.error("Error navigating:", error);
     }
   };
 
@@ -82,11 +91,10 @@ const WideDropdownMenu = ({
   return (
     <Menu open={openMenu}>
       <MenuHandler>
-        <Link
-          to="/"
+        <div
           onMouseEnter={() => setOpenMenu(true)}
           onMouseLeave={() => setOpenMenu(false)}
-          className="text-black focus:outline-none px-2 py-2 inline-flex items-center"
+          className="text-black focus:outline-none px-2 py-2 inline-flex items-center cursor-pointer"
         >
           {name}
           <ChevronDownIcon
@@ -95,7 +103,7 @@ const WideDropdownMenu = ({
               openMenu ? "rotate-180" : ""
             }`}
           />
-        </Link>
+        </div>
       </MenuHandler>
       <div
         onMouseEnter={() => setOpenMenu(true)}
@@ -119,8 +127,15 @@ const WideDropdownMenu = ({
                     <div
                       key={category.categoryId}
                       className="font-bold pb-2 mb-1 mt-2  pl-2 text-sm text-gray-700 text-left"
+                      onClick={() =>
+                        handleNavigation(
+                          targetId,
+                          category.categoryId,
+                          category.name
+                        )
+                      }
                     >
-                      <Link to="/">{category.name}</Link>
+                      {category.name}
                     </div>
 
                     {/* Danh sách danh mục con */}
@@ -129,9 +144,11 @@ const WideDropdownMenu = ({
                         key={idx}
                         className="text-sm pb-2 pl-2 text-gray-700 text-left"
                         onClick={() =>
-                          handleSelect(
-                            Number(subcategory.subcategoryId),
-                            subcategory.subcategoryName
+                          handleNavigation(
+                            targetId,
+                            category.categoryId,
+                            subcategory.subcategoryName,
+                            subcategory.subcategoryId
                           )
                         }
                       >

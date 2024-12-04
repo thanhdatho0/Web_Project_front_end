@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Color, Product, ProductCart, Size } from "../../../Interface";
-import axios from "axios";
+import { Color, ProductCart, Size } from "../../../Interface";
 import { getProductById } from "../../../api";
 
 interface Props {
