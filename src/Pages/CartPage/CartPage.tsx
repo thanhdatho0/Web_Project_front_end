@@ -34,6 +34,7 @@ const CartPage = () => {
               const updatedSize = product.sizes.find(
                 (size) => size.sizeValue === item.size
               );
+              console.log();
 
               return {
                 ...item,
@@ -146,6 +147,7 @@ const CartPage = () => {
     );
     setCartCount(updatedCount);
     localStorage.setItem("cartCount", updatedCount.toString());
+    window.location.reload();
   };
 
   if (loading) {

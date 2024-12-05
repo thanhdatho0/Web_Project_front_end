@@ -2,7 +2,6 @@ import { Color } from "../../../Interface";
 import { Link } from "react-router-dom";
 
 interface Props {
-  id: number;
   colors: Color[];
   onHover: (colorId: number) => void;
 }
@@ -10,7 +9,7 @@ interface Props {
 const ColorCard = ({ colors, onHover }: Props) => {
   return (
     <div className="flex items-center gap-2 pt-2">
-      {colors.slice(0, 4).map((color) => (
+      {colors.slice(0, 8).map((color) => (
         <Link
           to=""
           key={color.colorId}

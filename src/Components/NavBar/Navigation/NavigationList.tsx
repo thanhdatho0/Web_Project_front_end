@@ -30,7 +30,7 @@ const NavigationList = () => {
   const items = [
     { name: "SALE", navigate: "#" },
     { name: "Mới về", navigate: "#" },
-    { name: "Bán chạy", navigate: "#" },
+    { name: "Bán chạy", navigate: "/collection" },
     {
       id: targetcustomers[0]?.targetCustomerId,
       name: targetcustomers[0]?.targetCustomerName,

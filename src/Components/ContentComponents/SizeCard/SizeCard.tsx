@@ -3,36 +3,13 @@ import { Size } from "../../../Interface";
 import { getSizeList } from "../../../api";
 
 type Props = {
+  sizes: Size[];
   onSizeSelect: (sizeId: number, sizeName: string) => void; // Hàm callback để thông báo kích thước đã chọn
 };
 
-const SizeCard = ({ onSizeSelect }: Props) => {
-  const [sizes, setSizes] = useState<Size[]>([]);
-  const [error, setError] = useState<string | null>(null);
+const SizeCard = ({ sizes, onSizeSelect }: Props) => {
   const [loading, setLoading] = useState<boolean>(false); // Loading state
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
-
-  useEffect(() => {
-    const fetchSizes = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const response = await getSizeList();
-
-        if (typeof response === "string") {
-          setError(response);
-        } else {
-          setSizes(response);
-        }
-      } catch (e) {
-        setError("An unexpected error occurred.");
-      } finally {
-        setLoading(false); // Kết thúc tải
-      }
-    };
-    fetchSizes();
-  }, []);
 
   useEffect(() => {
     if (sizes.length > 0 && selectedSize === null) {
@@ -48,9 +25,6 @@ const SizeCard = ({ onSizeSelect }: Props) => {
 
   return (
     <div className="flex gap-4 mt-2 mb-2">
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: "red" }}>Error: {error}</p>}
-      {!loading && !error && sizes.length === 0 && <p>No sizes found.</p>}
       {sizes.map((size) => (
         <button
           key={size.sizeId}

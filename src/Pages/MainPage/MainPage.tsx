@@ -459,6 +459,15 @@ const MainPage = () => {
                       Đã hết hàng
                     </p>
                   )}
+                  {products.length > 0 ? (
+                    <div className="flex w-full justify-center pt-4">
+                      <div className="cursor-pointer w-2/6 rounded-xl border-2 border-slate-500 py-2.5 bg-while-500 hover:bg-gray-300 font-bold text-center">
+                        Xem thêm
+                      </div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
             </section>
