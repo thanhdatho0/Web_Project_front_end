@@ -1,54 +1,83 @@
 import React, { useEffect, useState } from "react";
-import { Subcategory } from "../../../Interface";
-import { SubcategoryList } from "../../../api";
+import { Product, Subcategory } from "../../../Interface";
+import { getAllProducts, SubcategoryList } from "../../../api";
 import CardList from "../CardList/CardList";
+import Card from "../Card/Card";
 
-const TrendingItemSuggestions: React.FC = (): JSX.Element => {
-  const [subcategories, setSubcategories] = useState<Subcategory[]>([]); // Store subcategories
-  const [selectedSubcategoryId, setSelectedSubcategoryId] = useState<number>(1); // Store selected subcategory
+const TrendingItemSuggestions = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // const [subcategories, setSubcategories] = useState<Subcategory[]>([]); // Store subcategories
+
+  // const [selectedSubcategoryId, setSelectedSubcategoryId] = useState<number>(1); // Store selected subcategory
+  // const [error, setError] = useState<string | null>(null);
+
+  // useEffect(() => {
+  //   const fetchProduct = async () => {
+  //     try {
+  //       const response = await SubcategoryList();
+  //       if (typeof response === "string") {
+  //         // Handle API returning a string error
+  //         setError(response);
+  //       } else {
+  //         // Store categories in state
+  //         setSubcategories(response);
+  //       }
+  //     } catch (e) {
+  //       console.error("Unexpected error while fetching Subcategory", error);
+  //       setError("An unexpected error occurred.");
+  //     }
+  //   };
+  //   fetchProduct();
+  // }, []);
+
+  // const handleSubcategoryClick = async (subcategoryId: number) => {
+  //   setSelectedSubcategoryId(subcategoryId); // Update selected subcategory
+  // };
+
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchProducts = async () => {
+      setIsLoading(true);
       try {
-        const response = await SubcategoryList();
-        if (typeof response === "string") {
-          // Handle API returning a string error
-          setError(response);
+        const queryParams = new URLSearchParams();
+        queryParams.append("PageSize", "8");
+        queryParams.append("SortBy", "trend");
+
+        const response = await getAllProducts(queryParams);
+
+        if (Array.isArray(response)) {
+          setProducts(response);
         } else {
-          // Store categories in state
-          setSubcategories(response);
+          console.error("Invalid product data:", response);
+          setProducts([]);
         }
-      } catch (e) {
-        console.error("Unexpected error while fetching Subcategory", error);
-        setError("An unexpected error occurred.");
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
-    fetchProduct();
+    fetchProducts();
   }, []);
 
-  const handleSubcategoryClick = async (subcategoryId: number) => {
-    setSelectedSubcategoryId(subcategoryId); // Update selected subcategory
-  };
+  if (isLoading) <div>Loading............</div>;
+
   return (
-    <>
-      <div className="m-1 flex w-full items-center justify-start space-x-4 font-sans xl:justify-center">
-        {Array.isArray(subcategories) ? (
-          subcategories.map((subcategory) => (
-            <div
-              key={subcategory.subcategoryId} // Ensure each item has a unique key
-              className="cursor-pointer rounded-3xl bg-stone-100 px-7 py-2 text-xl text-slate-400"
-              onClick={() => handleSubcategoryClick(subcategory.subcategoryId)}
-            >
-              {subcategory.subcategoryName}
-            </div>
-          ))
-        ) : (
-          <div>{error || "No subcategories available at the moment."}</div>
-        )}
-      </div>
-      <CardList subcategoryId={selectedSubcategoryId} />
-    </>
+    <div className="lg:col-span-3 gap-6">
+      {products.length > 0 && Array.isArray(products) ? (
+        <div className="my-5 grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {products.map((product) => (
+            <Card key={product.productId} product={product} />
+          ))}
+        </div>
+      ) : (
+        <p className="text-center font-bold text-red-400 text-3xl">
+          Chưa có sản phẩm bán chạy
+        </p>
+      )}
+    </div>
   );
 };
 
