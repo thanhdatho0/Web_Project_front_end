@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { convertSlugToTitle } from "../../Service/slugService";
+import { useNavigate } from "react-router-dom";
 import { getCategoryId, getSubcategoryId, getTargetId } from "../../../api";
 
 interface Props {
@@ -11,6 +11,27 @@ interface Props {
   name?: string;
   onTitleChange?: (name: string) => void;
 }
+
+const slugify = (text: string) => {
+  const from =
+    "áàảãạăắằẳẵặâấầẩẫậóòỏõọôốồổỗộơớờởỡợéèẻẽẹêếềểễệúùủũụưứừửữựíìỉĩịýỳỷỹỵđ";
+  const to =
+    "aaaaaaaaaaaaaaaaaaooooooooooooooooeeeeeeeeeeeuuuuuuuuuuuuiiiiiyyyyyd";
+
+  let slug = text
+    .split("")
+    .map((char) => {
+      const i = from.indexOf(char.toLowerCase());
+      return i !== -1 ? to[i] : char;
+    })
+    .join("");
+
+  slug = slug.toLowerCase();
+
+  slug = slug.replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-");
+
+  return slug.replace(/^-+|-+$/g, "");
+};
 
 const Breadcrumbs: React.FC<Props> = ({
   targetId,
@@ -29,7 +50,6 @@ const Breadcrumbs: React.FC<Props> = ({
     "Loading subcategory..."
   );
   const pathnames = location.pathname.split("/").filter((x) => x);
-
   useEffect(() => {
     const fetchSubcategoryName = async () => {
       try {
@@ -75,6 +95,32 @@ const Breadcrumbs: React.FC<Props> = ({
     fetchSubcategoryName();
   }, [targetId, categoryId, subcategoryId, onTitleChange]);
 
+  const isProductPage = !!productId && !!name;
+
+  const navigate = useNavigate();
+
+  const handleNavigation = async (
+    name: string,
+    targetId: number,
+    categoryId: number,
+    subcategoryId?: number
+  ) => {
+    try {
+      const formattedName = slugify(name);
+      const path = `/subCategory/${formattedName}`;
+
+      navigate(path, {
+        state: {
+          targetCustomerId: targetId,
+          categoryId,
+          subcategoryId,
+        },
+      });
+    } catch (error) {
+      console.error("Error navigating:", error);
+    }
+  };
+
   return (
     <nav className=" text text-base">
       <ul className="flex mb-6 mt-6 ">
@@ -86,7 +132,7 @@ const Breadcrumbs: React.FC<Props> = ({
             Trang chủ
           </Link>
         </li>
-        {pathnames.map((value, index) => {
+        {/* {pathnames.map((value, index) => {
           const last = index === pathnames.length - 1;
           const to = `/${pathnames.slice(0, index + 1).join("/")}`;
           let title = convertSlugToTitle(value);
@@ -127,7 +173,35 @@ const Breadcrumbs: React.FC<Props> = ({
               )}
             </li>
           );
-        })}
+        })} */}
+
+        {/* Subcategory */}
+        {subcategoryId && (
+          <li>
+            <span className="mx-2 text-black"> {">"} </span>
+            <span
+              onClick={() =>
+                handleNavigation(
+                  subcategoryName,
+                  targetId,
+                  categoryId,
+                  subcategoryId
+                )
+              }
+              className="hover:underline hover:text-blue-500"
+            >
+              {subcategoryName}
+            </span>
+          </li>
+        )}
+
+        {/* Sản phẩm (chỉ hiển thị khi ở trang sản phẩm) */}
+        {isProductPage && (
+          <li>
+            <span className="mx-2 text-black"> {">"} </span>
+            <span className="text-blue-500">{name}</span>
+          </li>
+        )}
       </ul>
     </nav>
   );

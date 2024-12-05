@@ -138,13 +138,13 @@ const MainPage = () => {
           queryParams.append("SortBy", selectedOption);
 
         const queryString = queryParams.toString();
-        console.log("Generated query string:", queryString);
 
         // Gọi API
         const response = await getAllProducts(queryParams); // Truyền URLSearchParams vào hàm API
 
         // Xử lý kết quả
         if (Array.isArray(response)) {
+          // console.log("hiếuuuuuuuuuuuu + response = " + response[0]);
           setProducts(response);
           // setProductCount(response.length || 0);
         } else {

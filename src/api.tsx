@@ -145,6 +145,47 @@ export const getTargetId = async (
   }
 };
 
+export const getCategoryIdToSubcategoryId = async (
+  subcategoryId: number
+): Promise<number> => {
+  try {
+    const response = await axios.get<Subcategory>(
+      `${BASE_URL}/subcategories/${subcategoryId}`
+    );
+    return response.data.categoryId;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Axios error:", error.message);
+    } else {
+      console.error("Unexpected error:", error);
+    }
+    return -1;
+  }
+};
+
+export const getTargetIdToSubcategoryId = async (
+  subcategoryId: number
+): Promise<number> => {
+  try {
+    const response = await axios.get<Subcategory>(
+      `${BASE_URL}/subcategories/${subcategoryId}`
+    );
+    const categoryId = response.data.categoryId;
+
+    const response1 = await axios.get<Category>(
+      `${BASE_URL}/categories/${categoryId}`
+    );
+    return response1.data.targetCustomerId;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Axios error:", error.message);
+    } else {
+      console.error("Unexpected error:", error);
+    }
+    return -1;
+  }
+};
+
 export const getListProduct = async (
   query: string
 ): Promise<Product[] | string> => {
@@ -186,7 +227,7 @@ export const getAllProducts = async (
     const response = await axios.get<Product[]>(`${BASE_URL}/products`, {
       params: queryParams, // Truyền đối tượng URLSearchParams
     });
-    console.log(response.config.url);
+    // console.log(response.config.url);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

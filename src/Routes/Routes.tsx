@@ -3,7 +3,6 @@ import App from "../App";
 import HomePage from "../Pages/HomePage/HomePage";
 import CartPage from "../Pages/CartPage/CartPage";
 import CollectionPage from "../Pages/CollectionPage/CollectionPage";
-import SubcategoryPage from "../Pages/SubcategoryPage/SubcategoryPage";
 import ProductPage from "../Pages/ProductPage/ProductPage";
 import MainPage from "../Pages/MainPage/MainPage";
 import RegisterPage from "../Pages/RegisterPage/RegisterPage";
@@ -17,9 +16,8 @@ export const router = createBrowserRouter([
       { path: "", element: <HomePage /> },
       { path: "cart", element: <CartPage /> },
       { path: "collection", element: <CollectionPage /> },
-      // { path: "target/:ticker", element: <MainPage /> },
       { path: "category/:ticker", element: <MainPage /> },
-      // { path: "subcategory/:ticker", element: <SubcategoryPage /> },
+      { path: "subCategory/:ticker", element: <MainPage /> },
       { path: "product/:ticker", element: <ProductPage /> },
       { path: "register", element: <RegisterPage /> },
       { path: "login", element: <LoginPage /> },

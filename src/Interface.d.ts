@@ -8,21 +8,42 @@ export interface NavBarCategoryTitle {
 //     name : string
 // }
 
+// export interface Product {
+//     productId: number;
+//     name: string;
+//     price: number;
+//     description: string;
+//     cost: number;
+//     stock: number;
+//     isDeleted: boolean;
+//     subCategoryId: number;
+//     providerId: number;
+//     sizes: Size[];
+//     colors: Color[];
+//     navigate: string;
+//   }
 export interface Product {
-    productId: number;
-    name: string;
-    categoryName: string;
-    price: number;
-    description: string;
-    cost: number;
-    stock: number;
-    isDeleted: boolean;
-    categoryId: number;
-    providerId: number;
-    sizes: Size[];
-    colors: Color[];
-    navigate: string;
-  }
+  productId: number; 
+  name: string; 
+  price: number; 
+  description?: string; 
+  cost: number;
+  quantity: number; 
+  inStock: number; 
+  discountPercentage: number; 
+  isDeleted: boolean; 
+  createdAt: string; 
+  updatedAt: string;
+  images: Image[]; 
+  inventories: Inventory[]; 
+  providerId: number; 
+  provider?: Provider;
+  subcategoryId: number; 
+  subcategory?: Subcategory;
+  sizes: Size[];
+  colors: Color[];
+  navigate: string; 
+}
   export interface ProductCart {
     productId: number;
     name: string;
