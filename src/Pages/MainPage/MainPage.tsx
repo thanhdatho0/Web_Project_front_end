@@ -144,6 +144,7 @@ const MainPage = () => {
 
         // Xử lý kết quả
         if (Array.isArray(response)) {
+          // console.log("hiếuuuuuuuuuuuu + response = " + response[0]);
           setProducts(response);
           // setProductCount(response.length || 0);
         } else {

@@ -6,6 +6,10 @@ import ColorCard from "../../Components/ContentComponents/ColorCard/ColorCard";
 import ShippingInfo from "../../Components/ContentComponents/ShippingInfo/ShippingInfo";
 import PaymentMethods from "../../Components/ContentComponents/PaymentMethods/PaymentMethods";
 import SizeCard from "../../Components/ContentComponents/SizeCard/SizeCard";
+import {
+  getCategoryIdToSubcategoryId,
+  getTargetIdToSubcategoryId,
+} from "../../api";
 
 const ProductPage = () => {
   const [categoryName, setCategoryName] = useState("");
@@ -13,15 +17,47 @@ const ProductPage = () => {
   const [copySuccess, setCopySuccess] = useState("");
   const location = useLocation();
   const product = location.state?.product;
+  const [targetCustomerId, setTargetCustomerId] = useState<number>();
+  const [categoryId, setCategoryId] = useState<number>();
+  useEffect(() => {
+    if (!product) return;
+
+    const fetch = async () => {
+      try {
+        const response = await getTargetIdToSubcategoryId(
+          product.subcategoryId
+        );
+        if (response) {
+          setTargetCustomerId(response);
+        }
+
+        const response1 = await getCategoryIdToSubcategoryId(
+          product.subcategoryId
+        );
+        if (response1) {
+          setCategoryId(response1);
+        }
+      } catch (error) {
+        console.log("Failed to fetch subcategory data");
+      }
+    };
+
+    if (product?.subcategoryId) {
+      fetch();
+    }
+  }, [product]);
+
   const [cartItems, setCartItems] = useState<ProductCart[]>([]);
   const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
     console.log("cartCount = " + cartCount);
   }, [cartCount]);
+
   useEffect(() => {
     window.scrollTo(0, 0); // Scroll to the top of the page
   }, []);
+
   useEffect(() => {
     const storedCartItems = localStorage.getItem("cartItems");
     if (storedCartItems) {
@@ -89,9 +125,9 @@ const ProductPage = () => {
     setSelectedSizeName(sizeValue);
   };
 
-  // const handleAddCategoryName = (categoryName: string) => {
-  //   setCategoryName(categoryName);
-  // };
+  const handleAddCategoryName = (categoryName: string) => {
+    setCategoryName(categoryName);
+  };
 
   const handleHoverColor = (colorId: number) => {
     setColorId(colorId);
@@ -191,8 +227,8 @@ const ProductPage = () => {
         subcategoryId={product.categoryId}
       /> */}
       <Breadcrumbs
-        targetId={2}
-        categoryId={1}
+        targetId={targetCustomerId ?? 1}
+        categoryId={categoryId ?? 1}
         subcategoryId={product.subcategoryId}
         name={product.name}
         productId={product.productId}

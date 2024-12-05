@@ -49,8 +49,10 @@ const WideDropdownMenu = ({ targetId, name, items, img }: Props) => {
   ) => {
     try {
       const formattedName = slugify(name);
-      const path = `category/${formattedName}`;
-
+      const path = subcategoryId
+        ? `subCategory/${formattedName}`
+        : `category/${formattedName}`;
+      console.log("targetCustomerId = " + targetCustomerId);
       navigate(path, {
         state: {
           targetCustomerId,
