@@ -102,9 +102,18 @@ const MainPage = () => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [selectTitle, setSelectTitle] = useState<string>("");
 
+  // useEffect(() => {
+  //   // Scroll to the top of the page
+  // }, []);
+
   useEffect(() => {
-    window.scrollTo(0, 0); // Scroll to the top of the page
-  }, []);
+    if (categoryId || subcategoryId) {
+      handleClearListFilters();
+      setSortBy("Sắp xếp theo");
+      setSortOptions(Options);
+      window.scrollTo(0, 0);
+    }
+  }, [categoryId, subcategoryId]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -137,7 +146,7 @@ const MainPage = () => {
         // Xử lý kết quả
         if (Array.isArray(response)) {
           setProducts(response);
-          setProductCount(response.length || 0);
+          // setProductCount(response.length || 0);
         } else {
           console.error("Invalid product data:", response);
           setProducts([]); // Nếu dữ liệu không hợp lệ, trả về mảng rỗng
@@ -176,6 +185,9 @@ const MainPage = () => {
     selectedOption,
   ]);
 
+  useEffect(() => {
+    setProductCount(products.length);
+  }, [products]);
   const handleSelectTitle = (name: string) => {
     setSelectTitle(name);
   };
@@ -184,18 +196,15 @@ const MainPage = () => {
     setSortOptions((prevOptions) =>
       prevOptions.map((o) => {
         if (o.name === option.name) {
-          // Nếu mục được chọn đã được chọn, đặt current = false và thay đổi tên
           if (selectedOption === option.value) {
             setSortBy("Sắp xếp theo");
-            setSelectedOption(null); // Deselect nếu mục đã được chọn
+            setSelectedOption(null);
             return { ...o, current: false };
           }
           setSortBy(o.name);
-          setSelectedOption(o.value); // Cập nhật selectedOption
-          // Nếu mục được chọn chưa được chọn, đặt current = true và thay đổi tên
+          setSelectedOption(o.value);
           return { ...o, current: true };
         }
-        // Cập nhật các mục khác với current = false
         return { ...o, current: false };
       })
     );
@@ -216,12 +225,12 @@ const MainPage = () => {
     setPrice([newPrice]); // Only one price can be selected at a time
   };
 
-  const handleDeletePrice = () => {
-    setSelectedFilters((prev) => [
-      ...prev.filter((item) => item.id !== "Theo giá"), // Remove any existing price filter
-      { id: "Theo giá" }, // Add the new price filter
-    ]);
-  };
+  // const handleDeletePrice = () => {
+  //   setSelectedFilters((prev) => [
+  //     ...prev.filter((item) => item.id !== "Theo giá"), // Remove any existing price filter
+  //     { id: "Theo giá" }, // Add the new price filter
+  //   ]);
+  // };
 
   const handleAddSize = (newSize: string) => {
     setSize((prev) => {
@@ -271,7 +280,7 @@ const MainPage = () => {
   };
 
   return (
-    <div className="lg:w-[85%] mx-auto">
+    <div className="lg:w-[90%] mx-auto">
       <div className="pb-2 mt-16"></div>
       <Breadcrumbs
         targetId={targetCustomerId}
@@ -439,13 +448,17 @@ const MainPage = () => {
                   ))}
                 </form>
                 <div className="lg:col-span-3 gap-6">
-                  <div className="my-5 grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                    {Array.isArray(products)
-                      ? products.map((product) => (
-                          <Card key={product.productId} product={product} />
-                        ))
-                      : ""}
-                  </div>
+                  {products.length > 0 && Array.isArray(products) ? (
+                    <div className="my-5 grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                      {products.map((product) => (
+                        <Card key={product.productId} product={product} />
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-center font-bold text-red-400 text-3xl">
+                      Đã hết hàng
+                    </p>
+                  )}
                 </div>
               </div>
             </section>

@@ -76,10 +76,13 @@ const Breadcrumbs: React.FC<Props> = ({
   }, [targetId, categoryId, subcategoryId, onTitleChange]);
 
   return (
-    <nav className="text-blue-500 text text-base">
+    <nav className=" text text-base">
       <ul className="flex mb-6 mt-6 ">
         <li>
-          <Link to="/" className="hover:text-blue-500 hover:underline mt-2">
+          <Link
+            to="/"
+            className="hover:text-blue-500 hover:underline mt-2 text-black"
+          >
             Trang chủ
           </Link>
         </li>
@@ -102,17 +105,19 @@ const Breadcrumbs: React.FC<Props> = ({
 
           return (
             <li key={to}>
-              <span className="mx-2 mt-6">/</span>
+              <span className="mx-2 mt-6 text-black"> {">"} </span>
               {last ? (
                 productId ? (
                   // Khi có productId, hiển thị toàn bộ breadcrumb, bao gồm tên sản phẩm, subcategory, và category
-                  <span>{name}</span>
+                  <span className="text-blue-500">{name}</span>
                 ) : subcategoryId ? (
                   // Nếu không có productId nhưng có subcategoryId, hiển thị tên subcategory
-                  <span>{subcategoryName || title}</span>
+                  <span className="text-blue-500">
+                    {subcategoryName || title}
+                  </span>
                 ) : (
                   // Nếu không có cả productId và subcategoryId, chỉ hiển thị tên category
-                  <span>{categoryName || title}</span>
+                  <span className="text-blue-500">{categoryName || title}</span>
                 )
               ) : (
                 // Nếu không phải phần tử cuối, hiển thị liên kết breadcrumb
