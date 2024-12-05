@@ -119,49 +119,52 @@ const WideDropdownMenu = ({ targetId, name, items, img }: Props) => {
                   index < 4 ? "border-r border-gray-300" : ""
                 }`}
               >
-                {categories.map((category, groupIdx) => (
-                  <div key={groupIdx}>
-                    {/* Tên danh mục chính */}
-                    <div
-                      key={category.categoryId}
-                      className="font-bold pb-2 mb-1 mt-2  pl-2 text-sm text-gray-700 text-left"
-                      onClick={() =>
-                        handleNavigation(
-                          targetId,
-                          category.categoryId,
-                          category.name
-                        )
-                      }
-                    >
-                      {category.name}
-                    </div>
+                {categories.map(
+                  (category, groupIdx) =>
+                    category.subcategories.length > 0 && (
+                      <div key={groupIdx}>
+                        {/* Tên danh mục chính */}
+                        <div
+                          key={category.categoryId}
+                          className="font-bold pb-2 mb-1 mt-2  pl-2 text-sm text-gray-700 text-left cursor-pointer"
+                          onClick={() =>
+                            handleNavigation(
+                              targetId,
+                              category.categoryId,
+                              category.name
+                            )
+                          }
+                        >
+                          {category.name}
+                        </div>
 
-                    {/* Danh sách danh mục con */}
-                    {category.subcategories.map((subcategory, idx) => (
-                      <Typography
-                        key={idx}
-                        className="text-sm pb-2 pl-2 text-gray-700 text-left"
-                        onClick={() =>
-                          handleNavigation(
-                            targetId,
-                            category.categoryId,
-                            subcategory.subcategoryName,
-                            subcategory.subcategoryId
-                          )
-                        }
-                      >
-                        {/* <Link
+                        {/* Danh sách danh mục con */}
+                        {category.subcategories.map((subcategory, idx) => (
+                          <Typography
+                            key={idx}
+                            className="text-sm pb-2 pl-2 text-gray-700 text-left cursor-pointer"
+                            onClick={() =>
+                              handleNavigation(
+                                targetId,
+                                category.categoryId,
+                                subcategory.subcategoryName,
+                                subcategory.subcategoryId
+                              )
+                            }
+                          >
+                            {/* <Link
                         to={{
                           pathname: `/category/${item.navigate}`,
                           state: { categoryData: item },
                         }}
                         className="dark:hover:text-red-600 ml-4"
                       ></Link> */}
-                        {subcategory.subcategoryName}
-                      </Typography>
-                    ))}
-                  </div>
-                ))}
+                            {subcategory.subcategoryName}
+                          </Typography>
+                        ))}
+                      </div>
+                    )
+                )}
               </div>
             ))}
             <div className="col-span-1">
