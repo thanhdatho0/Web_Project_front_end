@@ -89,11 +89,9 @@ const ProductPage = () => {
     setSelectedSizeName(sizeValue);
   };
 
-  const handleAddCategoryName = (categoryName: string) => {
-    setCategoryName(categoryName);
-  };
-
-  console.log(categoryName);
+  // const handleAddCategoryName = (categoryName: string) => {
+  //   setCategoryName(categoryName);
+  // };
 
   const handleHoverColor = (colorId: number) => {
     setColorId(colorId);
@@ -112,6 +110,7 @@ const ProductPage = () => {
     const selectedSizeObj = product.sizes.find(
       (c) => c.sizeId === selectedSize
     );
+
     const newItem: ProductCart = {
       productId: product.productId,
       name: product.name,
@@ -122,6 +121,7 @@ const ProductPage = () => {
       size: selectedSizeObj?.sizeValue || "",
       quantity: count,
     };
+
     const updatedCartItems = [...cartItems, newItem];
 
     setCartItems(updatedCartItems);
@@ -253,14 +253,14 @@ const ProductPage = () => {
             })}
           </p>
           <p className="text-lg">Màu sắc: {colorName} </p>
-          <ColorCard
-            id={product.productId}
-            colors={product.colors}
-            onHover={handleHoverColor}
-          />
+          <ColorCard colors={product.colors} onHover={handleHoverColor} />
+
           <p className="mt-4 mb-2">Kích thước: {selectedSizeName}</p>
-          <SizeCard onSizeSelect={handleSelectSize} />
+
+          <SizeCard sizes={product.sizes} onSizeSelect={handleSelectSize} />
+
           <p className="mt-6">Số lượng:</p>
+
           <div className="flex items-center mt-2 ">
             <button
               onClick={() => setCount((c) => c - 1)}
