@@ -239,7 +239,7 @@ const CartItemDetail: React.FC<Props> = ({
                     >
                       {productOptions[item.productId]?.sizes?.map(
                         (size, idx) => (
-                          <option key={idx} value={size.sizeId}>
+                          <option key={idx} value={size.sizeValue}>
                             {size.sizeValue}
                           </option>
                         )
