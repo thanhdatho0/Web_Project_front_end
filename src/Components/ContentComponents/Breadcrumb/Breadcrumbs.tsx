@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCategoryId, getSubcategoryId, getTargetId } from "../../../api";
@@ -41,7 +41,7 @@ const Breadcrumbs: React.FC<Props> = ({
   onTitleChange,
   productId,
 }: Props) => {
-  const location = useLocation();
+  // const location = useLocation();
   const [targetName, setTargetName] = useState<string>("Loading target...");
   const [categoryName, setCategoryName] = useState<string>(
     "Loading category..."
@@ -49,7 +49,7 @@ const Breadcrumbs: React.FC<Props> = ({
   const [subcategoryName, setSubcategoryName] = useState<string>(
     "Loading subcategory..."
   );
-  const pathnames = location.pathname.split("/").filter((x) => x);
+  // const pathnames = location.pathname.split("/").filter((x) => x);
   useEffect(() => {
     const fetchSubcategoryName = async () => {
       try {
