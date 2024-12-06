@@ -41,7 +41,6 @@ const Breadcrumbs: React.FC<Props> = ({
   onTitleChange,
   productId,
 }: Props) => {
-  
   const [categoryName, setCategoryName] = useState<string>(
     "Loading category..."
   );

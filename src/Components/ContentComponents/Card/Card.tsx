@@ -60,11 +60,7 @@ const Card: React.FC<Props> = ({ product }: Props) => {
           {product.price.toLocaleString("vi-VN")} đ
         </div>
       </div>
-      <ColorCard
-        id={product.productId}
-        colors={product.colors}
-        onHover={handleHoverColor}
-      />
+      <ColorCard colors={product.colors} onHover={handleHoverColor} />
     </div>
   );
 };

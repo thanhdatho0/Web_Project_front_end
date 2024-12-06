@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Size } from "../../../Interface";
-import { getSizeList } from "../../../api";
 
 type Props = {
   sizes: Size[];
@@ -8,7 +7,6 @@ type Props = {
 };
 
 const SizeCard = ({ sizes, onSizeSelect }: Props) => {
-  const [loading, setLoading] = useState<boolean>(false); // Loading state
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
 
   useEffect(() => {
@@ -25,9 +23,9 @@ const SizeCard = ({ sizes, onSizeSelect }: Props) => {
 
   return (
     <div className="flex gap-4 mt-2 mb-2">
-      {sizes.map((size) => (
+      {sizes.map((size, index) => (
         <button
-          key={size.sizeId}
+          key={index}
           className={`px-4 py-2 border border-gray-400 rounded ${
             selectedSize === size.sizeId
               ? "bg-gray-900 text-white"
