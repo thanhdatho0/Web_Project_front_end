@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCategoryId, getSubcategoryId, getTargetId } from "../../../api";
+import { getCategoryId, getSubcategoryId } from "../../../api";
 
 interface Props {
   targetId: number;

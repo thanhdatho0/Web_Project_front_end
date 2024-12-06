@@ -180,12 +180,12 @@ const ProductCatalog: React.FC<Props> = ({
     setPrice([newPrice]); // Only one price can be selected at a time
   };
 
-  const handleDeletePrice = () => {
-    setSelectedFilters((prev) => [
-      ...prev.filter((item) => item.id !== "Theo giá"), // Remove any existing price filter
-      { id: "Theo giá" }, // Add the new price filter
-    ]);
-  };
+  // const handleDeletePrice = () => {
+  //   setSelectedFilters((prev) => [
+  //     ...prev.filter((item) => item.id !== "Theo giá"), // Remove any existing price filter
+  //     { id: "Theo giá" }, // Add the new price filter
+  //   ]);
+  // };
 
   const handleAddSize = (newSize: string) => {
     setSize((prev) => {
@@ -287,8 +287,8 @@ const ProductCatalog: React.FC<Props> = ({
                   className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                 >
                   <div className="py-1">
-                    {sortOptions.map((option) => (
-                      <MenuItem key={option.name}>
+                    {sortOptions.map((option, index) => (
+                      <MenuItem key={index}>
                         <div
                           onClick={() => handleSortSelect(option)}
                           className={classNames(
@@ -316,10 +316,10 @@ const ProductCatalog: React.FC<Props> = ({
 
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
               <form className="hidden lg:block">
-                {filters.map((section) => (
+                {filters.map((section, index) => (
                   <Disclosure
                     defaultOpen
-                    key={section.id}
+                    key={index}
                     as="div"
                     className="border-b border-gray-200 py-6"
                   >
@@ -343,7 +343,7 @@ const ProductCatalog: React.FC<Props> = ({
                     <DisclosurePanel className="pt-6">
                       <div className="space-y-4">
                         {section.options.map((option, optionIdx) => (
-                          <div key={option.value} className="flex items-center">
+                          <div key={optionIdx} className="flex items-center">
                             <input
                               id={`filter-${section.id}-${optionIdx}`}
                               name={section.id} // Same name for radio buttons to group them
@@ -392,8 +392,8 @@ const ProductCatalog: React.FC<Props> = ({
               <div className="lg:col-span-3 gap-6">
                 <div className="my-5 grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                   {Array.isArray(products)
-                    ? products.map((product) => (
-                        <Card key={product.productId} product={product} />
+                    ? products.map((product, index) => (
+                        <Card key={index} product={product} />
                       ))
                     : ""}
                 </div>
