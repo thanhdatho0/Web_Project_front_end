@@ -12,7 +12,6 @@ import {
 } from "../../api";
 
 const ProductPage = () => {
-  const [categoryName, setCategoryName] = useState("");
   const [count, setCount] = useState(1);
   const [copySuccess, setCopySuccess] = useState("");
   const location = useLocation();
@@ -125,10 +124,6 @@ const ProductPage = () => {
     setSelectedSizeName(sizeValue);
   };
 
-  const handleAddCategoryName = (categoryName: string) => {
-    setCategoryName(categoryName);
-  };
-
   const handleHoverColor = (colorId: number) => {
     setColorId(colorId);
     const selectedColor = product.colors.find((c) => c.colorId === colorId);
@@ -222,10 +217,6 @@ const ProductPage = () => {
   return (
     <div className="lg:w-[95%] mx-auto">
       <div className="pb-2 mt-16 "></div>
-      {/* <Breadcrumbs
-        onAddSubcategoryName={handleAddCategoryName}
-        subcategoryId={product.categoryId}
-      /> */}
       <Breadcrumbs
         targetId={targetCustomerId ?? 1}
         categoryId={categoryId ?? 1}

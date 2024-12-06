@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom"; // Use useNavigate instead of useHistory
 import { RegisterData } from "../../Interface"; // Adjust this import based on your typ
 const RegisterPage = () => {

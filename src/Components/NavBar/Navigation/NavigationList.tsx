@@ -16,7 +16,7 @@ const NavigationList = () => {
       if (typeof response === "string") {
         // Handle API returning a string error
         setError(response);
-        console.log(response);
+        console.log(error);
       } else {
         // response là mảng Category[], lưu vào state
         setTargetcustomers(response);

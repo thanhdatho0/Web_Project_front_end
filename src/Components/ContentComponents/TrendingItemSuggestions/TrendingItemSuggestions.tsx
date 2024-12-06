@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Product, Subcategory } from "../../../Interface";
-import { getAllProducts, SubcategoryList } from "../../../api";
-import CardList from "../CardList/CardList";
+import { useEffect, useState } from "react";
+import { Product } from "../../../Interface";
+import { getAllProducts } from "../../../api";
 import Card from "../Card/Card";
 
 const TrendingItemSuggestions = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // const [error, setError] = useState<string | null>(null);
 
   // const [subcategories, setSubcategories] = useState<Subcategory[]>([]); // Store subcategories
 
@@ -68,8 +67,8 @@ const TrendingItemSuggestions = () => {
     <div className="lg:col-span-3 gap-6">
       {products.length > 0 && Array.isArray(products) ? (
         <div className="my-5 grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {products.map((product) => (
-            <Card key={product.productId} product={product} />
+          {products.map((product, index) => (
+            <Card key={index} product={product} />
           ))}
         </div>
       ) : (
