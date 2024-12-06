@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCategoryId, getSubcategoryId, getTargetId } from "../../../api";
@@ -41,6 +41,7 @@ const Breadcrumbs: React.FC<Props> = ({
   onTitleChange,
   productId,
 }: Props) => {
+  
   const [categoryName, setCategoryName] = useState<string>(
     "Loading category..."
   );

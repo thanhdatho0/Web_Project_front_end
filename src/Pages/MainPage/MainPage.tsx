@@ -370,7 +370,7 @@ const MainPage = () => {
               </h3>
 
               <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-                <form className="hidden lg:block">
+                <form className="hidden lg:block overflow-y-scroll h-[400px]">
                   {filters.map((section) => (
                     <Disclosure
                       defaultOpen
