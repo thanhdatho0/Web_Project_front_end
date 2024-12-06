@@ -5,8 +5,8 @@ const SocialMediaList = () => {
   return (
     <div className="mt-12">
       <ul className="flex items-center">
-        {Icons.map((icon) => (
-          <li className="p-2">
+        {Icons.map((icon, index) => (
+          <li className="p-2" key={index}>
             <SocialMedia icon={icon.icon} href={icon.href} />
           </li>
         ))}
