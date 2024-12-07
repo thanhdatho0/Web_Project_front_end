@@ -34,11 +34,10 @@ const CartPage = () => {
               const updatedSize = product.sizes.find(
                 (size) => size.sizeValue === item.size
               );
-              console.log();
 
               return {
                 ...item,
-                price: product.price,
+                price: product.price * (1 - product.discountPercentage),
                 imgUrl: updatedColor?.images[0]?.url || item.imgUrl,
                 imgAlt: updatedColor?.images[0]?.alt || item.imgAlt,
                 color: updatedColor?.name || item.color,

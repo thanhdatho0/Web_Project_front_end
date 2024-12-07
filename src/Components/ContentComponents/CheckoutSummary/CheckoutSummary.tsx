@@ -7,6 +7,7 @@ interface Props {
 }
 const CheckoutSummary: React.FC<Props> = ({ cartItems }) => {
   const [totalPrice, setTotalPrice] = useState(0);
+  const [money, setMoney] = useState(0);
 
   useEffect(() => {
     const total = cartItems.reduce(
@@ -14,6 +15,8 @@ const CheckoutSummary: React.FC<Props> = ({ cartItems }) => {
       0
     );
     setTotalPrice(total);
+    setMoney(total + 20000);
+    if (total > 200000) setMoney(total);
   }, [cartItems]);
   return (
     <div className="mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full">
@@ -41,15 +44,16 @@ const CheckoutSummary: React.FC<Props> = ({ cartItems }) => {
                 {(20000).toLocaleString("vi-VN")} đ
               </dd>
             </dl>
-
-            <dl className="flex items-center justify-between gap-4">
-              <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
-                Giảm giá vận chuyển
-              </dt>
-              <dd className="text-base font-medium  text-green-600">
-                - {(20000).toLocaleString("vi-VN")} đ
-              </dd>
-            </dl>
+            {totalPrice >= 200000 && (
+              <dl className="flex items-center justify-between gap-4">
+                <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
+                  Giảm giá vận chuyển
+                </dt>
+                <dd className="text-base font-medium  text-green-600">
+                  -{(20000).toLocaleString("vi-VN")}đ
+                </dd>
+              </dl>
+            )}
           </div>
 
           <dl className="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
@@ -57,7 +61,7 @@ const CheckoutSummary: React.FC<Props> = ({ cartItems }) => {
               Tổng thanh toán
             </dt>
             <dd className="text-base font-bold text-gray-900 dark:text-white">
-              {totalPrice.toLocaleString("vi-VN")} đ
+              {money.toLocaleString("vi-VN")} đ
             </dd>
           </dl>
         </div>
@@ -74,8 +78,8 @@ const CheckoutSummary: React.FC<Props> = ({ cartItems }) => {
             {" "}
             hoặc{" "}
           </span>
-          <a
-            href="#"
+          <div
+            // href="#"
             title=""
             className="inline-flex items-center gap-2 text-sm font-medium text-primary-700 underline hover:no-underline text-white"
           >
@@ -98,7 +102,7 @@ const CheckoutSummary: React.FC<Props> = ({ cartItems }) => {
                 d="M19 12H5m14 0-4 4m4-4-4-4"
               />
             </svg>
-          </a>
+          </div>
         </div>
       </div>
     </div>
