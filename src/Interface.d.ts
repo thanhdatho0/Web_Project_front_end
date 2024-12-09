@@ -111,3 +111,8 @@ export interface RegisterData {
   dob: string;        // Date of birth (format: 'YYYY-MM-DD')
   email: string; 
 }
+
+interface EmailRequest {
+  email: string;
+  username: string;
+}

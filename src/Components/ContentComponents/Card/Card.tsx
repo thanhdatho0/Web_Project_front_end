@@ -48,7 +48,10 @@ const Card: React.FC<Props> = ({ product }: Props) => {
   };
 
   return (
-    <div onClick={handleProductClick} className="relative overflow-hidden">
+    <div
+      onClick={handleProductClick}
+      className="relative overflow-hidden cursor-pointer"
+    >
       <div className="relative">
         <img
           alt={currentImage.alt}

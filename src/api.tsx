@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   Category,
+  EmailRequest,
   Product,
   Size,
   Subcategory,
@@ -217,5 +218,21 @@ export const getAllProducts = async (
       console.error("Unexpected error:", error);
     }
     return []; // Trả về mảng rỗng nếu gặp lỗi
+  }
+};
+
+export const sendEmail = async (emailRequest: EmailRequest) => {
+  try {
+    const response = await fetch(`${BASE_URL}/EmailSender/send`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(emailRequest),
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Error sending email:", error);
   }
 };
