@@ -1,15 +1,18 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../Components/ContentComponents/UserContext/UserContext";
+import { BASE_URL } from "../../api";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    if (user && user.isAuthenticated) navigate("/");
   }, []);
 
   const { loginContext } = useContext(UserContext);
@@ -24,12 +27,13 @@ const LoginPage = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:5254/api/account/login", {
+      const response = await fetch(`${BASE_URL}/account/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(loginPayload),
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -37,15 +41,11 @@ const LoginPage = () => {
         setError(errorMessage || "An error occurred while logging in.");
         return;
       }
-      // Lưu vào localStorage
-      const result = await response.json();
+      const token = await response.text(); // Vì API trả về plain text
       let data = {
         isAuthenticated: true, // Đăng nhập thành công
-        username: result.username,
-        email: result.email,
-        token: result.token,
+        accessToken: token,
       };
-
       loginContext(data);
       navigate("/"); // Navigate to a different page after successful login
     } catch (err) {

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { UserContext } from "../../ContentComponents/UserContext/UserContext";
 
 const SideBar = () => {
-  const { logoutContext } = useContext(UserContext);
+  const { account, logoutContext } = useContext(UserContext);
   return (
     <div className="w-1/4 bg-gray-100 p-6">
       <div className="text-center mb-6">
@@ -12,7 +12,7 @@ const SideBar = () => {
           alt="Avatar"
           className="w-20 h-20 rounded-full mx-auto"
         />
-        <h2 className="mt-4 text-xl font-semibold">Danh Thanh</h2>
+        <h2 className="mt-4 text-xl font-semibold">{account.firstName}</h2>
       </div>
       <ul className="space-y-4">
         <li>

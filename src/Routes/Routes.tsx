@@ -7,7 +7,6 @@ import ProductPage from "../Pages/ProductPage/ProductPage";
 import MainPage from "../Pages/MainPage/MainPage";
 import RegisterPage from "../Pages/RegisterPage/RegisterPage";
 import LoginPage from "../Pages/LoginPage/LoginPage";
-import UserPage from "../Pages/UserPage/UserPage";
 import AccountPage from "../Pages/AccountPage/AccountPage";
 import OrderHistoryPage from "../Pages/OrderHistoryPage/OrderHistoryPage";
 import ChangePasswordPage from "../Pages/ChangePasswordPage/ChangePasswordPage";

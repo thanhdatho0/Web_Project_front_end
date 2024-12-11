@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { EmailRequest } from "../../Interface";
 import { sendEmail } from "../../api";
+import { UserContext } from "../../Components/ContentComponents/UserContext/UserContext";
 
 const ForgotPasswordPage = () => {
   const navigate = useNavigate();
@@ -9,9 +10,11 @@ const ForgotPasswordPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    if (user && user.isAuthenticated) navigate("/");
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {

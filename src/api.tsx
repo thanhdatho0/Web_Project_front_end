@@ -8,7 +8,7 @@ import {
   TargerCustomer,
 } from "./Interface";
 
-const BASE_URL = "http://localhost:5254/api";
+export const BASE_URL = "http://localhost:5254/api";
 
 export const ProductList = async (
   subcategoryId: number,
@@ -235,4 +235,27 @@ export const sendEmail = async (emailRequest: EmailRequest) => {
   } catch (error) {
     console.error("Error sending email:", error);
   }
+};
+export const getCustomerDetails = async (accessToken: string) => {
+  const response = await axios.get(`${BASE_URL}/Customer/details`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`, // Thêm header Authorization
+    },
+    withCredentials: true, // Đảm bảo với Cookies nếu có
+  });
+  return response;
+};
+
+export const refreshToken = async (accessToken: string) => {
+  const response = await axios.post(
+    `${BASE_URL}/Token/refresh`,
+    {}, // Body request (trống vì bạn chỉ cần gửi token trong header)
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`, // Thêm header Authorization
+      },
+      withCredentials: true, // Đảm bảo với Cookies nếu có
+    }
+  );
+  return response;
 };
