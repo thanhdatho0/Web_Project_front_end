@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Use useNavigate instead of useHistory
 import { RegisterData } from "../../Interface"; // Adjust this import based on your typ
+import { UserContext } from "../../Components/ContentComponents/UserContext/UserContext";
 const RegisterPage = () => {
   window.scrollTo(0, 0); // Scroll to the top of the page
   const [formData, setFormData] = useState<RegisterData>({
@@ -17,6 +18,12 @@ const RegisterPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate(); // Use React Router's useNavigate
+  const { user } = useContext(UserContext);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    if (user && user.isAuthenticated) navigate("/");
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,12 +32,14 @@ const RegisterPage = () => {
 
     const registerPayload = {
       customerInfo: {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        male: formData.gender === "Nam",
-        phoneNumber: formData.phoneNumber,
-        address: formData.address,
-        dateOfBirth: new Date(formData.dob).toISOString().split("T")[0],
+        personalInfo: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          male: formData.gender === "Nam",
+          phoneNumber: formData.phoneNumber,
+          address: formData.address,
+          dateOfBirth: new Date(formData.dob).toISOString().split("T")[0],
+        },
         email: formData.email,
       },
       username: formData.userName,

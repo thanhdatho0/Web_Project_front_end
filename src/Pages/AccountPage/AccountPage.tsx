@@ -1,20 +1,22 @@
-import { useState } from "react";
+import { useContext, useState, useEffect } from "react";
+import { UserContext } from "../../Components/ContentComponents/UserContext/UserContext";
 
 const AccountPage = () => {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    gender: "",
-    email: "",
-    phoneNumber: "",
-    address: "",
-    dateOfBirth: "",
-  });
+  const { account } = useContext(UserContext);
 
   const [isEditingE, setIsEditingE] = useState(false);
   const [isEditingP, setIsEditingP] = useState(false);
-  const [email, setEmail] = useState("thanhdanh431@gmail.com");
-  const [phone, setPhone] = useState("091237124");
+  const [email, setEmail] = useState(account.email);
+  const [phone, setPhone] = useState(account.phoneNumber);
+  const [fullName, setFullName] = useState(account.fullName);
+  const [dateOfBirth, setDateOfBirth] = useState(account.dateOfBirth);
+
+  useEffect(() => {
+    setEmail(account.email);
+    setPhone(account.phoneNumber);
+    setFullName(account.fullName);
+    setDateOfBirth(account.dateOfBirth);
+  }, [account]);
 
   // Hàm ẩn email
   const maskEmail = (email: string) => {
@@ -23,9 +25,11 @@ const AccountPage = () => {
     return `${maskedLocal}@${domain}`;
   };
 
+  // Hàm ẩn số điện thoại
   const maskPhone = (phone: string) => {
-    const maskedLocal = "*".repeat(phone.length); // Thay thế toàn bộ phần local bằng dấu *
-    return `${maskedLocal}`;
+    if (phone.length == 0) return "";
+    const maskedLocal = "*".repeat(phone.length - 4) + phone.slice(-4); // Ẩn tất cả nhưng 4 số cuối
+    return maskedLocal;
   };
 
   const handleEmailEditClick = () => {
@@ -44,6 +48,18 @@ const AccountPage = () => {
     setPhone(e.target.value);
   };
 
+  const handleInputFullNameChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setFullName(e.target.value);
+  };
+
+  const handleInputDateOfBirthChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setDateOfBirth(e.target.value);
+  };
+
   const handleBlurEmail = () => {
     setIsEditingE(false);
   };
@@ -52,22 +68,30 @@ const AccountPage = () => {
     setIsEditingP(false);
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Gửi dữ liệu đã thay đổi đến API hoặc Context để cập nhật
+    console.log({
+      fullName,
+      email,
+      phone,
+      dateOfBirth,
+    });
+  };
+
   return (
-    <div className="lg:w-[80%] p-6 ">
+    <div className="lg:w-[80%] p-6">
       <h2 className="text-2xl font-semibold mb-6">Thông tin tài khoản</h2>
-      <form
-        //   onSubmit={handleSubmit}
-        className="space-y-4"
-      >
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex items-center">
-          <label className="text-base font-medium w-1/5 text-right pr-8 ali">
+          <label className="text-base font-medium w-1/5 text-right pr-8">
             Họ Tên
           </label>
           <input
             type="text"
             name="fullName"
-            //   value={formData.fullName}
-            // onChange={handleChange}
+            value={fullName}
+            onChange={handleInputFullNameChange}
             className="w-2/4 px-4 py-2 border rounded-md"
           />
         </div>
@@ -82,8 +106,7 @@ const AccountPage = () => {
                 type="radio"
                 name="gender"
                 value="male"
-                checked={formData.gender === "male"}
-                // onChange={handleChange}
+                checked={account.male === true}
                 className="mr-3"
               />
               Nam
@@ -93,8 +116,7 @@ const AccountPage = () => {
                 type="radio"
                 name="gender"
                 value="female"
-                checked={formData.gender === "female"}
-                // onChange={handleChange}
+                checked={account.male !== true}
                 className="mr-3"
               />
               Nữ
@@ -117,8 +139,8 @@ const AccountPage = () => {
                 className="w-full px-4 py-2 border rounded-md"
               />
             ) : (
-              <div className="flex items-center w-full px-4 py-2 rounded-md ">
-                {maskPhone(phone)}
+              <div className="flex items-center w-full px-4 py-2 rounded-md">
+                {maskPhone(phone || "")}
               </div>
             )}
             {!isEditingP && (
@@ -147,7 +169,7 @@ const AccountPage = () => {
                 className="w-full px-4 py-2 border rounded-md"
               />
             ) : (
-              <div className="flex items-center w-full px-4 py-2 rounded-md ">
+              <div className="flex items-center w-full px-4 py-2 rounded-md">
                 {maskEmail(email)}
               </div>
             )}
@@ -169,8 +191,8 @@ const AccountPage = () => {
           <div className="flex items-center space-x-2">
             <select
               name="day"
-              // value={formData.day}
-              //   onChange={handleChange}
+              value={dateOfBirth?.split("-")[0] || ""}
+              onChange={handleInputDateOfBirthChange}
               className="w-2/3 px-4 py-2 border rounded-md"
             >
               <option value="">Ngày</option>
@@ -182,8 +204,8 @@ const AccountPage = () => {
             </select>
             <select
               name="month"
-              // value={formData.month}
-              //   onChange={handleChange}
+              value={dateOfBirth?.split("-")[1] || ""}
+              onChange={handleInputDateOfBirthChange}
               className="w-3/4 px-4 py-2 border rounded-md"
             >
               <option value="">Tháng</option>
@@ -195,8 +217,8 @@ const AccountPage = () => {
             </select>
             <select
               name="year"
-              // value={formData.year}
-              //   onChange={handleChange}
+              value={dateOfBirth?.split("-")[2] || ""}
+              onChange={handleInputDateOfBirthChange}
               className="w-2/3 px-4 py-2 border rounded-md"
             >
               <option value="">Năm</option>

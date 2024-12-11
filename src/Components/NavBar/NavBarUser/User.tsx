@@ -3,13 +3,12 @@ import { Link } from "react-router-dom";
 import { UserContext } from "../../ContentComponents/UserContext/UserContext";
 
 const User = () => {
-  const { user } = useContext(UserContext);
-
+  const { user, account } = useContext(UserContext);
   return (
     <div className="relative">
       {user && user.isAuthenticated ? (
-        <Link to="/user" className="text-blue-500 hover:underline">
-          User
+        <Link to="user" className="text-blue-500 hover:underline">
+          {account.firstName}
         </Link>
       ) : (
         <Link to="/login" className="text-blue-500 hover:underline">
