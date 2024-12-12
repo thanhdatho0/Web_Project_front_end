@@ -10,6 +10,10 @@ const CartPage = () => {
   const [loading, setLoading] = useState(true);
   const { account } = useContext(UserContext); // Access user account details
   const [totalPrice, setTotalPrice] = useState(0);
+  const [colors, setColors] = useState<{ colorId: number; name: string }[]>([]);
+  const [sizes, setSizes] = useState<{ sizeId: number; sizeValue: string }[]>(
+    []
+  );
   useEffect(() => {
     const total = cartItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
@@ -90,24 +94,48 @@ const CartPage = () => {
   }, []);
 
   // Example functions for mapping color and size names to IDs
-  const getColorId = (colorName: string): number => {
-    const colorMap: { [key: string]: number } = {
-      Red: 1,
-      Blue: 2,
-      Green: 3,
-      // Add more mappings as needed
+  useEffect(() => {
+    const fetchColors = async () => {
+      try {
+        const response = await axios.get("http://localhost:5254/api/colors");
+        const fetchedColors = response.data.map((color: any) => ({
+          colorId: color.colorId,
+          name: color.name,
+        }));
+        setColors(fetchedColors);
+      } catch (error) {
+        console.error("Error fetching colors:", error);
+      }
     };
-    return colorMap[colorName] || 0; // Return 0 if not found
+
+    fetchColors();
+  }, []);
+
+  const getColorId = (colorName: string): number => {
+    const color = colors.find((color) => color.name === colorName);
+    return color ? color.colorId : 0; // Return 0 if color is not found
   };
 
-  const getSizeId = (sizeValue: string): number => {
-    const sizeMap: { [key: string]: number } = {
-      S: 1,
-      M: 2,
-      L: 3,
-      // Add more mappings as needed
+  useEffect(() => {
+    const fetchSizes = async () => {
+      try {
+        const response = await axios.get("http://localhost:5254/api/sizes");
+        const fetchedSizes = response.data.map((size: any) => ({
+          sizeId: size.sizeId,
+          sizeValue: size.sizeValue,
+        }));
+        setSizes(fetchedSizes);
+      } catch (error) {
+        console.error("Error fetching sizes:", error);
+      }
     };
-    return sizeMap[sizeValue] || 0; // Return 0 if not found
+
+    fetchSizes();
+  }, []);
+
+  const getSizeId = (sizeValue: string): number => {
+    const size = sizes.find((size) => size.sizeValue === sizeValue);
+    return size ? size.sizeId : 0; // Return 0 if size is not found
   };
 
   const handlePlaceOrder = async () => {
