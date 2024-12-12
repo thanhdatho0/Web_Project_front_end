@@ -20,15 +20,21 @@ function ChangePasswordPage({}: Props) {
 
     if (!username || !oldPassword || !newPassword || !confirmPassword) {
       setLoading(false);
-      setErrorMessage("Vui lòng nhập đủ thông tin");
+      setErrorMessage("Vui lòng nhập đủ thông tin.");
       return;
     }
 
-    // if (newPassword !== confirmPassword) {
-    //   setLoading(false);
-    //   setErrorMessage("Mật khẩu mới không khớp!");
-    //   return;
-    // }
+    if (newPassword !== confirmPassword) {
+      setLoading(false);
+      setErrorMessage("Mật khẩu mới không khớp!");
+      return;
+    }
+
+    if (!user?.accessToken) {
+      setLoading(false);
+      setErrorMessage("Token không hợp lệ. Vui lòng đăng nhập lại.");
+      return;
+    }
 
     try {
       const response = await changePassword(
@@ -38,15 +44,9 @@ function ChangePasswordPage({}: Props) {
         confirmPassword,
         user.accessToken
       );
-      setErrorMessage(response);
-      console.log(response);
-      console.log(newPassword + "" + confirmPassword);
+      setErrorMessage(response); // Assuming the message is returned from `changePassword`
     } catch (error: any) {
-      if (error.response) {
-        setErrorMessage(error.response.data || "");
-      } else {
-        setErrorMessage("Không thể kết nối đến máy chủ.");
-      }
+      setErrorMessage(error.message || "Không thể kết nối đến máy chủ.");
     } finally {
       setLoading(false);
     }
