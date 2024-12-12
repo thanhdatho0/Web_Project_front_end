@@ -18,6 +18,7 @@ const AccountPage = () => {
   const isValidEmail = (email: string) =>
     /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
   const isValidPhone = (phone: string) => /^\d{10,15}$/.test(phone);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setEmail(account.email);
@@ -71,6 +72,7 @@ const AccountPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
     if (
       !email ||
@@ -81,16 +83,19 @@ const AccountPage = () => {
       !dateOfBirth
     ) {
       alert("Vui lòng điền đầy đủ thông tin!");
+      setLoading(false);
       return;
     }
 
     if (!isValidEmail(email)) {
       alert("Email không hợp lệ!");
+      setLoading(false);
       return;
     }
 
     if (!isValidPhone(phone)) {
       alert("Số điện thoại không hợp lệ!");
+      setLoading(false);
       return;
     }
 
@@ -122,6 +127,8 @@ const AccountPage = () => {
       alert(message); // Hiển thị thông báo thành công
     } catch (error) {
       alert(error.message); // Hiển thị thông báo lỗi
+    } finally {
+      setLoading(false); // Kết thúc trạng thái tải
     }
   };
 
@@ -257,7 +264,30 @@ const AccountPage = () => {
               type="submit"
               className="px-6 py-2 bg-red-500 text-white rounded-md"
             >
-              Lưu thay đổi
+              {loading ? (
+                <svg
+                  className="w-5 h-5 mx-auto text-white animate-spin"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8z"
+                  ></path>
+                </svg>
+              ) : (
+                "Lưu thay đổi"
+              )}
             </button>
           </div>
         </div>
