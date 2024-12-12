@@ -5,7 +5,6 @@ import { changePassword } from "../../api";
 type Props = {};
 
 function ChangePasswordPage({}: Props) {
-  const [username, setUsername] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -18,7 +17,7 @@ function ChangePasswordPage({}: Props) {
     setErrorMessage(null);
     setLoading(true);
 
-    if (!username || !oldPassword || !newPassword || !confirmPassword) {
+    if (!oldPassword || !newPassword || !confirmPassword) {
       setLoading(false);
       setErrorMessage("Vui lòng nhập đủ thông tin.");
       return;
@@ -38,7 +37,7 @@ function ChangePasswordPage({}: Props) {
 
     try {
       const response = await changePassword(
-        username,
+        user.username,
         oldPassword,
         newPassword,
         confirmPassword,
@@ -61,18 +60,6 @@ function ChangePasswordPage({}: Props) {
         </div>
       )}
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex items-center">
-          <label className="text-base font-medium w-1/5 text-right pr-8">
-            Tên đăng nhập:
-          </label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="w-2/4 px-4 py-2 border rounded-md"
-          />
-        </div>
-
         <div className="flex items-center">
           <label className="text-base font-medium w-1/5 text-right pr-8">
             Mật khẩu cũ:

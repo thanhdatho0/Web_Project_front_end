@@ -1,43 +1,40 @@
 import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../Components/ContentComponents/UserContext/UserContext";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { updateUser } from "../../api";
 
 const AccountPage = () => {
-  const { account } = useContext(UserContext);
+  const { account, user } = useContext(UserContext);
 
-  const [isEditingE, setIsEditingE] = useState(false);
-  const [isEditingP, setIsEditingP] = useState(false);
   const [email, setEmail] = useState(account.email);
   const [phone, setPhone] = useState(account.phoneNumber);
-  const [fullName, setFullName] = useState(account.fullName);
-  const [dateOfBirth, setDateOfBirth] = useState(account.dateOfBirth);
+  const [lastName, setLastName] = useState(account.lastName);
+  const [firstName, setFirstName] = useState(account.firstName);
+  const [address, setAddress] = useState(account.address);
+  const [dateOfBirth, setDateOfBirth] = useState(account.dateOfBirth || "");
+  const [gender, setGender] = useState(account.male ? "male" : "female");
+  const [avatar, setAvatar] = useState<File | null>(null); // For file upload
+  const isValidEmail = (email: string) =>
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+  const isValidPhone = (phone: string) => /^\d{10,15}$/.test(phone);
 
   useEffect(() => {
     setEmail(account.email);
     setPhone(account.phoneNumber);
-    setFullName(account.fullName);
-    setDateOfBirth(account.dateOfBirth);
+    setFirstName(account.firstName);
+    setLastName(account.lastName);
+    setAddress(account.address);
+    setDateOfBirth(account.dateOfBirth || "");
+    setGender(account.male === true ? "male" : "female");
   }, [account]);
 
-  // Hàm ẩn email
-  const maskEmail = (email: string) => {
-    const [local, domain] = email.split("@");
-    const maskedLocal = local.slice(0, 2) + "*".repeat(local.length - 2);
-    return `${maskedLocal}@${domain}`;
-  };
-
-  // Hàm ẩn số điện thoại
-  const maskPhone = (phone: string) => {
-    if (phone.length == 0) return "";
-    const maskedLocal = "*".repeat(phone.length - 4) + phone.slice(-4); // Ẩn tất cả nhưng 4 số cuối
-    return maskedLocal;
-  };
-
-  const handleEmailEditClick = () => {
-    setIsEditingE(true);
-  };
-
-  const handlePhoneEditClick = () => {
-    setIsEditingP(true);
+  // Handle file upload (avatar)
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setAvatar(file);
+    }
   };
 
   const handleInputEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,35 +45,84 @@ const AccountPage = () => {
     setPhone(e.target.value);
   };
 
-  const handleInputFullNameChange = (
+  const handleInputFistChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFirstName(e.target.value);
+  };
+
+  const handleInputLastNameChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setFullName(e.target.value);
+    setLastName(e.target.value);
   };
 
-  const handleInputDateOfBirthChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setDateOfBirth(e.target.value);
+  const handleInputAddressChange = (e) => {
+    setAddress(e.target.value);
   };
 
-  const handleBlurEmail = () => {
-    setIsEditingE(false);
+  const handleDateChange = (date: Date | null) => {
+    if (date) {
+      setDateOfBirth(date.toISOString().split("T")[0]); // ISO format "yyyy-MM-dd"
+    }
   };
 
-  const handleBlurPhone = () => {
-    setIsEditingP(false);
+  const handleGenderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setGender(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Gửi dữ liệu đã thay đổi đến API hoặc Context để cập nhật
-    console.log({
-      fullName,
-      email,
-      phone,
-      dateOfBirth,
-    });
+
+    if (
+      !email ||
+      !phone ||
+      !firstName ||
+      !lastName ||
+      !address ||
+      !dateOfBirth
+    ) {
+      alert("Vui lòng điền đầy đủ thông tin!");
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      alert("Email không hợp lệ!");
+      return;
+    }
+
+    if (!isValidPhone(phone)) {
+      alert("Số điện thoại không hợp lệ!");
+      return;
+    }
+
+    // Create the CustomerUpdateDto object to match the backend structure
+    // Tạo đối tượng CustomerUpdateDto
+    const formData = new FormData();
+
+    // Thêm thông tin vào formData
+    formData.append("Email", email); // Thêm email
+    formData.append("PersonalInfo.FirstName", firstName); // Thêm FirstName
+    formData.append("PersonalInfo.LastName", lastName); // Thêm LastName
+    formData.append("PersonalInfo.Male", gender === "male" ? "true" : "false"); // Thêm Male (boolean)
+    formData.append("PersonalInfo.PhoneNumber", phone); // Thêm PhoneNumber
+    formData.append("PersonalInfo.Address", address); // Thêm Address
+    formData.append("PersonalInfo.DateOfBirth", dateOfBirth); // Thêm DateOfBirth
+
+    // Thêm avatar nếu có
+    if (avatar) {
+      formData.append("file", avatar); // Thêm ảnh vào formData
+    }
+
+    try {
+      // Gọi hàm updateUser
+      const message = await updateUser(
+        formData,
+        user.accessToken,
+        account.customerId
+      );
+      alert(message); // Hiển thị thông báo thành công
+    } catch (error) {
+      alert(error.message); // Hiển thị thông báo lỗi
+    }
   };
 
   return (
@@ -85,13 +131,38 @@ const AccountPage = () => {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex items-center">
           <label className="text-base font-medium w-1/5 text-right pr-8">
-            Họ Tên
+            Tên
           </label>
           <input
             type="text"
-            name="fullName"
-            value={fullName}
-            onChange={handleInputFullNameChange}
+            name="firstname"
+            value={firstName}
+            onChange={handleInputFistChange}
+            className="w-2/4 px-4 py-2 border rounded-md"
+          />
+        </div>
+
+        <div className="flex items-center">
+          <label className="text-base font-medium w-1/5 text-right pr-8">
+            Họ
+          </label>
+          <input
+            type="text"
+            name="lastName"
+            value={lastName}
+            onChange={handleInputLastNameChange}
+            className="w-2/4 px-4 py-2 border rounded-md"
+          />
+        </div>
+
+        <div className="flex items-center">
+          <label className="text-base font-medium w-1/5 text-right pr-8">
+            Địa chỉ
+          </label>
+          <textarea
+            name="address"
+            value={address}
+            onChange={handleInputAddressChange}
             className="w-2/4 px-4 py-2 border rounded-md"
           />
         </div>
@@ -100,13 +171,14 @@ const AccountPage = () => {
           <label className="text-base font-medium w-1/5 text-right pr-8">
             Giới tính
           </label>
-          <div className="space-x-4">
+          <div className="flex items-center">
             <label>
               <input
                 type="radio"
                 name="gender"
                 value="male"
-                checked={account.male === true}
+                checked={gender === "male"}
+                onChange={handleGenderChange}
                 className="mr-3"
               />
               Nam
@@ -116,7 +188,8 @@ const AccountPage = () => {
                 type="radio"
                 name="gender"
                 value="female"
-                checked={account.male !== true}
+                checked={gender === "female"}
+                onChange={handleGenderChange}
                 className="mr-3"
               />
               Nữ
@@ -128,111 +201,57 @@ const AccountPage = () => {
           <label className=" pr-8 text-base font-medium w-1/5 text-right">
             Số điện thoại
           </label>
-          <div className="flex items-center space-x-3">
-            {isEditingP ? (
-              <input
-                type="text"
-                value={phone}
-                onChange={handleInputPhoneChange}
-                onBlur={handleBlurPhone}
-                autoFocus
-                className="w-full px-4 py-2 border rounded-md"
-              />
-            ) : (
-              <div className="flex items-center w-full px-4 py-2 rounded-md">
-                {maskPhone(phone || "")}
-              </div>
-            )}
-            {!isEditingP && (
-              <div
-                className="text-blue-500 cursor-pointer w-full"
-                onClick={handlePhoneEditClick}
-              >
-                Thay đổi
-              </div>
-            )}
-          </div>
+          <input
+            type="text"
+            value={phone}
+            onChange={handleInputPhoneChange}
+            className="w-2/4 px-4 py-2 border rounded-md"
+          />
         </div>
 
         <div className="flex items-center">
           <label className=" pr-8 text-base font-medium w-1/5 text-right">
             Email
           </label>
-          <div className="flex items-center space-x-2">
-            {isEditingE ? (
-              <input
-                type="text"
-                value={email}
-                onChange={handleInputEmailChange}
-                onBlur={handleBlurEmail}
-                autoFocus
-                className="w-full px-4 py-2 border rounded-md"
-              />
-            ) : (
-              <div className="flex items-center w-full px-4 py-2 rounded-md">
-                {maskEmail(email)}
-              </div>
-            )}
-            {!isEditingE && (
-              <div
-                className="text-blue-500 cursor-pointer w-full"
-                onClick={handleEmailEditClick}
-              >
-                Thay đổi
-              </div>
-            )}
-          </div>
+          <input
+            type="text"
+            value={email}
+            onChange={handleInputEmailChange}
+            className="w-2/4 px-4 py-2 border rounded-md"
+          />
         </div>
 
         <div className="flex items-center">
-          <label className=" pr-8 text-base font-medium w-1/5 text-right">
+          <label className="pr-8 text-base font-medium w-1/5 text-right">
             Ngày sinh
           </label>
-          <div className="flex items-center space-x-2">
-            <select
-              name="day"
-              value={dateOfBirth?.split("-")[0] || ""}
-              onChange={handleInputDateOfBirthChange}
-              className="w-2/3 px-4 py-2 border rounded-md"
-            >
-              <option value="">Ngày</option>
-              {[...Array(31)].map((_, i) => (
-                <option key={i} value={i + 1}>
-                  {i + 1}
-                </option>
-              ))}
-            </select>
-            <select
-              name="month"
-              value={dateOfBirth?.split("-")[1] || ""}
-              onChange={handleInputDateOfBirthChange}
-              className="w-3/4 px-4 py-2 border rounded-md"
-            >
-              <option value="">Tháng</option>
-              {[...Array(12)].map((_, i) => (
-                <option key={i} value={i + 1}>
-                  {i + 1}
-                </option>
-              ))}
-            </select>
-            <select
-              name="year"
-              value={dateOfBirth?.split("-")[2] || ""}
-              onChange={handleInputDateOfBirthChange}
-              className="w-2/3 px-4 py-2 border rounded-md"
-            >
-              <option value="">Năm</option>
-              {Array.from({ length: 100 }, (_, i) => 2024 - i).map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
+          <div className="w-2/4">
+            <DatePicker
+              selected={dateOfBirth ? new Date(dateOfBirth) : null}
+              onChange={handleDateChange}
+              dateFormat="dd-MM-yyyy"
+              className="w-full px-4 py-2 border rounded-md"
+              placeholderText="Chọn ngày sinh"
+              maxDate={new Date()}
+              showMonthDropdown
+              showYearDropdown
+              dropdownMode="select"
+            />
           </div>
         </div>
 
         <div className="flex items-center">
-          <label className=" pr-8 text-base font-medium w-1/5 text-right"></label>
+          <label className="pr-8 text-base font-medium w-1/5 text-right">
+            Ảnh đại diện
+          </label>
+          <input
+            type="file"
+            onChange={handleFileChange}
+            className="w-2/4 px-4 py-2 border rounded-md"
+          />
+        </div>
+
+        <div className="flex items-center">
           <div className="flex items-center space-x-2">
             <button
               type="submit"

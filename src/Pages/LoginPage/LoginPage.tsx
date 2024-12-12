@@ -45,6 +45,7 @@ const LoginPage = () => {
       let data = {
         isAuthenticated: true, // Đăng nhập thành công
         accessToken: token,
+        username: formData.username,
       };
       loginContext(data);
       navigate("/"); // Navigate to a different page after successful login
