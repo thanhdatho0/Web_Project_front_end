@@ -133,4 +133,5 @@ interface Account {
 interface User {
   isAuthenticated: boolean;
   accessToken: string;
+  username : string;
 }

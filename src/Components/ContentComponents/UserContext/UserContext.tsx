@@ -2,7 +2,6 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 import { Account, User } from "../../../Interface";
 import { getCustomerDetails, refreshToken } from "../../../api";
 
-// Định nghĩa kiểu cho context
 interface UserContextType {
   user: User;
   account: Account;
@@ -10,11 +9,11 @@ interface UserContextType {
   logoutContext: () => void;
 }
 
-// Tạo UserContext
 export const UserContext = createContext<UserContextType>({
   user: {
     isAuthenticated: false,
     accessToken: "",
+    username: "",
   },
   account: {
     customerId: 0,
@@ -32,7 +31,6 @@ export const UserContext = createContext<UserContextType>({
   logoutContext: () => {},
 });
 
-// Tạo UserProvider
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
@@ -41,6 +39,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       : {
           isAuthenticated: false,
           accessToken: "",
+          username: "",
         };
   });
 
@@ -61,7 +60,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         };
   });
 
-  // Hàm login
   const loginContext = (userData: User) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
@@ -71,6 +69,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     setUser({
       isAuthenticated: false,
       accessToken: "",
+      username: "",
     });
     localStorage.removeItem("user"); // Xóa dữ liệu
     localStorage.removeItem("account"); // Xóa dữ liệu
@@ -83,7 +82,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     try {
       const check = await getCustomerDetails(user.accessToken);
       if (check && check.data) {
-        // console.log(check);
         let customerId = check.data.customerId;
         let avatar = check.data.avatar || "";
         let email = check.data.email;
@@ -127,9 +125,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             ...prevUser,
             accessToken: newAccessToken, // Cập nhật accessToken mới
             isAuthenticated: true,
+            username: user.username,
           };
           localStorage.setItem("user", JSON.stringify(updatedUser)); // Lưu lại vào localStorage
-          console.log("new" + user.accessToken);
+          // console.log("new" + user.accessToken);
           return updatedUser; // Trả về updatedUser
         });
       }
@@ -139,24 +138,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const parseJwt = (token: string) => {
-    try {
-      const base64Url = token.split(".")[1];
-      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-      return JSON.parse(atob(base64));
-    } catch (e) {
-      console.error("Invalid token format", e);
-      return null;
-    }
-  };
-
   useEffect(() => {
     if (user.isAuthenticated) {
       fetchUser();
       const intervalId = setInterval(() => {
         console.log(user.accessToken);
         getAccessToken(user.accessToken);
-      }, 2 * 60 * 1000);
+      }, 20 * 60 * 1000);
 
       return () => clearInterval(intervalId);
     }

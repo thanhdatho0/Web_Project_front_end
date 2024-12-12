@@ -288,8 +288,40 @@ export const changePassword = async (
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.message || "An error occurred");
+    throw new Error(
+      errorData.message || "Mật khẩu ít nhất 8, chứa ký tự đặc biệt, chữ hoa"
+    );
   }
 
   return "Password changed successfully!";
+};
+export const updateUser = async (
+  formData: FormData,
+  token: string,
+  customerId: number
+): Promise<string> => {
+  try {
+    const response = await fetch(
+      `${BASE_URL}/Customer/${customerId}`, // Địa chỉ API
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          // Không cần `Content-Type` vì FormData tự động xử lý
+        },
+        body: formData, // Gửi FormData
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json(); // Đọc lỗi từ response
+      const errorMessage = errorData.message || "Có lỗi gì đó xảy ra!";
+      throw new Error(errorMessage); // Ném lỗi nếu không thành công
+    }
+
+    return "Cập nhật thành công!"; // Trả về thông báo thành công
+  } catch (error) {
+    console.error(error);
+    return "Cập nhật thất bại!"; // Trả về thông báo lỗi
+  }
 };
