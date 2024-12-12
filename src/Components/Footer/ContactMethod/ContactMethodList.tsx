@@ -5,8 +5,8 @@ const ContactMethodList = () => {
   return (
     <div>
       <ul>
-        {MethodData.map((m) => (
-          <li>
+        {MethodData.map((m, index) => (
+          <li key={index}>
             <ContactMethod
               href={m.href}
               icon={m.icon}

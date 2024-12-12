@@ -1,13 +1,14 @@
 import axios from "axios";
 import {
   Category,
+  EmailRequest,
   Product,
   Size,
   Subcategory,
   TargerCustomer,
 } from "./Interface";
 
-const BASE_URL = "http://localhost:5254/api";
+export const BASE_URL = "http://localhost:5254/api";
 
 export const ProductList = async (
   subcategoryId: number,
@@ -186,25 +187,6 @@ export const getTargetIdToSubcategoryId = async (
   }
 };
 
-export const getListProduct = async (
-  query: string
-): Promise<Product[] | string> => {
-  try {
-    const response = await axios.get<Product[]>(
-      `${BASE_URL}/products?${query}`
-    );
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.log("Error Message", error.message);
-      return error.message; // Trả về chuỗi lỗi
-    } else {
-      console.log("Unexpected Error", error);
-      return "Unexpected Error"; // Trả về chuỗi lỗi nếu không phải lỗi Axios
-    }
-  }
-};
-
 export const getSizeList = async (): Promise<Size[] | string> => {
   try {
     const response = await axios.get<Size[]>(`${BASE_URL}/sizes`);
@@ -237,4 +219,77 @@ export const getAllProducts = async (
     }
     return []; // Trả về mảng rỗng nếu gặp lỗi
   }
+};
+
+export const sendEmail = async (emailRequest: EmailRequest) => {
+  try {
+    const response = await fetch(`${BASE_URL}/EmailSender/send`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(emailRequest),
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Error sending email:", error);
+  }
+};
+export const getCustomerDetails = async (accessToken: string) => {
+  const response = await axios.get(`${BASE_URL}/Customer/details`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`, // Thêm header Authorization
+    },
+    withCredentials: true, // Đảm bảo với Cookies nếu có
+  });
+  return response;
+};
+
+export const refreshToken = async (accessToken: string) => {
+  const response = await axios.post(
+    `${BASE_URL}/Token/refresh`,
+    {}, // Body request (trống vì bạn chỉ cần gửi token trong header)
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`, // Thêm header Authorization
+      },
+      withCredentials: true, // Đảm bảo với Cookies nếu có
+    }
+  );
+  return response;
+};
+
+export const changePassword = async (
+  userName: string,
+  oldPassword: string,
+  newPassword: string,
+  confirmNewPassword: string,
+  token: string
+): Promise<string> => {
+  const payload = {
+    userName,
+    oldPassword,
+    newPassword,
+    confirmNewPassword,
+  };
+
+  const response = await fetch(
+    "http://localhost:5254/api/account/change-password",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    }
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "An error occurred");
+  }
+
+  return "Password changed successfully!";
 };

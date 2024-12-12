@@ -91,7 +91,6 @@ const MainPage = () => {
   const location = useLocation();
   const { targetCustomerId, categoryId, subcategoryId } = location.state || {};
   const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [price, setPrice] = useState<string[]>([]);
   const [size, setSize] = useState<string[]>([]);
   const [colorId, setColorId] = useState<string[]>([]);
@@ -102,15 +101,17 @@ const MainPage = () => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [selectTitle, setSelectTitle] = useState<string>("");
 
-  // useEffect(() => {
-  //   // Scroll to the top of the page
-  // }, []);
+  const [offset, setOffset] = useState(8);
+  const [pageSize] = useState(8);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     if (categoryId || subcategoryId) {
       handleClearListFilters();
       setSortBy("Sắp xếp theo");
       setSortOptions(Options);
+      setOffset(8);
+      setHasMore(true);
       window.scrollTo(0, 0);
     }
   }, [categoryId, subcategoryId]);
@@ -118,8 +119,6 @@ const MainPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        setIsLoading(true); // Bắt đầu tải
-
         const queryParams = new URLSearchParams();
 
         // Các tham số cơ bản
@@ -137,24 +136,18 @@ const MainPage = () => {
         if (sortBy !== "Sắp xếp theo" && selectedOption)
           queryParams.append("SortBy", selectedOption);
 
-        const queryString = queryParams.toString();
-
         // Gọi API
         const response = await getAllProducts(queryParams); // Truyền URLSearchParams vào hàm API
 
         // Xử lý kết quả
         if (Array.isArray(response)) {
-          // console.log("hiếuuuuuuuuuuuu + response = " + response[0]);
           setProducts(response);
-          // setProductCount(response.length || 0);
         } else {
           console.error("Invalid product data:", response);
           setProducts([]); // Nếu dữ liệu không hợp lệ, trả về mảng rỗng
         }
       } catch (error) {
         console.error("Error fetching products:", error);
-      } finally {
-        setIsLoading(false); // Kết thúc tải
       }
     };
 
@@ -172,7 +165,6 @@ const MainPage = () => {
       fetchProducts();
     } else {
       setProducts([]); // Không gọi API nếu không có tham số
-      setIsLoading(false);
     }
   }, [
     targetCustomerId,
@@ -186,8 +178,56 @@ const MainPage = () => {
   ]);
 
   useEffect(() => {
+    const fetchMore = async () => {
+      try {
+        const queryParams = new URLSearchParams();
+
+        // Các tham số cơ bản
+        if (targetCustomerId)
+          queryParams.append("TargetCustomerId", targetCustomerId.toString());
+        if (categoryId) queryParams.append("CategoryId", categoryId.toString());
+        if (subcategoryId)
+          queryParams.append("SubcategoryId", subcategoryId.toString());
+
+        // Các tham số tùy chọn
+        if (colorId.length > 0)
+          queryParams.append("ColorId", colorId.join(","));
+        if (size.length > 0) queryParams.append("SizeId", size.join(","));
+        if (price.length > 0) queryParams.append("Price", price.join(","));
+        if (sortBy !== "Sắp xếp theo" && selectedOption)
+          queryParams.append("SortBy", selectedOption);
+
+        queryParams.append("Offset", offset.toString());
+        queryParams.append("PageSize", pageSize.toString());
+
+        // Gọi API
+        const response = await getAllProducts(queryParams); // Truyền URLSearchParams vào hàm API
+
+        // Xử lý kết quả
+        if (Array.isArray(response)) {
+          const newProducts = response;
+          if (newProducts.length > 0) {
+            setProducts((prev) => [...prev, ...newProducts]);
+          } else setHasMore(false);
+        } else {
+          console.error("Invalid product data:", response);
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+    fetchMore();
+    // Chỉ gọi API khi có ít nhất một trong các tham số quan trọng
+  }, [offset]);
+
+  const loadMore = () => {
+    setOffset((prev) => prev + pageSize);
+  };
+
+  useEffect(() => {
     setProductCount(products.length);
   }, [products]);
+
   const handleSelectTitle = (name: string) => {
     setSelectTitle(name);
   };
@@ -342,8 +382,8 @@ const MainPage = () => {
                     className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                   >
                     <div className="py-1">
-                      {sortOptions.map((option) => (
-                        <MenuItem key={option.name}>
+                      {sortOptions.map((option, index) => (
+                        <MenuItem key={index}>
                           <div
                             onClick={() => handleSortSelect(option)}
                             className={classNames(
@@ -371,10 +411,10 @@ const MainPage = () => {
 
               <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
                 <form className="hidden lg:block overflow-y-scroll h-[400px]">
-                  {filters.map((section) => (
+                  {filters.map((section, index) => (
                     <Disclosure
                       defaultOpen
-                      key={section.id}
+                      key={index}
                       as="div"
                       className="border-b border-gray-200 py-6"
                     >
@@ -398,10 +438,7 @@ const MainPage = () => {
                       <DisclosurePanel className="pt-6">
                         <div className="space-y-4">
                           {section.options.map((option, optionIdx) => (
-                            <div
-                              key={option.value}
-                              className="flex items-center"
-                            >
+                            <div key={optionIdx} className="flex items-center">
                               <input
                                 id={`filter-${section.id}-${optionIdx}`}
                                 name={section.id} // Same name for radio buttons to group them
@@ -459,11 +496,14 @@ const MainPage = () => {
                       Đã hết hàng
                     </p>
                   )}
-                  {products.length > 0 ? (
+                  {hasMore ? (
                     <div className="flex w-full justify-center pt-4">
-                      <div className="cursor-pointer w-2/6 rounded-xl border-2 border-slate-500 py-2.5 bg-while-500 hover:bg-gray-300 font-bold text-center">
+                      <button
+                        onClick={loadMore}
+                        className="cursor-pointer w-2/6 rounded-xl border-2 border-slate-500 py-2.5 bg-while-500 hover:bg-gray-300 font-bold text-center"
+                      >
                         Xem thêm
-                      </div>
+                      </button>
                     </div>
                   ) : (
                     ""

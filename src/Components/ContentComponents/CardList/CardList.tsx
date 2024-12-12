@@ -44,9 +44,7 @@ const CardList: React.FC<Props> = ({ subcategoryId }: Props): JSX.Element => {
   return (
     <div className="my-5 grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {Array.isArray(products) ? (
-        products.map((product) => (
-          <Card key={product.productId} product={product} />
-        ))
+        products.map((product, index) => <Card key={index} product={product} />)
       ) : (
         <div>{error ? error : "No products found"}</div> // Display error or no products message
       )}

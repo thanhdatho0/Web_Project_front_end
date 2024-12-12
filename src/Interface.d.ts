@@ -111,3 +111,26 @@ export interface RegisterData {
   dob: string;        // Date of birth (format: 'YYYY-MM-DD')
   email: string; 
 }
+
+interface EmailRequest {
+  email: string;
+  username: string;
+}
+
+interface Account {
+  customerId : number
+  avatar : string;
+  address: string;
+  dateOfBirth: string;
+  email: string;
+  firstName: string;
+  lastName : string;
+  male: boolean;
+  phoneNumber: string;
+  fullName : string;
+}
+
+interface User {
+  isAuthenticated: boolean;
+  accessToken: string;
+}

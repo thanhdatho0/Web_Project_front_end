@@ -1,7 +1,7 @@
-import { useState } from "react";
-import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Use useNavigate instead of useHistory
 import { RegisterData } from "../../Interface"; // Adjust this import based on your typ
+import { UserContext } from "../../Components/ContentComponents/UserContext/UserContext";
 const RegisterPage = () => {
   window.scrollTo(0, 0); // Scroll to the top of the page
   const [formData, setFormData] = useState<RegisterData>({
@@ -18,6 +18,12 @@ const RegisterPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate(); // Use React Router's useNavigate
+  const { user } = useContext(UserContext);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    if (user && user.isAuthenticated) navigate("/");
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,12 +32,14 @@ const RegisterPage = () => {
 
     const registerPayload = {
       customerInfo: {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        male: formData.gender === "Nam",
-        phoneNumber: formData.phoneNumber,
-        address: formData.address,
-        dateOfBirth: new Date(formData.dob).toISOString().split("T")[0],
+        personalInfo: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          male: formData.gender === "Nam",
+          phoneNumber: formData.phoneNumber,
+          address: formData.address,
+          dateOfBirth: new Date(formData.dob).toISOString().split("T")[0],
+        },
         email: formData.email,
       },
       username: formData.userName,
@@ -90,116 +98,119 @@ const RegisterPage = () => {
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center bg-gray-100"
-      style={{ zoom: "80%", marginTop: "50px" }}
-    >
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
-        <h3 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          Tạo tài khoản
-        </h3>
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4">
-            {error}
-          </div>
-        )}
-        <form
-          onSubmit={handleSubmit}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8"
-        >
-          {/* Left Column - Username & Password */}
-          <div className="space-y-4">
-            {renderInputField(
-              "Tài khoản",
-              "userName",
-              "Nhập tên tài khoản",
-              "text",
-              formData,
-              setFormData
-            )}
-            {renderInputField(
-              "Mật khẩu",
-              "passWord",
-              "Nhập mật khẩu",
-              "password",
-              formData,
-              setFormData
-            )}
-          </div>
-
-          {/* Right Column - Other Information */}
-          <div className="space-y-4">
-            {renderInputField(
-              "Họ",
-              "lastName",
-              "Nhập họ",
-              "text",
-              formData,
-              setFormData
-            )}
-            {renderInputField(
-              "Tên",
-              "firstName",
-              "Nhập tên",
-              "text",
-              formData,
-              setFormData
-            )}
-            {renderGenderField(formData, setFormData)}
-            {renderInputField(
-              "Email",
-              "email",
-              "Nhập email",
-              "email",
-              formData,
-              setFormData
-            )}
-            {renderInputField(
-              "Số điện thoại",
-              "phoneNumber",
-              "Nhập số điện thoại",
-              "tel",
-              formData,
-              setFormData
-            )}
-            {renderInputField(
-              "Địa chỉ",
-              "address",
-              "Nhập địa chỉ",
-              "text",
-              formData,
-              setFormData
-            )}
-            {renderInputField(
-              "Ngày sinh",
-              "dob",
-              "dd/mm/yyyy",
-              "date",
-              formData,
-              setFormData
-            )}
-          </div>
-
-          <div className="md:col-span-2">
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition duration-300"
-            >
-              {loading ? "Đang đăng ký..." : "Đăng ký"}
-            </button>
-          </div>
-        </form>
-
-        <p className="text-sm text-center text-gray-600 mt-4">
-          Đã có tài khoản?{" "}
-          <Link
-            to="/login"
-            className="text-yellow-500 font-semibold hover:underline"
+    <div>
+      <div className="pb-2 mt-16"></div>
+      <div
+        className="min-h-screen flex items-center justify-center bg-gray-100"
+        style={{ zoom: "80%" }}
+      >
+        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
+          <h3 className="text-3xl font-bold text-center text-gray-800 mb-6">
+            Tạo tài khoản
+          </h3>
+          {error && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4">
+              {error}
+            </div>
+          )}
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-1 md:grid-cols-2 gap-8"
           >
-            Đăng nhập tại đây
-          </Link>
-        </p>
+            {/* Left Column - Username & Password */}
+            <div className="space-y-4">
+              {renderInputField(
+                "Tài khoản",
+                "userName",
+                "Nhập tên tài khoản",
+                "text",
+                formData,
+                setFormData
+              )}
+              {renderInputField(
+                "Mật khẩu",
+                "passWord",
+                "Nhập mật khẩu",
+                "password",
+                formData,
+                setFormData
+              )}
+            </div>
+
+            {/* Right Column - Other Information */}
+            <div className="space-y-4">
+              {renderInputField(
+                "Họ",
+                "lastName",
+                "Nhập họ",
+                "text",
+                formData,
+                setFormData
+              )}
+              {renderInputField(
+                "Tên",
+                "firstName",
+                "Nhập tên",
+                "text",
+                formData,
+                setFormData
+              )}
+              {renderGenderField(formData, setFormData)}
+              {renderInputField(
+                "Email",
+                "email",
+                "Nhập email",
+                "email",
+                formData,
+                setFormData
+              )}
+              {renderInputField(
+                "Số điện thoại",
+                "phoneNumber",
+                "Nhập số điện thoại",
+                "tel",
+                formData,
+                setFormData
+              )}
+              {renderInputField(
+                "Địa chỉ",
+                "address",
+                "Nhập địa chỉ",
+                "text",
+                formData,
+                setFormData
+              )}
+              {renderInputField(
+                "Ngày sinh",
+                "dob",
+                "dd/mm/yyyy",
+                "date",
+                formData,
+                setFormData
+              )}
+            </div>
+
+            <div className="md:col-span-2">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition duration-300"
+              >
+                {loading ? "Đang đăng ký..." : "Đăng ký"}
+              </button>
+            </div>
+          </form>
+
+          <p className="text-sm text-center text-gray-600 mt-4">
+            Đã có tài khoản?{" "}
+            <Link
+              to="/login"
+              className="text-yellow-500 font-semibold hover:underline"
+            >
+              Đăng nhập tại đây
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

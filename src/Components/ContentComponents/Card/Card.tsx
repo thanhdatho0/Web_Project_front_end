@@ -48,23 +48,39 @@ const Card: React.FC<Props> = ({ product }: Props) => {
   };
 
   return (
-    <div onClick={handleProductClick} className="relative overflow-hidden">
-      <img
-        alt={currentImage.alt}
-        className="w-full object-cover"
-        src={currentImage.url}
-      />
-      <div className="pt-2 text-sm">
+    <div
+      onClick={handleProductClick}
+      className="relative overflow-hidden cursor-pointer"
+    >
+      <div className="relative">
+        <img
+          alt={currentImage.alt}
+          className="w-full object-cover"
+          src={currentImage.url}
+        />
+        {product.discountPercentage > 0 && (
+          <span className="absolute top-0 right-0 bg-red-500 text-white p-2 rounded-full">
+            -{product.discountPercentage * 100}%
+          </span>
+        )}
+      </div>
+      <div className="pt-2 pl-2 text-base">
         <div>{product.name}</div>
-        <div className="pt-2 text-base font-semibold tracking-wider">
-          {product.price.toLocaleString("vi-VN")} đ
+        <div className="flex">
+          <div className="pt-2 text-base font-semibold tracking-wider text-red-600">
+            {(product.price * (1 - product.discountPercentage)).toLocaleString(
+              "vi-VN"
+            )}{" "}
+            đ
+          </div>
+          {product.discountPercentage > 0 && (
+            <div className="pt-3 pl-3 text-sm font-semibold tracking-wider text-gray-400 line-through">
+              {product.price.toLocaleString("vi-VN")} đ
+            </div>
+          )}
         </div>
       </div>
-      <ColorCard
-        id={product.productId}
-        colors={product.colors}
-        onHover={handleHoverColor}
-      />
+      <ColorCard colors={product.colors} onHover={handleHoverColor} />
     </div>
   );
 };

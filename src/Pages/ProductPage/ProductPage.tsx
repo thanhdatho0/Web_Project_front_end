@@ -12,7 +12,6 @@ import {
 } from "../../api";
 
 const ProductPage = () => {
-  const [categoryName, setCategoryName] = useState("");
   const [count, setCount] = useState(1);
   const [copySuccess, setCopySuccess] = useState("");
   const location = useLocation();
@@ -125,10 +124,6 @@ const ProductPage = () => {
     setSelectedSizeName(sizeValue);
   };
 
-  const handleAddCategoryName = (categoryName: string) => {
-    setCategoryName(categoryName);
-  };
-
   const handleHoverColor = (colorId: number) => {
     setColorId(colorId);
     const selectedColor = product.colors.find((c) => c.colorId === colorId);
@@ -150,7 +145,7 @@ const ProductPage = () => {
     const newItem: ProductCart = {
       productId: product.productId,
       name: product.name,
-      price: product.price,
+      price: product.price * (1 - product.discountPercentage),
       color: selectedColor?.name || "",
       imgUrl: selectedColor?.images[0]?.url || "",
       imgAlt: selectedColor?.images[0]?.alt || "",
@@ -189,7 +184,7 @@ const ProductPage = () => {
     const newItem: ProductCart = {
       productId: product.productId,
       name: product.name,
-      price: product.price,
+      price: product.price * (1 - product.discountPercentage),
       color: selectedColor?.name || "",
       imgUrl: selectedColor?.images[0]?.url || "",
       imgAlt: selectedColor?.images[0]?.alt || "",
@@ -222,10 +217,6 @@ const ProductPage = () => {
   return (
     <div className="lg:w-[95%] mx-auto">
       <div className="pb-2 mt-16 "></div>
-      {/* <Breadcrumbs
-        onAddSubcategoryName={handleAddCategoryName}
-        subcategoryId={product.categoryId}
-      /> */}
       <Breadcrumbs
         targetId={targetCustomerId ?? 1}
         categoryId={categoryId ?? 1}
@@ -281,13 +272,28 @@ const ProductPage = () => {
           {copySuccess && (
             <div className="mt-2 text-green-600">{copySuccess}</div>
           )}
-          <p className="mb-2 text-red-600 font-bold text-2xl">
-            Giá bán:{" "}
-            {product.price.toLocaleString("vi-VN", {
-              style: "currency",
-              currency: "VND",
-            })}
-          </p>
+          <div className="flex">
+            <p className="mb-2 text-red-600 font-bold text-2xl">
+              Giá bán:{" "}
+              {(
+                product.price *
+                (1 - product.discountPercentage)
+              ).toLocaleString("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              })}
+            </p>
+            {product.discountPercentage > 0 && (
+              <div className="mt-1 pl-3 text-lg font-semibold tracking-wider flex">
+                <p className="text-gray-400 line-through">
+                  {product.price.toLocaleString("vi-VN")} đ
+                </p>
+                <p className="ml-3 bg-gray-100 text-red-500 py-1 px-3 rounded-full text-center">
+                  -{product.discountPercentage * 100}%
+                </p>
+              </div>
+            )}
+          </div>
           <p className="text-lg">Màu sắc: {colorName} </p>
           <ColorCard colors={product.colors} onHover={handleHoverColor} />
 

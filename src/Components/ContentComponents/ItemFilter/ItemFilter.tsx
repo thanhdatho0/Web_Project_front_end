@@ -18,8 +18,8 @@ const ItemFilter: React.FC<ItemFilterProps> = ({
     <>
       {selectedFilter.length < 4 ? (
         <ul className="flex flex-wrap gap-2 p-0 list-none">
-          {selectedFilter.map((filter) => (
-            <li key={filter.id} className="inline-block border-dashed">
+          {selectedFilter.map((filter, index) => (
+            <li key={index} className="inline-block border-dashed">
               <button onClick={() => onDeleteItem(filter.id)}>
                 {filter.id} ❌
               </button>
@@ -42,9 +42,9 @@ const ItemFilter: React.FC<ItemFilterProps> = ({
           <div className="absolute right-0 z-10 mt-2 w-56  rounded-md bg-white shadow-lg  ring-black ">
             {open ? (
               <div className="py-1" role="none">
-                {selectedFilter.map((filter) => (
+                {selectedFilter.map((filter, index) => (
                   <div
-                    key={filter.id}
+                    key={index}
                     className="flex justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                   >
                     <span>{filter.id}</span>

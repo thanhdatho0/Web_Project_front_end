@@ -1,13 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { EmailRequest } from "../../Interface";
+import { sendEmail } from "../../api";
 import { UserContext } from "../../Components/ContentComponents/UserContext/UserContext";
-import { BASE_URL } from "../../api";
 
-const LoginPage = () => {
-  const [formData, setFormData] = useState({ username: "", password: "" });
-  const [error, setError] = useState<string | null>(null);
+const ForgotPasswordPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const { user } = useContext(UserContext);
 
   useEffect(() => {
@@ -15,47 +17,36 @@ const LoginPage = () => {
     if (user && user.isAuthenticated) navigate("/");
   }, []);
 
-  const { loginContext } = useContext(UserContext);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     setLoading(true);
 
-    const loginPayload = {
-      username: formData.username,
-      password: formData.password,
-    };
-
     try {
-      const response = await fetch(`${BASE_URL}/account/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(loginPayload),
-        credentials: "include",
-      });
+      const emailRequest: EmailRequest = { email, username };
+      const response = await sendEmail(emailRequest);
 
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        setError(errorMessage || "An error occurred while logging in.");
+      // Kiểm tra phản hồi trả về
+      if (!response?.ok) {
+        setError("Tài khoản hoặc email không chính xác!");
+      } else {
+        alert("Gửi mật khẩu về email thành công");
+        navigate("/login");
         return;
       }
-      const token = await response.text(); // Vì API trả về plain text
-      let data = {
-        isAuthenticated: true, // Đăng nhập thành công
-        accessToken: token,
-      };
-      loginContext(data);
-      navigate("/"); // Navigate to a different page after successful login
-    } catch (err) {
-      console.error("Error during login:", err);
-      setError("An unexpected error occurred. Please try again.");
+    } catch (error: any) {
+      // Xử lý lỗi từ server hoặc lỗi kết nối
+      if (error.response) {
+        // Lỗi do server trả về (ví dụ: 400, 500)
+        setError(error.response.data || "Lỗi xảy ra khi gửi email.");
+      } else {
+        // Lỗi khác (ví dụ: không kết nối được đến server)
+        setError("Không thể kết nối đến máy chủ.");
+      }
     } finally {
       setLoading(false); // Kết thúc trạng thái tải
     }
   };
-
   return (
     <div>
       <section className="bg-gray-50 dark:bg-gray-900">
@@ -63,7 +54,7 @@ const LoginPage = () => {
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-center text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                Đăng nhập
+                Quên mật khẩu
               </h1>
               <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
                 {error && (
@@ -78,28 +69,24 @@ const LoginPage = () => {
                   <input
                     type="text"
                     name="username"
-                    value={formData.username}
-                    onChange={(e) =>
-                      setFormData({ ...formData, username: e.target.value })
-                    }
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Nhập tài khoản"
-                    required
                   />
                 </div>
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Mật khẩu
+                    Email
                   </label>
                   <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={(e) =>
-                      setFormData({ ...formData, password: e.target.value })
-                    }
+                    type="email"
+                    name="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="••••••••"
+                    placeholder="Nhập email"
                     required
                   />
                 </div>
@@ -107,7 +94,7 @@ const LoginPage = () => {
                 <button
                   type="submit"
                   className="w-full bg-blue-400 text-white hover:bg-blue-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                  disabled={loading}
+                  disabled={loading} // Vô hiệu hóa nút trong khi đang tải
                 >
                   {loading ? (
                     <svg
@@ -131,15 +118,15 @@ const LoginPage = () => {
                       ></path>
                     </svg>
                   ) : (
-                    "Đăng nhập"
+                    "Đổi mật khẩu"
                   )}
                 </button>
                 <div className="text-center">
                   <Link
-                    to="/forgot"
+                    to="/login"
                     className="text-blue-400 hover:underline cursor-pointer"
                   >
-                    Quên mật khẩu?
+                    Đăng nhập
                   </Link>
                 </div>
 
@@ -161,4 +148,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default ForgotPasswordPage;

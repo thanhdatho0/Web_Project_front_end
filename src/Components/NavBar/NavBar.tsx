@@ -5,6 +5,7 @@ import Cart from "./NavBarCart/Cart.tsx";
 import { ChangeEvent, useState } from "react";
 import NavigationList from "./Navigation/NavigationList.tsx";
 import { Link } from "react-router-dom";
+import User from "./NavBarUser/User.tsx";
 
 const NavBar = () => {
   const [search, setSearch] = useState<string>("");
@@ -30,6 +31,7 @@ const NavBar = () => {
         <div className="right-side flex flex-row items-center gap-8 p-3 text-center">
           <Search handleChange={handleChange} search={search} />
           <Cart />
+          <User />
         </div>
       </div>
     </nav>

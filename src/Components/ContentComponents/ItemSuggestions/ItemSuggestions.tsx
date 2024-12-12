@@ -44,6 +44,7 @@ const ItemSuggestions = () => {
       } catch (e) {
         console.error("Unexpected error while fetching subcategories", e);
         setError("An unexpected error occurred.");
+        console.log(error);
       }
     };
     fetchSubcategories();
@@ -76,8 +77,8 @@ const ItemSuggestions = () => {
           <MenuList
             className={`z-10 bg-white divide-y divide-gray-200 rounded-lg shadow ${dropdownWidth}`}
           >
-            {subcategories.map((subcategory) => (
-              <MenuItem key={subcategory.subcategoryId}>
+            {subcategories.map((subcategory, index) => (
+              <MenuItem key={index}>
                 <Typography
                   className="block pl-2 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-800 dark:hover:bg-gray-500 dark:hover:text-white text-left"
                   onClick={() => handleSelect(subcategory.subcategoryId)}

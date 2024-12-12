@@ -1,6 +1,28 @@
 import { useEffect, useState } from "react";
 import { Color, ProductCart, Size } from "../../../Interface";
 import { getProductById } from "../../../api";
+import { useNavigate } from "react-router-dom";
+
+const slugify = (text: string) => {
+  const from =
+    "áàảãạăắằẳẵặâấầẩẫậóòỏõọôốồổỗộơớờởỡợéèẻẽẹêếềểễệúùủũụưứừửữựíìỉĩịýỳỷỹỵđ";
+  const to =
+    "aaaaaaaaaaaaaaaaaaooooooooooooooooeeeeeeeeeeeuuuuuuuuuuuuiiiiiyyyyyd";
+
+  let slug = text
+    .split("")
+    .map((char) => {
+      const i = from.indexOf(char.toLowerCase());
+      return i !== -1 ? to[i] : char;
+    })
+    .join("");
+
+  slug = slug.toLowerCase();
+
+  slug = slug.replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-");
+
+  return slug.replace(/^-+|-+$/g, "");
+};
 
 interface Props {
   cartItems: ProductCart[];
@@ -143,19 +165,41 @@ const CartItemDetail: React.FC<Props> = ({
     }
     window.location.reload();
   };
+
+  const navigate = useNavigate();
+
+  const handleProductClick = async (productId: number, name: string) => {
+    try {
+      const response = await getProductById(productId);
+
+      if (typeof response === "string") {
+        console.error("Error fetching Product:", response);
+        return;
+      }
+      navigate(`/product/${slugify(name)}`, {
+        state: { product: response }, // Truyền trực tiếp product lấy được
+      });
+    } catch (error) {
+      console.error("Error fetching product:", error);
+    }
+  };
+
   return (
     <div className="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl">
       {cartItems.map((item, index) => (
         <div key={index} className="space-y-6">
           <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
             <div className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
-              <a href="#" className="shrink-0 md:order-1">
+              <div
+                className="shrink-0 md:order-1"
+                onClick={() => handleProductClick(item.productId, item.name)}
+              >
                 <img
                   className="hidden h-28 w-24 dark:block"
                   src={item.imgUrl}
                   alt={item.imgAlt}
                 />
-              </a>
+              </div>
               <div className="flex items-center justify-between md:order-3 md:justify-end">
                 <div className="flex items-center">
                   <button
@@ -195,12 +239,12 @@ const CartItemDetail: React.FC<Props> = ({
               </div>
 
               <div className="w-full min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md">
-                <a
-                  href="#"
+                <div
+                  onClick={() => handleProductClick(item.productId, item.name)}
                   className="text-base font-medium text-gray-900 hover:underline dark:text-white"
                 >
                   {item.name}
-                </a>
+                </div>
 
                 <div className="flex items-center gap-4 text-sm font-medium text-gray-500  dark:text-gray-400 ">
                   <div>

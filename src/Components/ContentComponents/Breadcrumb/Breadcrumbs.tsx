@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCategoryId, getSubcategoryId, getTargetId } from "../../../api";
+import { getCategoryId, getSubcategoryId } from "../../../api";
 
 interface Props {
   targetId: number;
@@ -41,27 +41,15 @@ const Breadcrumbs: React.FC<Props> = ({
   onTitleChange,
   productId,
 }: Props) => {
-  // const location = useLocation();
-  const [targetName, setTargetName] = useState<string>("Loading target...");
   const [categoryName, setCategoryName] = useState<string>(
     "Loading category..."
   );
   const [subcategoryName, setSubcategoryName] = useState<string>(
     "Loading subcategory..."
   );
-  // const pathnames = location.pathname.split("/").filter((x) => x);
   useEffect(() => {
     const fetchSubcategoryName = async () => {
       try {
-        const targetData = await getTargetId(targetId);
-
-        if (typeof targetData === "string") {
-          console.error("Error fetching target :", targetData);
-          return null;
-        }
-
-        setTargetName(targetData.targetCustomerName || "Unknown target");
-
         const categoryData = await getCategoryId(categoryId);
 
         if (typeof categoryData === "string") {
@@ -96,6 +84,7 @@ const Breadcrumbs: React.FC<Props> = ({
   }, [targetId, categoryId, subcategoryId, onTitleChange]);
 
   const isProductPage = !!productId && !!name;
+  const isSubcateogryPage = !!subcategoryId;
 
   const navigate = useNavigate();
 
@@ -107,13 +96,15 @@ const Breadcrumbs: React.FC<Props> = ({
   ) => {
     try {
       const formattedName = slugify(name);
-      const path = `/subCategory/${formattedName}`;
+      const path = subcategoryId
+        ? `/subCategory/${formattedName}`
+        : `/category/${formattedName}`;
 
       navigate(path, {
         state: {
           targetCustomerId: targetId,
           categoryId,
-          subcategoryId,
+          ...(subcategoryId && { subcategoryId }),
         },
       });
     } catch (error) {
@@ -132,48 +123,25 @@ const Breadcrumbs: React.FC<Props> = ({
             Trang chủ
           </Link>
         </li>
-        {/* {pathnames.map((value, index) => {
-          const last = index === pathnames.length - 1;
-          const to = `/${pathnames.slice(0, index + 1).join("/")}`;
-          let title = convertSlugToTitle(value);
-
-          // if (productId == null && value === "category") return null;
-          if (value === "category") return null;
-
-          if (index === 0) {
-            title = targetName;
-          } else if (index === 1) {
-            title = categoryName;
-          } else if (index === 2) {
-            title = subcategoryName;
-          }
-          // else if (productId == null) return null;
-
-          return (
-            <li key={to}>
-              <span className="mx-2 mt-6 text-black"> {">"} </span>
-              {last ? (
-                productId ? (
-                  // Khi có productId, hiển thị toàn bộ breadcrumb, bao gồm tên sản phẩm, subcategory, và category
-                  <span className="text-blue-500">{name}</span>
-                ) : subcategoryId ? (
-                  // Nếu không có productId nhưng có subcategoryId, hiển thị tên subcategory
-                  <span className="text-blue-500">
-                    {subcategoryName || title}
-                  </span>
-                ) : (
-                  // Nếu không có cả productId và subcategoryId, chỉ hiển thị tên category
-                  <span className="text-blue-500">{categoryName || title}</span>
-                )
-              ) : (
-                // Nếu không phải phần tử cuối, hiển thị liên kết breadcrumb
-                <Link to={to} className="hover:underline hover:text-blue-500">
-                  {title}
-                </Link>
-              )}
-            </li>
-          );
-        })} */}
+        {/* Category */}
+        {categoryId && (
+          <li>
+            <span className="mx-2 text-black"> {">"} </span>
+            <span
+              onClick={() =>
+                handleNavigation(categoryName, targetId, categoryId)
+              }
+              // className="hover:underline hover:text-blue-500"
+              className={
+                isSubcateogryPage
+                  ? "text-black hover:underline hover:text-blue-500 cursor-pointer"
+                  : "text-blue-500"
+              }
+            >
+              {categoryName}
+            </span>
+          </li>
+        )}
 
         {/* Subcategory */}
         {subcategoryId && (
@@ -188,7 +156,12 @@ const Breadcrumbs: React.FC<Props> = ({
                   subcategoryId
                 )
               }
-              className="hover:underline hover:text-blue-500"
+              // className="hover:underline hover:text-blue-500"
+              className={
+                isProductPage
+                  ? "text-black hover:underline hover:text-blue-500 cursor-pointer"
+                  : "text-blue-500"
+              }
             >
               {subcategoryName}
             </span>
