@@ -163,6 +163,7 @@ const CartItemDetail: React.FC<Props> = ({
         );
       }
     }
+    window.location.reload();
   };
 
   const navigate = useNavigate();
