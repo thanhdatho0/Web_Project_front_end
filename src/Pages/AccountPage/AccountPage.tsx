@@ -56,7 +56,9 @@ const AccountPage = () => {
     setLastName(e.target.value);
   };
 
-  const handleInputAddressChange = (e) => {
+  const handleInputAddressChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
     setAddress(e.target.value);
   };
 
@@ -126,7 +128,11 @@ const AccountPage = () => {
       );
       alert(message); // Hiển thị thông báo thành công
     } catch (error) {
-      alert(error.message); // Hiển thị thông báo lỗi
+      if (error instanceof Error) {
+        alert(error.message); // Hiển thị thông báo lỗi
+      } else {
+        alert("Đã xảy ra lỗi không xác định."); // Thông báo cho trường hợp lỗi không xác định
+      }
     } finally {
       setLoading(false); // Kết thúc trạng thái tải
     }
