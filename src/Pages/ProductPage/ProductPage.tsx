@@ -345,9 +345,6 @@ const ProductPage = () => {
             Mua ngay
           </button>
 
-          <button onClick={handleClearCart}>
-            Clear Cart(cái này dùng để test)
-          </button>
           <PaymentMethods />
           <ShippingInfo />
         </div>
