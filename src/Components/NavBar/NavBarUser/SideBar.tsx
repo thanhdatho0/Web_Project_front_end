@@ -30,7 +30,7 @@ const SideBar = () => {
           </Link>
         </li>
         <li>
-          <Link to="#" className="flex items-center space-x-2">
+          <Link to="change-password" className="flex items-center space-x-2">
             <span>Đổi mật khẩu</span>
           </Link>
         </li>
