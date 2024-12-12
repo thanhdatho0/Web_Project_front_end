@@ -59,7 +59,7 @@ const CartPage = () => {
               );
 
               if (existingItem) {
-                existingItem.quantity += 1;
+                existingItem.quantity = item.quantity + existingItem.quantity;
               } else {
                 acc.push(item);
               }

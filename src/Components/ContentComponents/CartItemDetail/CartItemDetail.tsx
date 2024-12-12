@@ -141,6 +141,7 @@ const CartItemDetail: React.FC<Props> = ({
         );
       }
     }
+    window.location.reload();
   };
   return (
     <div className="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl">
