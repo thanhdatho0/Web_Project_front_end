@@ -37,7 +37,7 @@ const ProductPage = () => {
           setCategoryId(response1);
         }
       } catch (error) {
-        console.log("Failed to fetch subcategory data");
+        console.log("Failed to fetch subcategory data ", error);
       }
     };
 
@@ -68,19 +68,6 @@ const ProductPage = () => {
       setCartCount(parseInt(storedCartCount, 10));
     }
   }, []);
-
-  if (!product) {
-    return (
-      <div className="lg:w-[85%] mx-auto">
-        <div className="text-center mt-16">
-          <p className="text-red-500">Sản phẩm không tồn tại hoặc có lỗi!</p>
-          <Link to="/" className="text-blue-500 hover:underline">
-            Quay lại trang chủ
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   const defaultImages: Image[] = [];
   const defaultColorId = "";
@@ -126,7 +113,9 @@ const ProductPage = () => {
 
   const handleHoverColor = (colorId: number) => {
     setColorId(colorId);
-    const selectedColor = product.colors.find((c) => c.colorId === colorId);
+    const selectedColor = product.colors.find(
+      (c: { colorId: number }) => c.colorId === colorId
+    );
     setColorName(selectedColor.name);
     if (selectedColor) {
       setImages(selectedColor.images);
@@ -137,9 +126,11 @@ const ProductPage = () => {
   const navigate = useNavigate();
 
   const handleAddToCart = () => {
-    const selectedColor = product.colors.find((c) => c.colorId === colorId);
+    const selectedColor = product.colors.find(
+      (c: { colorId: number }) => c.colorId === colorId
+    );
     const selectedSizeObj = product.sizes.find(
-      (c) => c.sizeId === selectedSize
+      (c: { sizeId: number }) => c.sizeId === selectedSize
     );
 
     const newItem: ProductCart = {
@@ -176,9 +167,11 @@ const ProductPage = () => {
     localStorage.setItem("cartCount", newCount.toString());
     setCartCount(newCount);
 
-    const selectedColor = product.colors.find((c) => c.colorId === colorId);
+    const selectedColor = product.colors.find(
+      (c: { colorId: number }) => c.colorId === colorId
+    );
     const selectedSizeObj = product.sizes.find(
-      (s) => s.sizeId === selectedSize
+      (s: { sizeId: number }) => s.sizeId === selectedSize
     );
 
     const newItem: ProductCart = {
@@ -201,19 +194,30 @@ const ProductPage = () => {
   };
 
   // cái này để test
-  const handleClearCart = () => {
-    localStorage.removeItem("cartItems"); // Xóa giỏ hàng
-    setCartItems([]); // Cập nhật lại trạng thái giỏ hàng trong component
-    setCartCount(0);
+  // const handleClearCart = () => {
+  //   localStorage.removeItem("cartItems"); // Xóa giỏ hàng
+  //   setCartItems([]); // Cập nhật lại trạng thái giỏ hàng trong component
+  //   setCartCount(0);
 
-    setCartCount(() => {
-      const newCount = 0; // Đặt lại giá trị cart count thành 0
-      localStorage.setItem("cartCount", newCount.toString());
-      return newCount;
-    });
-    window.location.reload();
-  };
-
+  //   setCartCount(() => {
+  //     const newCount = 0; // Đặt lại giá trị cart count thành 0
+  //     localStorage.setItem("cartCount", newCount.toString());
+  //     return newCount;
+  //   });
+  //   window.location.reload();
+  // };
+  if (!product) {
+    return (
+      <div className="lg:w-[85%] mx-auto">
+        <div className="text-center mt-16">
+          <p className="text-red-500">Sản phẩm không tồn tại hoặc có lỗi!</p>
+          <Link to="/" className="text-blue-500 hover:underline">
+            Quay lại trang chủ
+          </Link>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="lg:w-[95%] mx-auto">
       <div className="pb-2 mt-16 "></div>
@@ -305,7 +309,7 @@ const ProductPage = () => {
 
           <div className="flex items-center mt-2 ">
             <button
-              onClick={() => setCount((c) => c - 1)}
+              onClick={() => setCount((c: number) => c - 1)}
               disabled={count <= 1}
               className={`w-10 h-10 justify-center rounded font-semibold transition  border border-black 
               ${

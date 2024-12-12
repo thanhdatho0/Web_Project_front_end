@@ -169,6 +169,7 @@ const CartPage = () => {
           },
         }
       );
+      console.log(response);
       alert("Order placed successfully!");
       localStorage.removeItem("cartItems"); // Clear the cart
       localStorage.removeItem("cartCount");

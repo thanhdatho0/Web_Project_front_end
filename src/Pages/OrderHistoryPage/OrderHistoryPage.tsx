@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../Components/ContentComponents/UserContext/UserContext";
 
 type OrderDetail = {
@@ -22,7 +22,7 @@ type Order = {
   confirmed: boolean;
 };
 
-const OrderHistoryPage = (props: any) => {
+const OrderHistoryPage = () => {
   const { account } = useContext(UserContext); // Access customerId from the UserContext
   const [orders, setOrders] = useState<Order[]>([]);
   const [visibleDetails, setVisibleDetails] = useState<Set<number>>(new Set()); // Track visible order details
