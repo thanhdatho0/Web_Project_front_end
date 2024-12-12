@@ -54,6 +54,19 @@ export interface Product {
     size: string;    
     quantity: number;
   }
+  export interface OrderRequest {
+    employeeId: number | null;
+    customerId: number;
+    orderNotice: string;
+    orderDetails: OrderDetail[];
+  }
+  
+  export interface OrderDetail {
+    productId: number;
+    colorId: number;
+    sizeId: number;
+    quantity: number;
+  }
   
 export interface Size {
     sizeId: number;

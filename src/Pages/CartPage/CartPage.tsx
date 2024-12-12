@@ -1,15 +1,22 @@
+import { useContext, useEffect, useState } from "react";
 import CartItemDetail from "../../Components/ContentComponents/CartItemDetail/CartItemDetail";
-import CheckoutSummary from "../../Components/ContentComponents/CheckoutSummary/CheckoutSummary";
-import { useEffect, useState } from "react";
-import { ProductCart } from "../../Interface";
+import { OrderRequest, ProductCart } from "../../Interface";
 import { getProductById } from "../../api";
+import { UserContext } from "../../Components/ContentComponents/UserContext/UserContext";
+import axios from "axios";
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState<ProductCart[]>([]);
   const [loading, setLoading] = useState(true);
-  const [cartCount, setCartCount] = useState(0);
-
-  // Fetch cart items from localStorage when the component mounts
+  const { account } = useContext(UserContext); // Access user account details
+  const [totalPrice, setTotalPrice] = useState(0);
+  useEffect(() => {
+    const total = cartItems.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+    setTotalPrice(total);
+  }, [cartItems]);
   useEffect(() => {
     const fetchCartItems = async () => {
       const storedCartItems = localStorage.getItem("cartItems");
@@ -74,16 +81,76 @@ const CartPage = () => {
           setLoading(false);
         }
       } else {
-        // If there are no items in localStorage, set cartItems as empty
         setCartItems([]);
         setLoading(false);
       }
     };
 
     fetchCartItems();
-  }, []); // Only run once on mount
+  }, []);
 
-  // Handle updating the quantity of an item
+  // Example functions for mapping color and size names to IDs
+  const getColorId = (colorName: string): number => {
+    const colorMap: { [key: string]: number } = {
+      Red: 1,
+      Blue: 2,
+      Green: 3,
+      // Add more mappings as needed
+    };
+    return colorMap[colorName] || 0; // Return 0 if not found
+  };
+
+  const getSizeId = (sizeValue: string): number => {
+    const sizeMap: { [key: string]: number } = {
+      S: 1,
+      M: 2,
+      L: 3,
+      // Add more mappings as needed
+    };
+    return sizeMap[sizeValue] || 0; // Return 0 if not found
+  };
+
+  const handlePlaceOrder = async () => {
+    if (!account?.customerId) {
+      alert("Please log in to place an order.");
+      return;
+    }
+
+    // Transform cartItems to match OrderRequest structure
+    const orderDetails = cartItems.map((item) => ({
+      productId: item.productId,
+      colorId: getColorId(item.color), // Map color to its ID
+      sizeId: getSizeId(item.size), // Map size to its ID
+      quantity: item.quantity,
+    }));
+
+    const orderData: OrderRequest = {
+      employeeId: null,
+      customerId: account.customerId,
+      orderNotice: "Order placed via cart page",
+      orderDetails,
+    };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5254/api/Order",
+        orderData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      alert("Order placed successfully!");
+      localStorage.removeItem("cartItems"); // Clear the cart
+      localStorage.removeItem("cartCount");
+      window.location.reload(); // Refresh the page
+    } catch (error) {
+      console.error("Order submission failed:", error);
+      alert("Failed to place the order. Please try again.");
+    }
+  };
+
   const handleUpdateQuantity = (
     productId: number,
     color: string,
@@ -97,9 +164,9 @@ const CartPage = () => {
     );
     setCartItems(updatedCartItems);
     localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+    window.location.reload();
   };
 
-  // Handle updating color and size of an item
   const handleUpdateColor_Size = (
     productId: number,
     oldColor: string,
@@ -124,9 +191,9 @@ const CartPage = () => {
     );
     setCartItems(updatedCartItems);
     localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+    window.location.reload();
   };
 
-  // Handle removing an item from the cart
   const handleRemoveItem = (productId: number, color: string, size: string) => {
     const updatedCartItems = cartItems.filter(
       (item) =>
@@ -138,15 +205,6 @@ const CartPage = () => {
     );
     setCartItems(updatedCartItems);
     localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-
-    // Update cart count
-    const updatedCount = updatedCartItems.reduce(
-      (total, item) => total + item.quantity,
-      0
-    );
-    setCartCount(updatedCount);
-    localStorage.setItem("cartCount", updatedCount.toString());
-    window.location.reload();
   };
 
   if (loading) {
@@ -176,7 +234,92 @@ const CartPage = () => {
                     onUpdateQuantity={handleUpdateQuantity}
                     onUpdateColor_Size={handleUpdateColor_Size}
                   />
-                  <CheckoutSummary cartItems={cartItems} />
+                  <div className="mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full">
+                    <div className="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6">
+                      <p className="text-xl font-semibold text-gray-900 dark:text-white">
+                        Chi tiết đơn hàng
+                      </p>
+
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <dl className="flex items-center justify-between gap-4">
+                            <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
+                              Tổng giá trị sản phẩm
+                            </dt>
+                            <dd className="text-base font-medium text-gray-900 dark:text-white">
+                              {totalPrice.toLocaleString("vi-VN")} đ
+                            </dd>
+                          </dl>
+
+                          <dl className="flex items-center justify-between gap-4">
+                            <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
+                              Vận chuyển
+                            </dt>
+                            <dd className="text-base font-medium dark:text-white">
+                              {(20000).toLocaleString("vi-VN")} đ
+                            </dd>
+                          </dl>
+
+                          <dl className="flex items-center justify-between gap-4">
+                            <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
+                              Giảm giá vận chuyển
+                            </dt>
+                            <dd className="text-base font-medium  text-green-600">
+                              - {(20000).toLocaleString("vi-VN")} đ
+                            </dd>
+                          </dl>
+                        </div>
+
+                        <dl className="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
+                          <dt className="text-base font-bold text-gray-900 dark:text-white">
+                            Tổng thanh toán
+                          </dt>
+                          <dd className="text-base font-bold text-gray-900 dark:text-white">
+                            {totalPrice.toLocaleString("vi-VN")} đ
+                          </dd>
+                        </dl>
+                      </div>
+
+                      <button
+                        onClick={handlePlaceOrder}
+                        className="w-full rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                      >
+                        Place Order
+                      </button>
+
+                      <div className="flex items-center justify-center gap-2">
+                        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                          {" "}
+                          hoặc{" "}
+                        </span>
+                        <a
+                          href="#"
+                          title=""
+                          className="inline-flex items-center gap-2 text-sm font-medium text-primary-700 underline hover:no-underline text-white"
+                        >
+                          <a href="/" className="text-white">
+                            Tiếp tục mua hàng
+                          </a>
+
+                          <svg
+                            className="h-5 w-5"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M19 12H5m14 0-4 4m4-4-4-4"
+                            />
+                          </svg>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
                 </>
               )}
             </div>
