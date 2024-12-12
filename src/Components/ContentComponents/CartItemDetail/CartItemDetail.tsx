@@ -294,16 +294,21 @@ const CartItemDetail: React.FC<Props> = ({
                   <button
                     type="button"
                     className="inline-flex items-center text-sm font-medium text-red-600 hover:text-red-300 dark:text-red-500"
-                    onClick={() =>
+                    onClick={() => {
+                      const newCount = cartCount - item.quantity;
+
+                      updateCartCount(newCount);
+
                       onRemoveItem(
                         item.productId,
                         item.color,
                         item.size,
                         item.quantity
-                      )
-                    }
+                      );
+                      window.location.reload();
+                    }}
                   >
-                    ❌ Remove
+                    ❌
                   </button>
                 </div>
               </div>
