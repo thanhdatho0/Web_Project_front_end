@@ -261,35 +261,35 @@ export const refreshToken = async (accessToken: string) => {
 };
 
 export const changePassword = async (
-  username: string,
+  userName: string,
   oldPassword: string,
   newPassword: string,
-  confirmPassword: string,
-  accessToken: string
-) => {
-  try {
-    const response = await axios.post(
-      `${BASE_URL}/account/change-password`,
-      {
-        username,
-        oldPassword,
-        newPassword,
-        confirmPassword,
+  confirmNewPassword: string,
+  token: string
+): Promise<string> => {
+  const payload = {
+    userName,
+    oldPassword,
+    newPassword,
+    confirmNewPassword,
+  };
+
+  const response = await fetch(
+    "http://localhost:5254/api/account/change-password",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        withCredentials: true,
-      }
-    );
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("Axios error message:", error.message);
-      console.error("Server response data:", error.response?.data);
-      return error.response?.data;
+      body: JSON.stringify(payload),
     }
-    return null;
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "An error occurred");
   }
+
+  return "Password changed successfully!";
 };
