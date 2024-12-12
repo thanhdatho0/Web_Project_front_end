@@ -259,3 +259,37 @@ export const refreshToken = async (accessToken: string) => {
   );
   return response;
 };
+
+export const changePassword = async (
+  username: string,
+  oldPassword: string,
+  newPassword: string,
+  confirmPassword: string,
+  accessToken: string
+) => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/account/change-password`,
+      {
+        username,
+        oldPassword,
+        newPassword,
+        confirmPassword,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        withCredentials: true,
+      }
+    );
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Axios error message:", error.message);
+      console.error("Server response data:", error.response?.data);
+      return error.response?.data;
+    }
+    return null;
+  }
+};
